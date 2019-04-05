@@ -10,8 +10,10 @@
       "type": "extensionHost",
       "request": "launch",
       "runtimeExecutable": "${execPath}",
-      "args": ["--extensionDevelopmentPath=${workspaceRoot}"],
-      "outFiles": ["${workspaceFolder}/packages/extension/out/**/*.js"],
+      "args": [
+        "--extensionDevelopmentPath=${workspaceRoot}/packages/extension"
+      ],
+      "outFiles": ["${workspaceFolder}/out/**/*.js"],
       "preLaunchTask": "npm: watch"
     }
   ]

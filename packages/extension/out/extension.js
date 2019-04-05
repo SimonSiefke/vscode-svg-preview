@@ -80,7 +80,7 @@ class CatCodingPanel {
             enableScripts: true,
             // And restrict the webview to only loading content from our extension's `media` directory.
             localResourceRoots: [
-                vscode.Uri.file(path.join(extensionPath, 'packages/media')),
+                vscode.Uri.file(path.join(extensionPath, '../../packages/media')),
             ],
         });
         CatCodingPanel.currentPanel = new CatCodingPanel(panel, extensionPath);
@@ -126,7 +126,7 @@ class CatCodingPanel {
     }
     _getHtmlForWebview(catGif) {
         // Local path to main script run in the webview
-        const scriptPathOnDisk = vscode.Uri.file(path.join(this._extensionPath, 'packages', 'media', 'main.js'));
+        const scriptPathOnDisk = vscode.Uri.file(path.join(this._extensionPath, '../../packages', 'media', 'main.js'));
         // And the uri we use to load this script in the webview
         const scriptUri = scriptPathOnDisk.with({ scheme: 'vscode-resource' });
         // Use a nonce to whitelist which scripts can be run

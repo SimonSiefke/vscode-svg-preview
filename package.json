@@ -1,44 +1,6 @@
 {
-  "name": "cat-coding",
-  "description": "Cat Coding - A Webview API Sample",
-  "version": "0.0.1",
-  "publisher": "vscode-samples",
-  "engines": {
-    "vscode": "^1.26.0"
-  },
-  "categories": [
-    "Other"
-  ],
-  "activationEvents": [
-    "onCommand:catCoding.start",
-    "onCommand:catCoding.doRefactor",
-    "onWebviewPanel:catCoding"
-  ],
-  "main": "./packages/extension/out/extension.js",
-  "contributes": {
-    "commands": [
-      {
-        "command": "catCoding.start",
-        "title": "Start cat coding session",
-        "category": "Cat Coding"
-      },
-      {
-        "command": "catCoding.doRefactor",
-        "title": "Do some refactoring",
-        "category": "Cat Coding"
-      }
-    ]
-  },
   "scripts": {
-    "vscode:prepublish": "tsc -p ./",
-    "compile": "tsc -p ./",
-    "watch": "tsc -w",
-    "postinstall": "node ./node_modules/vscode/bin/install"
-  },
-  "dependencies": {},
-  "devDependencies": {
-    "@types/node": "^11.13.0",
-    "typescript": "^3.4.1",
-    "vscode": "^1.1.33"
+    "watch": "cd packages/extension && npm run watch",
+    "postinstall": "cd packages/extension && npm i"
   }
 }

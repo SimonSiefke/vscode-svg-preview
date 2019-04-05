@@ -73,7 +73,7 @@ class CatCodingPanel {
 
         // And restrict the webview to only loading content from our extension's `media` directory.
         localResourceRoots: [
-          vscode.Uri.file(path.join(extensionPath, 'packages/media')),
+          vscode.Uri.file(path.join(extensionPath, '../../packages/media')),
         ],
       }
     )
@@ -168,7 +168,7 @@ class CatCodingPanel {
   private _getHtmlForWebview(catGif: string) {
     // Local path to main script run in the webview
     const scriptPathOnDisk = vscode.Uri.file(
-      path.join(this._extensionPath, 'packages', 'media', 'main.js')
+      path.join(this._extensionPath, '../../packages', 'media', 'main.js')
     )
 
     // And the uri we use to load this script in the webview
