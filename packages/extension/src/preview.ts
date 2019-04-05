@@ -28,17 +28,6 @@ function getP(extensionPath: string, relativePath: string): string {
   return path.join(extensionPath, rootPath, relativePath)
 }
 
-function getPath(
-  context: vscode.ExtensionContext,
-  relativePath: string
-): vscode.Uri {
-  return vscode.Uri.file(
-    context.asAbsolutePath(path.join(rootPath, relativePath))
-  ).with({
-    scheme: 'vscode-resource',
-  })
-}
-
 /**
  * Get the html for the svg preview panel. TODO: cache.
  */
@@ -52,7 +41,10 @@ async function getPreviewHTML(
   /**
    * The base url for links inside the html file.
    */
-  const base = getPath(context, previewPath)
+  const base = vscode.Uri.file(getP(context.extensionPath, previewPath)).with({
+    scheme: 'vscode-resource',
+  })
+
   /**
    * The things that will be replaced inside the html, e.g. `<!-- base -->` will be replaced with the actual `base` tag and `<!-- svg -->` will be replaced with the actual `svg`.
    */
