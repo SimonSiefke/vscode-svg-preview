@@ -114,7 +114,10 @@ export function createPreviewPanel(
           vscode.window.createWebviewPanel(
             config.webViewPanelType,
             `Preview ${title}`,
-            vscode.ViewColumn.Beside,
+            {
+              viewColumn: vscode.ViewColumn.Beside,
+              preserveFocus: true,
+            },
             {
               enableCommandUris: true,
               localResourceRoots: [
