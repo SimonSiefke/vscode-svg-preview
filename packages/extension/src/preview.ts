@@ -132,7 +132,7 @@ export function createPreviewPanel(
               enableCommandUris: true,
               localResourceRoots: [
                 vscode.Uri.file(
-                  path.join(context.extensionPath, '../preview/dist')
+                  getP(context.extensionPath, 'packages/preview/dist')
                 ),
               ],
               enableScripts: true,
