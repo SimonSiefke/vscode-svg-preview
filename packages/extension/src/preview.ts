@@ -24,19 +24,8 @@ const previewPath = 'packages/preview/dist'
  * ```
  */
 
-function getP(extensionPath: string, relativePath: string): string {
+function getPath(extensionPath: string, relativePath: string): string {
   return path.join(extensionPath, rootPath, relativePath)
-}
-
-function getPath(
-  context: vscode.ExtensionContext,
-  relativePath: string
-): vscode.Uri {
-  return vscode.Uri.file(
-    context.asAbsolutePath(path.join(rootPath, relativePath))
-  ).with({
-    scheme: 'vscode-resource',
-  })
 }
 
 /**
@@ -46,20 +35,19 @@ async function getPreviewHTML(
   context: vscode.ExtensionContext
 ): Promise<string> {
   const html = await readFile(
-    getP(context.extensionPath, 'packages/preview/dist/index.html'),
+    getPath(context.extensionPath, `${previewPath}/index.html`),
     'utf-8'
   )
   /**
    * The base url for links inside the html file.
    */
-  const base = getPath(context, previewPath)
+  const base = getPath(context.extensionPath, previewPath)
   /**
    * The things that will be replaced inside the html, e.g. `<!-- base -->` will be replaced with the actual `base` tag and `<!-- svg -->` will be replaced with the actual `svg`.
    */
   const replaceMap = {
     '<!-- insert base here -->': `<base href="${base}/">`,
   }
-  console.log(html)
   const regExp = new RegExp(Object.keys(replaceMap).join('|'), 'gi')
   return html.replace(regExp, matched => replaceMap[matched])
 }
@@ -107,10 +95,8 @@ export function createPreviewPanel(
   const onDidCreatePanel = async (
     webViewPanel: vscode.WebviewPanel
   ): Promise<void> => {
-    console.log('did create panel')
     _panel = webViewPanel
     _panel.webview.html = await getPreviewHTML(context)
-    console.log(_panel.webview.html)
     context.subscriptions.push(
       _panel.onDidDispose(() => {
         _panel = undefined
@@ -131,9 +117,7 @@ export function createPreviewPanel(
             {
               enableCommandUris: true,
               localResourceRoots: [
-                vscode.Uri.file(
-                  getP(context.extensionPath, 'packages/preview/dist')
-                ),
+                vscode.Uri.file(getPath(context.extensionPath, previewPath)),
               ],
               enableScripts: true,
             }
