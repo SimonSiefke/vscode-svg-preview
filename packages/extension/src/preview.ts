@@ -23,6 +23,11 @@ const previewPath = 'packages/preview/dist'
  * getPath(context, 'packages/preview/dist/index.css')
  * ```
  */
+
+function getP(extensionPath: string, relativePath: string): string {
+  return path.join(extensionPath, rootPath, relativePath)
+}
+
 function getPath(
   context: vscode.ExtensionContext,
   relativePath: string
@@ -41,7 +46,7 @@ async function getPreviewHTML(
   context: vscode.ExtensionContext
 ): Promise<string> {
   const html = await readFile(
-    path.join(context.extensionPath, '../../packages/preview/dist/index.html'),
+    getP(context.extensionPath, 'packages/preview/dist/index.html'),
     'utf-8'
   )
   /**
