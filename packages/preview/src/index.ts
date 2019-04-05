@@ -33,5 +33,7 @@ window.addEventListener('message', event => {
       currentCount = Math.ceil(currentCount * 0.5)
       counter.textContent = currentCount
       break
+    default:
+      break
   }
 })
