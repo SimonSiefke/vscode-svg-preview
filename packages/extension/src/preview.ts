@@ -24,24 +24,22 @@ const previewPath = 'packages/preview/dist'
  * ```
  */
 
-function getP(extensionPath: string, relativePath: string): string {
+function getPath(extensionPath: string, relativePath: string): string {
   return path.join(extensionPath, rootPath, relativePath)
 }
 
 /**
  * Get the html for the svg preview panel. TODO: cache.
  */
-async function getPreviewHTML(
-  context: vscode.ExtensionContext
-): Promise<string> {
+async function getPreviewHTML(extensionPath: string): Promise<string> {
   const html = await readFile(
-    getP(context.extensionPath, 'packages/preview/dist/index.html'),
+    getPath(extensionPath, 'packages/preview/dist/index.html'),
     'utf-8'
   )
   /**
    * The base url for links inside the html file.
    */
-  const base = vscode.Uri.file(getP(context.extensionPath, previewPath)).with({
+  const base = vscode.Uri.file(getPath(extensionPath, previewPath)).with({
     scheme: 'vscode-resource',
   })
 
@@ -51,7 +49,6 @@ async function getPreviewHTML(
   const replaceMap = {
     '<!-- insert base here -->': `<base href="${base}/">`,
   }
-  console.log(html)
   const regExp = new RegExp(Object.keys(replaceMap).join('|'), 'gi')
   return html.replace(regExp, matched => replaceMap[matched])
 }
@@ -99,10 +96,8 @@ export function createPreviewPanel(
   const onDidCreatePanel = async (
     webViewPanel: vscode.WebviewPanel
   ): Promise<void> => {
-    console.log('did create panel')
     _panel = webViewPanel
-    _panel.webview.html = await getPreviewHTML(context)
-    console.log(_panel.webview.html)
+    _panel.webview.html = await getPreviewHTML(context.extensionPath)
     context.subscriptions.push(
       _panel.onDidDispose(() => {
         _panel = undefined
@@ -124,7 +119,7 @@ export function createPreviewPanel(
               enableCommandUris: true,
               localResourceRoots: [
                 vscode.Uri.file(
-                  getP(context.extensionPath, 'packages/preview/dist')
+                  getPath(context.extensionPath, 'packages/preview/dist')
                 ),
               ],
               enableScripts: true,
