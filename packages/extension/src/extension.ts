@@ -1,13 +1,16 @@
 import * as path from 'path'
 import * as vscode from 'vscode'
+import * as fs from 'fs'
 
 const cats = {
   'Coding Cat': 'https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif',
   'Compiling Cat': 'https://media.giphy.com/media/mlvseq9yvZhba/giphy.gif',
   'Testing Cat': 'https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif',
 }
+let c: vscode.ExtensionContext
 
 export function activate(context: vscode.ExtensionContext) {
+  c = context
   context.subscriptions.push(
     vscode.commands.registerCommand('catCoding.start', () => {
       CatCodingPanel.createOrShow(context.extensionPath)
@@ -34,6 +37,42 @@ export function activate(context: vscode.ExtensionContext) {
       },
     })
   }
+}
+
+/**
+ * Get the absolute path for relative path.
+ *
+ * @example
+ * ```js
+ * getPath(context, './preview-src/index.css')
+ * ```
+ */
+function getPath(context: vscode.ExtensionContext, file: string): vscode.Uri {
+  return vscode.Uri.file(context.asAbsolutePath(file)).with({
+    scheme: 'vscode-resource',
+  })
+}
+
+/**
+ * Get the html for the svg preview panel.
+ */
+function getPreviewHTML(): string {
+  const html = fs.readFileSync(
+    path.join(__dirname, '../preview-src/index.html'),
+    'utf-8'
+  )
+  /**
+   * The base url for links inside the html file.
+   */
+  const base = getPath(c, 'preview-src')
+  /**
+   * The things that will be replaced inside the html, e.g. `<!-- base -->` will be replaced with the actual `base` tag and `<!-- svg -->` will be replaced with the actual `svg`.
+   */
+  const replaceMap = {
+    '<!-- insert base here -->': `<base href="${base}/"`,
+  }
+  const regExp = new RegExp(Object.keys(replaceMap).join('|'), 'gi')
+  return html.replace(regExp, matched => replaceMap[matched])
 }
 
 /**
@@ -72,9 +111,9 @@ class CatCodingPanel {
         enableScripts: true,
 
         // And restrict the webview to only loading content from our extension's `media` directory.
-        localResourceRoots: [
-          vscode.Uri.file(path.join(extensionPath, '../../packages/media')),
-        ],
+        // localResourceRoots: [
+        //   vscode.Uri.file(path.join(extensionPath, '../../packages/media')),
+        // ],
       }
     )
 
@@ -162,42 +201,22 @@ class CatCodingPanel {
 
   private _updateForCat(catName: keyof typeof cats) {
     this._panel.title = catName
-    this._panel.webview.html = this._getHtmlForWebview(cats[catName])
+    this._panel.webview.html = getPreviewHTML()
   }
 
   private _getHtmlForWebview(catGif: string) {
     // Local path to main script run in the webview
-    const scriptPathOnDisk = vscode.Uri.file(
-      path.join(this._extensionPath, '../../packages', 'media', 'main.js')
+    const htmlPathOnDisk = vscode.Uri.file(
+      path.join(this._extensionPath, '../../packages', 'media', 'index.html')
     )
 
     // And the uri we use to load this script in the webview
-    const scriptUri = scriptPathOnDisk.with({ scheme: 'vscode-resource' })
+    const scriptUri = htmlPathOnDisk.with({ scheme: 'vscode-resource' })
 
     // Use a nonce to whitelist which scripts can be run
     const nonce = getNonce()
 
-    return `<!DOCTYPE html>
-            <html lang="en">
-            <head>
-                <meta charset="UTF-8">
-
-                <!--
-                Use a content security policy to only allow loading images from https or from our extension directory,
-                and only allow scripts that have a specific nonce.
-                -->
-                <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src vscode-resource: https:; script-src 'nonce-${nonce}';">
-
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Cat Coding</title>
-            </head>
-            <body>
-                <img src="${catGif}" width="300" />
-                <h1 id="lines-of-code-counter">0</h1>
-
-                <script nonce="${nonce}" src="${scriptUri}"></script>
-            </body>
-            </html>`
+    return fs.readFileSync(htmlPathOnDisk.fsPath, 'utf-8')
   }
 }
 
