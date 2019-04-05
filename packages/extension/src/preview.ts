@@ -40,8 +40,8 @@ function getPath(
 async function getPreviewHTML(
   context: vscode.ExtensionContext
 ): Promise<string> {
-  const html = fs.readFileSync(
-    path.join(__dirname, '../../preview/dist/index.html'),
+  const html = await readFile(
+    path.join(context.extensionPath, '../../packages/preview/dist/index.html'),
     'utf-8'
   )
   /**
