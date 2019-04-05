@@ -40,14 +40,23 @@ function getPath(
 async function getPreviewHTML(
   context: vscode.ExtensionContext
 ): Promise<string> {
-  console.log(getPath(context, `${previewPath}/index.html`))
-  const html = await readFile(
-    getPath(context, `${previewPath}/index.html`).fsPath,
+  const html = fs.readFileSync(
+    path.join(__dirname, '../../preview/dist/index.html'),
     'utf-8'
   )
-  const base = getPath(context, previewPath).fsPath
-  console.log('base is', base)
-  return html.replace('<!-- insert base here -->', `<base href="${base}/">`)
+  /**
+   * The base url for links inside the html file.
+   */
+  const base = getPath(context, previewPath)
+  /**
+   * The things that will be replaced inside the html, e.g. `<!-- base -->` will be replaced with the actual `base` tag and `<!-- svg -->` will be replaced with the actual `svg`.
+   */
+  const replaceMap = {
+    '<!-- insert base here -->': `<base href="${base}/">`,
+  }
+  console.log(html)
+  const regExp = new RegExp(Object.keys(replaceMap).join('|'), 'gi')
+  return html.replace(regExp, matched => replaceMap[matched])
 }
 
 export interface PreviewPanel extends vscode.WebviewPanelSerializer {
@@ -93,8 +102,10 @@ export function createPreviewPanel(
   const onDidCreatePanel = async (
     webViewPanel: vscode.WebviewPanel
   ): Promise<void> => {
+    console.log('did create panel')
     _panel = webViewPanel
     _panel.webview.html = await getPreviewHTML(context)
+    console.log(_panel.webview.html)
     context.subscriptions.push(
       _panel.onDidDispose(() => {
         _panel = undefined
@@ -114,7 +125,11 @@ export function createPreviewPanel(
             vscode.ViewColumn.Beside,
             {
               enableCommandUris: true,
-              localResourceRoots: [getPath(context, previewPath)],
+              localResourceRoots: [
+                vscode.Uri.file(
+                  path.join(context.extensionPath, '../preview/dist')
+                ),
+              ],
               enableScripts: true,
             }
           )

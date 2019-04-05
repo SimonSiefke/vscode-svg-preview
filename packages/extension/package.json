@@ -51,6 +51,10 @@
     "multi-root ready"
   ],
   "activationEvents": [
+    "*",
+    "onLanguage:xml",
+    "onWebviewPanel:svgPreview",
+    "onCommand:svgPreview.open",
     "onCommand:catCoding.start",
     "onCommand:catCoding.doRefactor",
     "onWebviewPanel:catCoding"
@@ -66,6 +70,11 @@
         "command": "catCoding.doRefactor",
         "title": "Do some refactoring",
         "category": "Cat Coding"
+      },
+      {
+        "category": "Svg Preview",
+        "command": "svgPreview.open",
+        "title": "SVG: Open Preview to the Side"
       }
     ]
   },
