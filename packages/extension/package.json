@@ -1,20 +1,60 @@
 {
-  "name": "cat-coding",
-  "description": "Cat Coding - A Webview API Sample",
-  "version": "0.0.1",
-  "publisher": "vscode-samples",
-  "engines": {
-    "vscode": "^1.26.0"
+  "name": "svg-preview",
+  "displayName": "SVG Preview",
+  "description": "Preview for SVG files",
+  "version": "1.0.0",
+  "publisher": "SimonSiefke",
+  "author": "Simon Siefke",
+  "license": "MIT",
+  "homepage": "https://github.com/Microsoft/vscode-python",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Microsoft/vscode-python.git"
   },
+  "bugs": {
+    "url": "https://github.com/Microsoft/vscode-python/issues"
+  },
+  "badges": [
+    {
+      "url": "https://vscode-python.visualstudio.com/VSCode-Python/_apis/build/status/VSCode-Python-Rolling-CI?branchName=master",
+      "href": "https://vscode-python.visualstudio.com/VSCode-Python/VSCode-Python%20Team/_build/index?context=allDefinitions&path=&definitionId=9",
+      "description": "Continuous integration (VSTS)"
+    },
+    {
+      "url": "https://travis-ci.org/Microsoft/vscode-python.svg?branch=master",
+      "href": "https://travis-ci.org/Microsoft/vscode-python",
+      "description": "Continuous integration (Travis)"
+    },
+    {
+      "url": "https://codecov.io/gh/Microsoft/vscode-python/branch/master/graph/badge.svg",
+      "href": "https://codecov.io/gh/Microsoft/vscode-python",
+      "description": "Test coverage"
+    }
+  ],
+  "icon": "icon.png",
+  "galleryBanner": {
+    "color": "#1e415e",
+    "theme": "dark"
+  },
+  "engines": {
+    "vscode": "^1.31.0"
+  },
+  "appInsightsKey": "TODO",
   "categories": [
-    "Other"
+    "Other",
+    "Debuggers"
+  ],
+  "keywords": [
+    "html preview",
+    "live preview",
+    "open in browser",
+    "multi-root ready"
   ],
   "activationEvents": [
     "onCommand:catCoding.start",
     "onCommand:catCoding.doRefactor",
     "onWebviewPanel:catCoding"
   ],
-  "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
@@ -29,16 +69,15 @@
       }
     ]
   },
+  "main": "./dist/extension.js",
   "scripts": {
-    "vscode:prepublish": "tsc -p ./",
-    "compile": "tsc -p ./",
-    "watch": "tsc -w",
-    "postinstall": "node ./node_modules/vscode/bin/install"
+    "test": "echo test"
   },
-  "dependencies": {},
+  "dependencies": {
+    "p-cancelable": "^2.0.0"
+  },
   "devDependencies": {
     "@types/node": "^11.13.0",
-    "typescript": "^3.4.1",
     "vscode": "^1.1.33"
   }
 }
