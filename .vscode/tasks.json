@@ -1,20 +1,36 @@
-// See https://go.microsoft.com/fwlink/?LinkId=733558
-// for the documentation about the tasks.json format
 {
-	"version": "2.0.0",
-	"tasks": [
-		{
-			"type": "npm",
-			"script": "watch",
-			"problemMatcher": "$tsc-watch",
-			"isBackground": true,
-			"presentation": {
-				"reveal": "never"
-			},
-			"group": {
-				"kind": "build",
-				"isDefault": true
-			}
-		}
-	]
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "npm",
+      "script": "dev",
+      "isBackground": true,
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always",
+        "echo": false
+      },
+      // see https://github.com/Microsoft/vscode/issues/6209#issuecomment-289411630
+      "problemMatcher": [
+        {
+          "owner": "custom",
+          "pattern": {
+            "regexp": "__________"
+          },
+          "background": {
+            "activeOnStart": true,
+            // this is printed in the console when rollup starts compiling
+            "beginsPattern": "^.*bundles.*$",
+            // this is printed in the console when rollup finishes
+            "endsPattern": "^.*waiting for changes.*$"
+          }
+        }
+      ]
+    }
+  ]
 }

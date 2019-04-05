@@ -1,6 +1,35 @@
 {
+  "name": "svg-preview",
+  "version": "1.0.0",
   "scripts": {
-    "watch": "cd packages/extension && npm run watch",
-    "postinstall": "cd packages/extension && npm i"
-  }
+    "dev": "rollup --config --no-esModule --no-strict --watch",
+    "build": "rollup --config --no-esModule --no-strict",
+    "test": "lerna run test",
+    "bundlesize": "bundlesize",
+    "postinstall": "lerna bootstrap"
+  },
+  "keywords": [],
+  "author": "Simon Siefke",
+  "license": "MIT",
+  "devDependencies": {
+    "bundlesize": "^0.17.1",
+    "eslint": "^5.16.0",
+    "eslint-config-bitworkers": "^1.21.5",
+    "lerna": "^3.13.1",
+    "prettier": "^1.16.4",
+    "prettier-config-bitworkers": "^1.5.0",
+    "rollup": "^1.9.0",
+    "rollup-plugin-copy-glob": "^0.3.0",
+    "rollup-plugin-import-alias": "^1.0.6",
+    "rollup-plugin-node-resolve": "^4.1.0",
+    "rollup-plugin-terser": "^4.0.4",
+    "rollup-plugin-typescript2": "^0.20.1",
+    "typescript": "^3.4.1"
+  },
+  "bundlesize": [
+    {
+      "path": "./packages/extension/dist/extension.js",
+      "maxSize": "2.5 kB"
+    }
+  ]
 }

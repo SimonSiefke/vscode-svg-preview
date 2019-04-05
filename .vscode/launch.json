@@ -13,8 +13,8 @@
       "args": [
         "--extensionDevelopmentPath=${workspaceRoot}/packages/extension"
       ],
-      "outFiles": ["${workspaceFolder}/out/**/*.js"],
-      "preLaunchTask": "npm: watch"
+      "outFiles": ["${workspaceFolder}/dist/**/*.js"],
+      "preLaunchTask": "npm: dev"
     }
   ]
 }
