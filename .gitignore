@@ -1,6 +1,7 @@
 .rpt2_cache
 dist
 
+.vscode/settings.json
 # Logs
 logs
 *.log

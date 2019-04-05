@@ -1,19 +1,17 @@
-const vscode = acquireVsCodeApi()
+import { Message } from '../../shared/Message'
 
-console.log('INDEX')
-// Handle messages sent from the extension to the webview
+const vscode = acquireVsCodeApi()
 window.addEventListener('message', event => {
-  const message = event.data // The json data that the extension sent
+  console.log('got message', event.data)
+  const message: Message = event.data
   switch (message.command) {
     case 'update.fsPath':
       vscode.setState({
-        message,
+        fsPath: message.data,
       })
       break
-    case 'update':
-      vscode.setState({
-        message,
-      })
+    case 'update.content':
+      document.body.innerHTML = message.data
       break
     default:
       throw new Error(`unknown command ${message.command}`)

@@ -11,6 +11,7 @@ import * as path from 'path'
 import * as util from 'util'
 import * as PCancelable from 'p-cancelable'
 import * as config from './config'
+import { Message } from '../../shared/Message'
 
 const readFile = util.promisify(fs.readFile)
 const rootPath = '../../'
@@ -76,7 +77,7 @@ export function createPreviewPanel(
   context: vscode.ExtensionContext
 ): PreviewPanel {
   /**
-   *
+   * a cancelable promise that indicates that the panel is currently being restored
    */
   let _restorePromise: PCancelable<void> | undefined
 
@@ -144,10 +145,12 @@ export function createPreviewPanel(
         _restorePromise.cancel()
         _restorePromise = undefined
       }
-      _panel.webview.postMessage({
+      const message: Message = {
         command: 'update.content',
         data: value,
-      })
+      }
+      console.log('ipdate content')
+      _panel.webview.postMessage(message)
     },
     async deserializeWebviewPanel(webviewPanel, state) {
       const PCancelable = await import('p-cancelable')
