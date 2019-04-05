@@ -154,11 +154,13 @@ export function createPreviewPanel(
       onDidCreatePanel(webviewPanel)
       const { fsPath } = state
       this.fsPath = fsPath
+
+      // we need make sure that the preview panel has always the latest content so when the user opens another file while we are reading we must cancel reading the file and setting the content afterwards because that would not be the latest content anymore. The `_restorePromise` is cancel as soon as the user opens a new file while we are restoring the content.
       _restorePromise = new PCancelable(async (resolve, reject, onCancel) => {
         // eslint-disable-next-line no-param-reassign
         onCancel.shouldReject = false
         try {
-          // The previewed file is closed, so we read the content from the file system
+          // The previewed file is closed, so we read the content from the file system without opening it
           const content = await readFile(fsPath, 'utf-8')
           this.content = content
           resolve()
