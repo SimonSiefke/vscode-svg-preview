@@ -40,21 +40,22 @@ export async function activate(
     })
   )
   // TODO: needed?
-  context.subscriptions.push(
-    vscode.workspace.onDidOpenTextDocument(
-      (textDocument): void => {
-        if (shouldOpenTextDocument(textDocument)) {
-          previewPanel.fsPath = textDocument.uri.fsPath
-          previewPanel.content = textDocument.getText()
-        }
-      }
-    )
-  )
+  // context.subscriptions.push(
+  //   vscode.workspace.onDidOpenTextDocument(
+  //     (textDocument): void => {
+  //       if (shouldOpenTextDocument(textDocument)) {
+  //         previewPanel.fsPath = textDocument.uri.fsPath
+  //         previewPanel.content = textDocument.getText()
+  //       }
+  //     }
+  //   )
+  // )
   context.subscriptions.push(
     vscode.window.onDidChangeActiveTextEditor(textEditor => {
       const textDocument = textEditor.document
       if (shouldOpenTextDocument(textDocument)) {
         previewPanel.fsPath = textDocument.uri.fsPath
+        previewPanel.content = textDocument.getText()
       }
     })
   )
