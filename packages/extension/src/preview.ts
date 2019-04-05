@@ -92,6 +92,11 @@ export function createPreviewPanel(
   let _fsPath: string | undefined
 
   /**
+   * Whether the webview panel is visible or not
+   */
+  let _visible: boolean = false
+
+  /**
    * This method is called when a webview panel has been created.
    */
   const onDidCreatePanel = async (
@@ -102,6 +107,13 @@ export function createPreviewPanel(
     context.subscriptions.push(
       _panel.onDidDispose(() => {
         _panel = undefined
+      })
+    )
+    _visible = _panel.visible
+    context.subscriptions.push(
+      _panel.onDidChangeViewState(event => {
+        _visible = event.webviewPanel.visible
+        console.log('change viewstate', event.webviewPanel.visible)
       })
     )
   }
@@ -149,13 +161,16 @@ export function createPreviewPanel(
         command: 'update.content',
         data: value,
       }
-      console.log('ipdate content')
+      console.log('panel is', _panel.visible)
+      console.log('update content')
       _panel.webview.postMessage(message)
     },
     async deserializeWebviewPanel(webviewPanel, state) {
+      console.log('deserialize')
       const PCancelable = await import('p-cancelable')
       onDidCreatePanel(webviewPanel)
       const { fsPath } = state
+      console.log('deserialize', fsPath)
       this.fsPath = fsPath
 
       // we need make sure that the preview panel has always the latest content so when the user opens another file while we are reading we must cancel reading the file and setting the content afterwards because that would not be the latest content anymore. The `_restorePromise` is cancel as soon as the user opens a new file while we are restoring the content.

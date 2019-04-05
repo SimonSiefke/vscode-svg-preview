@@ -11,6 +11,9 @@ window.addEventListener('message', event => {
       })
       break
     case 'update.content':
+      vscode.postMessage({
+        data: 'update content',
+      })
       document.body.innerHTML = message.data
       break
     default:
