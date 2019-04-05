@@ -58,18 +58,18 @@ function getPath(context: vscode.ExtensionContext, file: string): vscode.Uri {
  */
 function getPreviewHTML(): string {
   const html = fs.readFileSync(
-    path.join(__dirname, '../preview-src/index.html'),
+    path.join(__dirname, '../../preview/dist/index.html'),
     'utf-8'
   )
   /**
    * The base url for links inside the html file.
    */
-  const base = getPath(c, 'preview-src')
+  const base = getPath(c, '../preview/dist')
   /**
    * The things that will be replaced inside the html, e.g. `<!-- base -->` will be replaced with the actual `base` tag and `<!-- svg -->` will be replaced with the actual `svg`.
    */
   const replaceMap = {
-    '<!-- insert base here -->': `<base href="${base}/"`,
+    '<!-- insert base here -->': `<base href="${base}/">`,
   }
   const regExp = new RegExp(Object.keys(replaceMap).join('|'), 'gi')
   return html.replace(regExp, matched => replaceMap[matched])
@@ -111,9 +111,9 @@ class CatCodingPanel {
         enableScripts: true,
 
         // And restrict the webview to only loading content from our extension's `media` directory.
-        // localResourceRoots: [
-        //   vscode.Uri.file(path.join(extensionPath, '../../packages/media')),
-        // ],
+        localResourceRoots: [
+          vscode.Uri.file(path.join(extensionPath, '../preview/dist')),
+        ],
       }
     )
 
@@ -209,13 +209,6 @@ class CatCodingPanel {
     const htmlPathOnDisk = vscode.Uri.file(
       path.join(this._extensionPath, '../../packages', 'media', 'index.html')
     )
-
-    // And the uri we use to load this script in the webview
-    const scriptUri = htmlPathOnDisk.with({ scheme: 'vscode-resource' })
-
-    // Use a nonce to whitelist which scripts can be run
-    const nonce = getNonce()
-
     return fs.readFileSync(htmlPathOnDisk.fsPath, 'utf-8')
   }
 }

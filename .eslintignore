@@ -1,0 +1,7 @@
+prettierrc.js
+**/dist
+*.html
+deprecated
+rollup.config.js
+**/node_modules
+**/coverage
