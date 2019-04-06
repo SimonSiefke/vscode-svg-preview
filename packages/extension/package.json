@@ -1,6 +1,6 @@
 {
   "name": "svg-preview",
-  "displayName": "SVG Preview",
+  "displayName": "Svg Preview",
   "description": "Preview for SVG files",
   "version": "1.0.0",
   "publisher": "SimonSiefke",
@@ -62,12 +62,12 @@
       {
         "category": "Svg Preview",
         "command": "svgPreview.showPreview",
-        "title": "SVG: Open Preview"
+        "title": "%svgPreview.command.showPreview%"
       },
       {
         "category": "Svg Preview",
         "command": "svgPreview.showPreviewToSide",
-        "title": "SVG: Open Preview to the Side"
+        "title": "%svgPreview.command.showPreviewToSide%"
       }
     ],
     "menus": {

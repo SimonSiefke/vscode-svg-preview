@@ -1,4 +1,4 @@
 {
-  "svgPreview.open": "Open Preview to the Side",
-  "svgPreview.autoOpen": "Open the preview automatically"
+  "svgPreview.command.showPreview": "Open Preview",
+  "svgPreview.command.showPreviewToSide": "Open Preview to the Side"
 }
