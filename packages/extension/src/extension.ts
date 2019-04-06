@@ -26,7 +26,6 @@ export async function activate(
   )
   context.subscriptions.push(
     vscode.window.onDidChangeActiveTextEditor(textEditor => {
-      console.log('CHANGE ACTIVE TEXTEDITOR')
       const textDocument = textEditor.document
       if (shouldOpenTextDocument(textDocument, previewPanel)) {
         previewPanel.fsPath = textDocument.uri.fsPath

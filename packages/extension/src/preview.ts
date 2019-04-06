@@ -11,7 +11,8 @@ import * as path from 'path'
 import * as util from 'util'
 import memoizeOne from 'memoize-one'
 import * as config from './config'
-import { Message, Command } from '../../shared/Message'
+import { Message, Command } from '../../shared/src/Message'
+import { State } from '../../shared/src/State'
 import { shouldOpenTextDocument } from './util'
 
 const readFile = util.promisify(fs.readFile)
@@ -58,9 +59,10 @@ const getPreviewHTML = memoizeOne(
 )
 
 export interface PreviewPanel extends vscode.WebviewPanelSerializer {
-  /**
-   * Show the svg preview.
-   */
+  deserializeWebviewPanel: (
+    webviewPanel: vscode.WebviewPanel,
+    state: State
+  ) => Promise<void>
 
   /**
    * The content of the currently previewed file
@@ -186,20 +188,15 @@ export function createPreviewPanel(
         shouldOpenTextDocument(
           vscode.window.activeTextEditor.document,
           undefined
-        )
+        ) &&
+        vscode.window.activeTextEditor.document.uri.fsPath !== state.fsPath
       ) {
         this.fsPath = vscode.window.activeTextEditor.document.uri.fsPath
         await didCreatePanelPromise
         this.content = vscode.window.activeTextEditor.document.getText()
-        return
+      } else {
+        _fsPath = state.fsPath
       }
-      const { fsPath } = state
-      // The previewed file is closed, so we open it and read its content
-      const [textDocument] = await Promise.all([
-        vscode.workspace.openTextDocument(vscode.Uri.file(fsPath)),
-        didCreatePanelPromise,
-      ])
-      this.content = textDocument.getText()
     },
   }
 }

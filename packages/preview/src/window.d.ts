@@ -1,6 +1,8 @@
+type State = import('../../shared/src/State').State
+
 interface VSCodeApi {
-  getState(): any
-  setState(state: any): void
+  getState(): State
+  setState(state: State): void
   postMessage(message: any): void
 }
 
