@@ -30,6 +30,8 @@ const state = new Proxy<State>(
   }
 )
 
+console.log('index')
+
 const initialState = vscode.getState()
 if (initialState && initialState.content) {
   for (const [key, value] of Object.entries(initialState)) {

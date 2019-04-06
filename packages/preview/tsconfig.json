@@ -5,7 +5,8 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src"]
-    }
+    },
+    "inlineSourceMap": true
   },
   "include": ["src"],
   "exclude": ["dist", "node_modules"]
