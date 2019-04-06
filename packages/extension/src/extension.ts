@@ -16,13 +16,16 @@ export async function activate(
 ): Promise<void> {
   previewPanel = createPreviewPanel(context)
   context.subscriptions.push(
-    vscode.commands.registerTextEditorCommand('svgPreview.open', textEditor => {
-      const textDocument = textEditor.document
-      if (shouldOpenTextDocument(textDocument, previewPanel)) {
-        previewPanel.fsPath = textDocument.uri.fsPath
-        previewPanel.content = textDocument.getText()
+    vscode.commands.registerTextEditorCommand(
+      'svgPreview.showPreviewToSide',
+      textEditor => {
+        const textDocument = textEditor.document
+        if (shouldOpenTextDocument(textDocument, previewPanel)) {
+          previewPanel.fsPath = textDocument.uri.fsPath
+          previewPanel.content = textDocument.getText()
+        }
       }
-    })
+    )
   )
   context.subscriptions.push(
     vscode.window.onDidChangeActiveTextEditor(textEditor => {

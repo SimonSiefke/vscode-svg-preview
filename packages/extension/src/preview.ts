@@ -1,23 +1,20 @@
 /* eslint-disable no-shadow */
 /* eslint-disable @typescript-eslint/no-var-requires */
-/* eslint-disable global-require */
 /* eslint-disable @typescript-eslint/no-parameter-properties */
 /* eslint-disable no-useless-constructor */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-underscore-dangle */
-import * as fs from 'fs'
 import * as vscode from 'vscode'
 import * as path from 'path'
-import * as util from 'util'
 import memoizeOne from 'memoize-one'
 import * as config from './config'
 import { Message, Command } from '../../shared/src/Message'
 import { State } from '../../shared/src/State'
 import { shouldOpenTextDocument } from './util'
 
-const readFile = util.promisify(fs.readFile)
 const rootPath = '../../'
 const previewPath = 'packages/preview/dist'
+
 /**
  * Get the absolute path for relative path from the root of this project.
  *
@@ -31,29 +28,35 @@ function getPath(extensionPath: string, relativePath: string): string {
 }
 
 /**
- * Get the html for the svg preview panel. TODO: cache.
+ * Get the html for the svg preview panel.
  */
 const getPreviewHTML = memoizeOne(
-  async (extensionPath: string): Promise<string> => {
-    const html = await readFile(
-      getPath(extensionPath, 'packages/preview/dist/index.html'),
-      'utf-8'
-    )
+  (extensionPath: string): string => {
     /**
      * The base url for links inside the html file.
      */
     const base = vscode.Uri.file(getPath(extensionPath, previewPath)).with({
       scheme: 'vscode-resource',
     })
+    return `<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; img-src vscode-resource: https:; style-src 'unsafe-inline' vscode-resource:; script-src vscode-resource:;"
+    />
 
-    /**
-     * The things that will be replaced inside the html, e.g. `<!-- base -->` will be replaced with the actual `base` tag and `<!-- svg -->` will be replaced with the actual `svg`.
-     */
-    const replaceMap = {
-      '<!-- insert base here -->': `<base href="${base}/">`,
-    }
-    const regExp = new RegExp(Object.keys(replaceMap).join('|'), 'gi')
-    return html.replace(regExp, matched => replaceMap[matched])
+    <base href="${base}/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="index.css" />
+  </head>
+
+  <body>
+    <script src="index.js"></script>
+  </body>
+</html>
+`
   }
 )
 
@@ -116,6 +119,7 @@ export function createPreviewPanel(
     context.subscriptions.push(
       _panel.onDidDispose(() => {
         _panel = undefined
+        _fsPath = undefined
       })
     )
     context.subscriptions.push(
@@ -134,7 +138,8 @@ export function createPreviewPanel(
         vscode.window.showInformationMessage(message.command)
       })
     )
-    _panel.webview.html = await getPreviewHTML(context.extensionPath)
+    console.log(getPreviewHTML(context.extensionPath))
+    _panel.webview.html = getPreviewHTML(context.extensionPath)
   }
 
   return {
@@ -173,6 +178,7 @@ export function createPreviewPanel(
       return _fsPath
     },
     set content(value: string) {
+      console.log('SET CONTENT')
       setImmediate(() => {
         postMessage({
           command: 'update.content',

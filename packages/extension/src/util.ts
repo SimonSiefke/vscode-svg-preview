@@ -6,7 +6,7 @@ export function shouldOpenTextDocument(
   previewPanel: PreviewPanel | undefined
 ): boolean {
   // 1. its preview already open
-  if (previewPanel && previewPanel.fsPath === textDocument.uri.fsPath) {
+  if (previewPanel.fsPath === textDocument.uri.fsPath) {
     return false
   }
   // 2. its preview is not open and its not an svg

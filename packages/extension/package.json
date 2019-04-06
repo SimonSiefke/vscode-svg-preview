@@ -54,24 +54,46 @@
     "*",
     "onLanguage:xml",
     "onWebviewPanel:svgPreview",
-    "onCommand:svgPreview.open"
+    "onCommand:svgPreview.showPreview",
+    "onCommand:svgPreview.showPreviewToSide"
   ],
   "contributes": {
     "commands": [
       {
         "category": "Svg Preview",
-        "command": "svgPreview.open",
+        "command": "svgPreview.showPreview",
+        "title": "SVG: Open Preview"
+      },
+      {
+        "category": "Svg Preview",
+        "command": "svgPreview.showPreviewToSide",
         "title": "SVG: Open Preview to the Side"
       }
     ],
     "menus": {
       "commandPalette": [
         {
-          "command": "svgPreview.open",
+          "command": "svgPreview.showPreview",
+          "when": "editorLangId == xml && resourceExtname == .svg",
+          "group": "navigation"
+        },
+        {
+          "command": "svgPreview.showPreviewToSide",
           "when": "editorLangId == xml && resourceExtname == .svg",
           "group": "navigation"
         }
       ]
+    },
+    "configuration": {
+      "type": "object",
+      "title": "Svg Preview",
+      "properties": {
+        "svgPreview.autoOpen": {
+          "type": "boolean",
+          "default": false,
+          "description": "TODO"
+        }
+      }
     }
   },
   "main": "./dist/extension.js",
@@ -79,8 +101,7 @@
     "test": "echo test"
   },
   "dependencies": {
-    "memoize-one": "^5.0.2",
-    "p-cancelable": "^2.0.0"
+    "memoize-one": "^5.0.2"
   },
   "devDependencies": {
     "@types/node": "^11.13.0",
