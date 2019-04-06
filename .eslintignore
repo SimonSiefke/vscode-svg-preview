@@ -5,3 +5,4 @@ deprecated
 rollup.config.js
 **/node_modules
 **/coverage
+*.md
