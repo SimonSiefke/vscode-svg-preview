@@ -1,15 +1,10 @@
-/* eslint-disable no-shadow */
-/* eslint-disable @typescript-eslint/no-var-requires */
-/* eslint-disable @typescript-eslint/no-parameter-properties */
-/* eslint-disable no-useless-constructor */
-/* eslint-disable no-restricted-syntax */
 /* eslint-disable no-underscore-dangle */
-import * as vscode from 'vscode'
-import * as path from 'path'
 import memoizeOne from 'memoize-one'
-import * as config from './config'
-import { Message, Command } from '../../shared/src/Message'
+import * as path from 'path'
+import * as vscode from 'vscode'
+import { Command, Message } from '../../shared/src/Message'
 import { State } from '../../shared/src/State'
+import * as config from './config'
 import { shouldOpenTextDocument } from './util'
 
 const rootPath = '../../'

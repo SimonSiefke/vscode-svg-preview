@@ -1,6 +1,6 @@
 import * as vscode from 'vscode'
-import { PreviewPanel, createPreviewPanel } from './preview'
 import * as config from './config'
+import { createPreviewPanel, PreviewPanel } from './preview'
 import { shouldOpenTextDocument } from './util'
 
 /**
