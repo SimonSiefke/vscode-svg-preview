@@ -79,6 +79,7 @@
     "test": "echo test"
   },
   "dependencies": {
+    "memoize-one": "^5.0.2",
     "p-cancelable": "^2.0.0"
   },
   "devDependencies": {

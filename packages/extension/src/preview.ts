@@ -9,9 +9,10 @@ import * as fs from 'fs'
 import * as vscode from 'vscode'
 import * as path from 'path'
 import * as util from 'util'
-import * as PCancelable from 'p-cancelable'
+import memoizeOne from 'memoize-one'
 import * as config from './config'
 import { Message, Command } from '../../shared/Message'
+import { shouldOpenTextDocument } from './util'
 
 const readFile = util.promisify(fs.readFile)
 const rootPath = '../../'
@@ -31,27 +32,30 @@ function getPath(extensionPath: string, relativePath: string): string {
 /**
  * Get the html for the svg preview panel. TODO: cache.
  */
-async function getPreviewHTML(extensionPath: string): Promise<string> {
-  const html = await readFile(
-    getPath(extensionPath, 'packages/preview/dist/index.html'),
-    'utf-8'
-  )
-  /**
-   * The base url for links inside the html file.
-   */
-  const base = vscode.Uri.file(getPath(extensionPath, previewPath)).with({
-    scheme: 'vscode-resource',
-  })
+const getPreviewHTML = memoizeOne(
+  async (extensionPath: string): Promise<string> => {
+    console.log('GET HTML')
+    const html = await readFile(
+      getPath(extensionPath, 'packages/preview/dist/index.html'),
+      'utf-8'
+    )
+    /**
+     * The base url for links inside the html file.
+     */
+    const base = vscode.Uri.file(getPath(extensionPath, previewPath)).with({
+      scheme: 'vscode-resource',
+    })
 
-  /**
-   * The things that will be replaced inside the html, e.g. `<!-- base -->` will be replaced with the actual `base` tag and `<!-- svg -->` will be replaced with the actual `svg`.
-   */
-  const replaceMap = {
-    '<!-- insert base here -->': `<base href="${base}/">`,
+    /**
+     * The things that will be replaced inside the html, e.g. `<!-- base -->` will be replaced with the actual `base` tag and `<!-- svg -->` will be replaced with the actual `svg`.
+     */
+    const replaceMap = {
+      '<!-- insert base here -->': `<base href="${base}/">`,
+    }
+    const regExp = new RegExp(Object.keys(replaceMap).join('|'), 'gi')
+    return html.replace(regExp, matched => replaceMap[matched])
   }
-  const regExp = new RegExp(Object.keys(replaceMap).join('|'), 'gi')
-  return html.replace(regExp, matched => replaceMap[matched])
-}
+)
 
 export interface PreviewPanel extends vscode.WebviewPanelSerializer {
   /**
@@ -75,11 +79,6 @@ export interface PreviewPanel extends vscode.WebviewPanelSerializer {
 export function createPreviewPanel(
   context: vscode.ExtensionContext
 ): PreviewPanel {
-  /**
-   * A cancelable promise that indicates that the panel is currently being restored.
-   */
-  let _restorePromise: PCancelable<void> | undefined
-
   /**
    * The webview panel.
    */
@@ -173,10 +172,6 @@ export function createPreviewPanel(
       return _fsPath
     },
     set content(value: string) {
-      if (_restorePromise) {
-        _restorePromise.cancel()
-        _restorePromise = undefined
-      }
       setImmediate(() => {
         postMessage({
           command: 'update.content',
@@ -185,25 +180,23 @@ export function createPreviewPanel(
       })
     },
     async deserializeWebviewPanel(webviewPanel, state) {
-      const PCancelable = await import('p-cancelable')
-      onDidCreatePanel(webviewPanel)
+      await onDidCreatePanel(webviewPanel)
+      if (
+        vscode.window.activeTextEditor &&
+        shouldOpenTextDocument(
+          vscode.window.activeTextEditor.document,
+          undefined
+        )
+      ) {
+        this.fsPath = vscode.window.activeTextEditor.document.uri.fsPath
+        this.content = vscode.window.activeTextEditor.document.getText()
+        return
+      }
       const { fsPath } = state
-      this.fsPath = fsPath
-      // we need make sure that the preview panel has always the latest content so when the user opens another file while we are reading we must cancel reading the file and setting the content afterwards because that would not be the latest content anymore. The `_restorePromise` is cancel as soon as the user opens a new file while we are restoring the content.
-      _restorePromise = new PCancelable(async (resolve, reject, onCancel) => {
-        // eslint-disable-next-line no-param-reassign
-        onCancel.shouldReject = false
-        try {
-          // The previewed file is closed, so we read the content from the file system without opening it
-          const content = await readFile(fsPath, 'utf-8')
-          this.content = content
-          resolve()
-        } catch {
-          reject()
-        }
-      })
       try {
-        await _restorePromise
+        // The previewed file is closed, so we read the content from the file system without opening it
+        const content = await readFile(fsPath, 'utf-8')
+        this.content = content
       } catch {
         vscode.window.showErrorMessage(
           `[svg preview] failed to restore preview for "${fsPath}"`

@@ -1,27 +1,12 @@
 import * as vscode from 'vscode'
 import { PreviewPanel, createPreviewPanel } from './preview'
 import * as config from './config'
+import { shouldOpenTextDocument } from './util'
 
 /**
  * The preview panel.
  */
 let previewPanel: PreviewPanel
-
-function shouldOpenTextDocument(textDocument: vscode.TextDocument): boolean {
-  // 1. its preview already open
-  if (previewPanel.fsPath === textDocument.uri.fsPath) {
-    return false
-  }
-  // 2. its preview is not open and its not an svg
-  if (
-    textDocument.languageId !== 'xml' ||
-    !textDocument.fileName.endsWith('.svg')
-  ) {
-    return false
-  }
-  // 3. its preview is not open and its an svg
-  return true
-}
 
 /**
  * Activate the extension.
@@ -33,7 +18,7 @@ export async function activate(
   context.subscriptions.push(
     vscode.commands.registerTextEditorCommand('svgPreview.open', textEditor => {
       const textDocument = textEditor.document
-      if (shouldOpenTextDocument(textDocument)) {
+      if (shouldOpenTextDocument(textDocument, previewPanel)) {
         previewPanel.fsPath = textDocument.uri.fsPath
         previewPanel.content = textDocument.getText()
       }
@@ -41,8 +26,9 @@ export async function activate(
   )
   context.subscriptions.push(
     vscode.window.onDidChangeActiveTextEditor(textEditor => {
+      console.log('CHANGE ACTIVE TEXTEDITOR')
       const textDocument = textEditor.document
-      if (shouldOpenTextDocument(textDocument)) {
+      if (shouldOpenTextDocument(textDocument, previewPanel)) {
         previewPanel.fsPath = textDocument.uri.fsPath
         previewPanel.content = textDocument.getText()
       }
