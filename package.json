@@ -21,10 +21,10 @@
     "rollup": "^1.9.0",
     "rollup-plugin-copy-glob": "^0.3.0",
     "rollup-plugin-import-alias": "^1.0.6",
-    "rollup-plugin-node-resolve": "^4.1.0",
+    "rollup-plugin-node-resolve": "^4.2.0",
     "rollup-plugin-terser": "^4.0.4",
     "rollup-plugin-typescript2": "^0.20.1",
-    "typescript": "^3.4.1"
+    "typescript": "^3.4.2"
   },
   "bundlesize": [
     {
