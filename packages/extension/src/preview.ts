@@ -21,10 +21,9 @@ const previewPath = 'packages/preview/dist'
  *
  * @example
  * ```js
- * getPath(context, 'packages/preview/dist/index.css')
+ * getPath(context.extensionPath, 'packages/preview/dist/index.css')
  * ```
  */
-
 function getPath(extensionPath: string, relativePath: string): string {
   return path.join(extensionPath, rootPath, relativePath)
 }
@@ -101,16 +100,9 @@ export function createPreviewPanel(
    */
   const postMessage = (message: Message): void => {
     if (_panel.visible) {
-      console.log(
-        'POST MESSAGE TO VISIBLE',
-        message.command,
-        message.payload.slice(0, 5)
-      )
       _panel.webview.postMessage(message)
     } else {
-      console.log('post message to invisible')
       _postponedMessages.set(message.command, message.payload)
-      console.log('size', _postponedMessages.size)
     }
   }
 
@@ -128,13 +120,7 @@ export function createPreviewPanel(
     )
     context.subscriptions.push(
       _panel.onDidChangeViewState(event => {
-        console.log(
-          'change view state to',
-          event.webviewPanel.visible,
-          _postponedMessages
-        )
         if (event.webviewPanel.visible) {
-          console.log('send out', _postponedMessages.size, 'messages')
           for (const [command, payload] of _postponedMessages) {
             postMessage({ command, payload })
           }
@@ -144,7 +130,7 @@ export function createPreviewPanel(
     )
     context.subscriptions.push(
       _panel.webview.onDidReceiveMessage((message: any) => {
-        console.log('received message', message)
+        // TODO
         vscode.window.showInformationMessage(message.command)
       })
     )

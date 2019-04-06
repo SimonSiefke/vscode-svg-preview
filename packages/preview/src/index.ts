@@ -2,17 +2,7 @@ import { Message } from '../../shared/Message'
 
 const vscode = acquireVsCodeApi()
 
-// let _message: any
-
-// setInterval(() => {
-//   vscode.postMessage({
-//     command: _message.data,
-//   })
-// }, 1000)
-
 window.addEventListener('message', event => {
-  console.log('got message', event.data)
-  // _message = event.data
   const message: Message = event.data
   switch (message.command) {
     case 'update.fsPath':
@@ -21,9 +11,6 @@ window.addEventListener('message', event => {
       })
       break
     case 'update.content':
-      vscode.postMessage({
-        command: 'update content',
-      })
       document.body.innerHTML = message.payload
       break
     default:
