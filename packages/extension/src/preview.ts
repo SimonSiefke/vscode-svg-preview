@@ -75,6 +75,11 @@ export interface PreviewPanel extends vscode.WebviewPanelSerializer {
    * The file system path of the currently previewed file
    */
   fsPath: string
+
+  /**
+   * The view column of the preview panel.
+   */
+  viewColumn: vscode.ViewColumn
 }
 
 /**
@@ -97,6 +102,11 @@ export function createPreviewPanel(
    * The latest message that could not be sent because the webview was hidden.
    */
   const _postponedMessages = new Map<Command, string>()
+
+  /**
+   * The view column of the preview panel.
+   */
+  let _viewColumn: vscode.ViewColumn
 
   /**
    * Post a message to the webview.
@@ -138,11 +148,16 @@ export function createPreviewPanel(
         vscode.window.showInformationMessage(message.command)
       })
     )
-    console.log(getPreviewHTML(context.extensionPath))
     _panel.webview.html = getPreviewHTML(context.extensionPath)
   }
 
   return {
+    get viewColumn() {
+      return _viewColumn
+    },
+    set viewColumn(value) {
+      _viewColumn = value
+    },
     set fsPath(value) {
       _fsPath = value
       const title = `Preview ${path.basename(value)}`
@@ -152,7 +167,7 @@ export function createPreviewPanel(
             config.webViewPanelType,
             title,
             {
-              viewColumn: vscode.ViewColumn.Beside,
+              viewColumn: _viewColumn,
               preserveFocus: true,
             },
             {
@@ -178,7 +193,6 @@ export function createPreviewPanel(
       return _fsPath
     },
     set content(value: string) {
-      console.log('SET CONTENT')
       setImmediate(() => {
         postMessage({
           command: 'update.content',
@@ -189,11 +203,9 @@ export function createPreviewPanel(
     async deserializeWebviewPanel(webviewPanel, state) {
       const didCreatePanelPromise = onDidCreatePanel(webviewPanel)
       if (
+        state &&
         vscode.window.activeTextEditor &&
-        shouldOpenTextDocument(
-          vscode.window.activeTextEditor.document,
-          undefined
-        ) &&
+        shouldOpenTextDocument(vscode.window.activeTextEditor.document) &&
         vscode.window.activeTextEditor.document.uri.fsPath !== state.fsPath
       ) {
         this.fsPath = vscode.window.activeTextEditor.document.uri.fsPath

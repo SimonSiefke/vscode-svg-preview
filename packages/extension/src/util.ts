@@ -1,12 +1,11 @@
 import * as vscode from 'vscode'
-import { PreviewPanel } from './preview'
 
 export function shouldOpenTextDocument(
   textDocument: vscode.TextDocument,
-  previewPanel: PreviewPanel | undefined
+  fsPath?: string
 ): boolean {
   // 1. its preview already open
-  if (previewPanel.fsPath === textDocument.uri.fsPath) {
+  if (fsPath === textDocument.uri.fsPath) {
     return false
   }
   // 2. its preview is not open and its not an svg
