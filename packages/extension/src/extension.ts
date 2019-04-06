@@ -27,7 +27,7 @@ export async function activate(
       'svgPreview.showPreview',
       textEditor => {
         const textDocument = textEditor.document
-        if (shouldOpenTextDocument(textDocument, previewPanel)) {
+        if (shouldOpenTextDocument(textDocument, previewPanel.fsPath)) {
           previewPanel.viewColumn = vscode.ViewColumn.Active
           previewPanel.fsPath = textDocument.uri.fsPath
           previewPanel.content = textDocument.getText()
@@ -48,18 +48,19 @@ export async function activate(
       }
     )
   )
-  if (options.autoOpen) {
-    context.subscriptions.push(
-      vscode.window.onDidChangeActiveTextEditor(textEditor => {
-        const textDocument = textEditor.document
-        if (shouldOpenTextDocument(textDocument, previewPanel.fsPath)) {
-          previewPanel.viewColumn = vscode.ViewColumn.Beside
-          previewPanel.fsPath = textDocument.uri.fsPath
-          previewPanel.content = textDocument.getText()
-        }
-      })
-    )
-  }
+  context.subscriptions.push(
+    vscode.window.onDidChangeActiveTextEditor(textEditor => {
+      if (!options.autoOpen && !previewPanel.fsPath) {
+        return
+      }
+      const textDocument = textEditor.document
+      if (shouldOpenTextDocument(textDocument, previewPanel.fsPath)) {
+        previewPanel.viewColumn = vscode.ViewColumn.Beside
+        previewPanel.fsPath = textDocument.uri.fsPath
+        previewPanel.content = textDocument.getText()
+      }
+    })
+  )
   context.subscriptions.push(
     vscode.workspace.onDidChangeTextDocument(event => {
       const shouldUpdateTextDocument =
