@@ -14,7 +14,6 @@ let previewPanel: PreviewPanel
 export async function activate(
   context: vscode.ExtensionContext
 ): Promise<void> {
-  console.log('activate')
   previewPanel = createPreviewPanel(context)
   const options = {
     get autoOpen() {
