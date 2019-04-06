@@ -35,7 +35,6 @@ function getPath(extensionPath: string, relativePath: string): string {
  */
 const getPreviewHTML = memoizeOne(
   async (extensionPath: string): Promise<string> => {
-    console.log('GET HTML')
     const html = await readFile(
       getPath(extensionPath, 'packages/preview/dist/index.html'),
       'utf-8'

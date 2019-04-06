@@ -2,15 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-
-    <!--
-                Use a content security policy to only allow loading images from https or from our extension directory,
-                and only allow scripts that have a specific nonce.
-                -->
-    <!--   <meta
+    <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'none'; img-src vscode-resource: https:; script-src 'nonce-${nonce}';"
-    />-->
+      content="default-src 'none'; img-src vscode-resource: https:; style-src 'unsafe-inline' vscode-resource:; script-src vscode-resource:;"
+    />
 
     <!-- insert base here -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />

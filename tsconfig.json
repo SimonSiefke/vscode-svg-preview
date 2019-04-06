@@ -4,7 +4,6 @@
     "module": "esnext",
     "target": "esnext",
     "lib": ["esnext"],
-    "sourceMap": true,
     "skipLibCheck": true,
     "noImplicitThis": true
   }
