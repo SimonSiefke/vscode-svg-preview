@@ -11,7 +11,7 @@ import * as path from 'path'
 import * as util from 'util'
 import * as PCancelable from 'p-cancelable'
 import * as config from './config'
-import { Message } from '../../shared/Message'
+import { Message, Command } from '../../shared/Message'
 
 const readFile = util.promisify(fs.readFile)
 const rootPath = '../../'
@@ -77,24 +77,42 @@ export function createPreviewPanel(
   context: vscode.ExtensionContext
 ): PreviewPanel {
   /**
-   * a cancelable promise that indicates that the panel is currently being restored
+   * A cancelable promise that indicates that the panel is currently being restored.
    */
   let _restorePromise: PCancelable<void> | undefined
 
   /**
-   * The webview panel
+   * The webview panel.
    */
   let _panel: vscode.WebviewPanel | undefined
 
   /**
-   * The file system path of the currently previewed file
+   * The file system path of the currently previewed file.
    */
   let _fsPath: string | undefined
 
   /**
-   * Whether the webview panel is visible or not
+   * The latest message that could not be sent because the webview was hidden.
    */
-  let _visible: boolean = false
+  const _postponedMessages = new Map<Command, string>()
+
+  /**
+   * Post a message to the webview.
+   */
+  const postMessage = (message: Message): void => {
+    if (_panel.visible) {
+      console.log(
+        'POST MESSAGE TO VISIBLE',
+        message.command,
+        message.payload.slice(0, 5)
+      )
+      _panel.webview.postMessage(message)
+    } else {
+      console.log('post message to invisible')
+      _postponedMessages.set(message.command, message.payload)
+      console.log('size', _postponedMessages.size)
+    }
+  }
 
   /**
    * This method is called when a webview panel has been created.
@@ -103,30 +121,45 @@ export function createPreviewPanel(
     webViewPanel: vscode.WebviewPanel
   ): Promise<void> => {
     _panel = webViewPanel
-    _panel.webview.html = await getPreviewHTML(context.extensionPath)
     context.subscriptions.push(
       _panel.onDidDispose(() => {
         _panel = undefined
       })
     )
-    _visible = _panel.visible
     context.subscriptions.push(
       _panel.onDidChangeViewState(event => {
-        _visible = event.webviewPanel.visible
-        console.log('change viewstate', event.webviewPanel.visible)
+        console.log(
+          'change view state to',
+          event.webviewPanel.visible,
+          _postponedMessages
+        )
+        if (event.webviewPanel.visible) {
+          console.log('send out', _postponedMessages.size, 'messages')
+          for (const [command, payload] of _postponedMessages) {
+            postMessage({ command, payload })
+          }
+          _postponedMessages.clear()
+        }
       })
     )
+    context.subscriptions.push(
+      _panel.webview.onDidReceiveMessage((message: any) => {
+        console.log('received message', message)
+        vscode.window.showInformationMessage(message.command)
+      })
+    )
+    _panel.webview.html = await getPreviewHTML(context.extensionPath)
   }
 
   return {
     set fsPath(value) {
       _fsPath = value
-      const title = path.basename(value)
+      const title = `Preview ${path.basename(value)}`
       if (!_panel) {
         onDidCreatePanel(
           vscode.window.createWebviewPanel(
             config.webViewPanelType,
-            `Preview ${title}`,
+            title,
             {
               viewColumn: vscode.ViewColumn.Beside,
               preserveFocus: true,
@@ -142,11 +175,12 @@ export function createPreviewPanel(
             }
           )
         )
+      } else {
+        _panel.title = title
       }
-      _panel.title = title
-      _panel.webview.postMessage({
+      postMessage({
         command: 'update.fsPath',
-        data: value,
+        payload: value,
       })
     },
     get fsPath() {
@@ -157,22 +191,18 @@ export function createPreviewPanel(
         _restorePromise.cancel()
         _restorePromise = undefined
       }
-      const message: Message = {
-        command: 'update.content',
-        data: value,
-      }
-      console.log('panel is', _panel.visible)
-      console.log('update content')
-      _panel.webview.postMessage(message)
+      setImmediate(() => {
+        postMessage({
+          command: 'update.content',
+          payload: value,
+        })
+      })
     },
     async deserializeWebviewPanel(webviewPanel, state) {
-      console.log('deserialize')
       const PCancelable = await import('p-cancelable')
       onDidCreatePanel(webviewPanel)
       const { fsPath } = state
-      console.log('deserialize', fsPath)
       this.fsPath = fsPath
-
       // we need make sure that the preview panel has always the latest content so when the user opens another file while we are reading we must cancel reading the file and setting the content afterwards because that would not be the latest content anymore. The `_restorePromise` is cancel as soon as the user opens a new file while we are restoring the content.
       _restorePromise = new PCancelable(async (resolve, reject, onCancel) => {
         // eslint-disable-next-line no-param-reassign
@@ -190,7 +220,7 @@ export function createPreviewPanel(
         await _restorePromise
       } catch {
         vscode.window.showErrorMessage(
-          `[svg preview] failed to restore preview of "${fsPath}"`
+          `[svg preview] failed to restore preview for "${fsPath}"`
         )
       }
     },

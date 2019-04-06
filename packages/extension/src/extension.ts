@@ -10,7 +10,7 @@ let previewPanel: PreviewPanel
 function shouldOpenTextDocument(textDocument: vscode.TextDocument): boolean {
   // 1. its already open
   if (previewPanel.fsPath === textDocument.uri.fsPath) {
-    return false
+    return true
   }
   // 2. its not open and its not an svg
   if (
@@ -39,19 +39,9 @@ export async function activate(
       }
     })
   )
-  // TODO: needed?
-  // context.subscriptions.push(
-  //   vscode.workspace.onDidOpenTextDocument(
-  //     (textDocument): void => {
-  //       if (shouldOpenTextDocument(textDocument)) {
-  //         previewPanel.fsPath = textDocument.uri.fsPath
-  //         previewPanel.content = textDocument.getText()
-  //       }
-  //     }
-  //   )
-  // )
   context.subscriptions.push(
     vscode.window.onDidChangeActiveTextEditor(textEditor => {
+      console.log('ACTIVE TEXT EDITOR CHANGED')
       const textDocument = textEditor.document
       if (shouldOpenTextDocument(textDocument)) {
         previewPanel.fsPath = textDocument.uri.fsPath
@@ -60,12 +50,13 @@ export async function activate(
     })
   )
   context.subscriptions.push(
-    vscode.workspace.onDidChangeTextDocument(textDocument => {
+    vscode.workspace.onDidChangeTextDocument(event => {
+      console.log('CHANGE document')
       const shouldUpdateTextDocument =
-        textDocument.contentChanges.length > 0 &&
-        textDocument.document.uri.fsPath === previewPanel.fsPath
+        event.contentChanges.length > 0 &&
+        event.document.uri.fsPath === previewPanel.fsPath
       if (shouldUpdateTextDocument) {
-        previewPanel.content = textDocument.document.getText()
+        previewPanel.content = event.document.getText()
       }
     })
   )

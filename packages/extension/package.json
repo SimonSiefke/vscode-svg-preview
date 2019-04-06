@@ -54,29 +54,25 @@
     "*",
     "onLanguage:xml",
     "onWebviewPanel:svgPreview",
-    "onCommand:svgPreview.open",
-    "onCommand:catCoding.start",
-    "onCommand:catCoding.doRefactor",
-    "onWebviewPanel:catCoding"
+    "onCommand:svgPreview.open"
   ],
   "contributes": {
     "commands": [
-      {
-        "command": "catCoding.start",
-        "title": "Start cat coding session",
-        "category": "Cat Coding"
-      },
-      {
-        "command": "catCoding.doRefactor",
-        "title": "Do some refactoring",
-        "category": "Cat Coding"
-      },
       {
         "category": "Svg Preview",
         "command": "svgPreview.open",
         "title": "SVG: Open Preview to the Side"
       }
-    ]
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "svgPreview.open",
+          "when": "editorLangId == xml && resourceExtname == .svg",
+          "group": "navigation"
+        }
+      ]
+    }
   },
   "main": "./dist/extension.js",
   "scripts": {
