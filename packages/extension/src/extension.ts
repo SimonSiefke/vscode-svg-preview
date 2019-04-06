@@ -8,18 +8,18 @@ import * as config from './config'
 let previewPanel: PreviewPanel
 
 function shouldOpenTextDocument(textDocument: vscode.TextDocument): boolean {
-  // 1. its already open
+  // 1. its preview already open
   if (previewPanel.fsPath === textDocument.uri.fsPath) {
     return false
   }
-  // 2. its not open and its not an svg
+  // 2. its preview is not open and its not an svg
   if (
     textDocument.languageId !== 'xml' ||
     !textDocument.fileName.endsWith('.svg')
   ) {
     return false
   }
-  // 3. its not open and its an svg
+  // 3. its preview is not open and its an svg
   return true
 }
 
