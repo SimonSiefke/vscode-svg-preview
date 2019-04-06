@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 import memoizeOne from 'memoize-one'
 import * as path from 'path'
 import * as vscode from 'vscode'

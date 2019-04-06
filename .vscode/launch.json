@@ -18,15 +18,15 @@
       "preLaunchTask": "npm: dev"
     },
     {
-      "name": "Extension (debug)",
       "type": "extensionHost",
       "request": "launch",
+      "name": "Extension (prod)",
       "runtimeExecutable": "${execPath}",
       "args": [
         "--extensionDevelopmentPath=${workspaceRoot}/packages/extension"
       ],
-      "outFiles": ["${workspaceFolder}/dist/**/*.js"],
-      "preLaunchTask": "npm: dev"
+      "outFiles": ["${workspaceRoot}/dist/**/*.js"],
+      "preLaunchTask": "npm: build"
     }
   ]
 }

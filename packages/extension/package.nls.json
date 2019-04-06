@@ -1,4 +1,5 @@
 {
   "svgPreview.command.showPreview": "Open Preview",
-  "svgPreview.command.showPreviewToSide": "Open Preview to the Side"
+  "svgPreview.command.showPreviewToSide": "Open Preview to the Side",
+  "svgPreview.configuration.autoOpen": "Automatically open the preview when an svg file is opened"
 }

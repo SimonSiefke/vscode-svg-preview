@@ -1,22 +1,7 @@
-/* eslint-disable import/no-default-export */
 import importAlias from 'rollup-plugin-import-alias'
 import nodeResolve from 'rollup-plugin-node-resolve'
-import { terser } from 'rollup-plugin-terser'
 import typescriptPlugin from 'rollup-plugin-typescript2'
 import copy from 'rollup-plugin-copy-glob'
-
-const options = {
-  compress: false,
-}
-
-const terserPlugin = terser({
-  ecma: 9,
-  toplevel: true,
-  mangle: false, // keep output readable
-  output: {
-    inline_script: false,
-  },
-})
 
 /** @type {import('rollup').RollupOptions} */
 const extensionConfig = {
@@ -76,11 +61,5 @@ const previewConfig = {
 
 /** @type {import('rollup').RollupOptions[]} */
 const configs = [extensionConfig, previewConfig]
-
-if (options.compress) {
-  for (const config of configs) {
-    config.plugins.push(terserPlugin)
-  }
-}
 
 export default configs

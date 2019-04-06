@@ -3,6 +3,7 @@ prettierrc.js
 *.html
 deprecated
 rollup.config.js
+rollup.config.prod.js
 **/node_modules
 **/coverage
 *.md

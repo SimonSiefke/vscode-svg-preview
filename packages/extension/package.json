@@ -77,7 +77,7 @@
         "svgPreview.autoOpen": {
           "type": "boolean",
           "default": false,
-          "description": "TODO"
+          "description": "%svgPreview.configuration.autoOpen%"
         }
       }
     }
