@@ -180,7 +180,7 @@ export function createPreviewPanel(
       })
     },
     async deserializeWebviewPanel(webviewPanel, state) {
-      await onDidCreatePanel(webviewPanel)
+      const didCreatePanelPromise = onDidCreatePanel(webviewPanel)
       if (
         vscode.window.activeTextEditor &&
         shouldOpenTextDocument(
@@ -189,19 +189,17 @@ export function createPreviewPanel(
         )
       ) {
         this.fsPath = vscode.window.activeTextEditor.document.uri.fsPath
+        await didCreatePanelPromise
         this.content = vscode.window.activeTextEditor.document.getText()
         return
       }
       const { fsPath } = state
-      try {
-        // The previewed file is closed, so we read the content from the file system without opening it
-        const content = await readFile(fsPath, 'utf-8')
-        this.content = content
-      } catch {
-        vscode.window.showErrorMessage(
-          `[svg preview] failed to restore preview for "${fsPath}"`
-        )
-      }
+      // The previewed file is closed, so we open it and read its content
+      const [textDocument] = await Promise.all([
+        vscode.workspace.openTextDocument(vscode.Uri.file(fsPath)),
+        didCreatePanelPromise,
+      ])
+      this.content = textDocument.getText()
     },
   }
 }
