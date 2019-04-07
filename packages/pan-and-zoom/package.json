@@ -6,6 +6,7 @@
     "dev": "parcel example/index.html"
   },
   "devDependencies": {
+    "jest": "^24.7.1",
     "parcel-bundler": "^1.12.3"
   }
 }

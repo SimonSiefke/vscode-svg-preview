@@ -6,5 +6,5 @@ module.exports = {
   displayName: package.name,
   name: package.name,
   rootDir: '../..',
-  testMatch: [`<rootDir>/packages/${package.name}/**/*.spec.js`],
+  testMatch: [`<rootDir>/packages/${package.name}/src/**/*.spec.ts`],
 }
