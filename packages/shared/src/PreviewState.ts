@@ -1,7 +1,7 @@
 /**
  * State of the preview panel.
  */
-export interface State {
+export interface PreviewState {
   /**
    * File system path of the currently previewed file.
    */
@@ -10,4 +10,12 @@ export interface State {
    * Content of the currently previewed file.
    */
   content?: string
+  /**
+   * Whether or not panning is enabled
+   */
+  panningEnabled: boolean
+  /**
+   * Whether or not zooming is enabled
+   */
+  zoomingEnabled: boolean
 }

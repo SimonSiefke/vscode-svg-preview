@@ -1,13 +1,67 @@
 import memoizeOne from 'memoize-one'
 import * as path from 'path'
 import * as vscode from 'vscode'
-import { Command, Message } from '../../shared/src/Message'
-import { State } from '../../shared/src/State'
-import * as config from './config'
+import { Message } from '../../shared/src/Message'
+import { PreviewState } from '../../shared/src/PreviewState'
 import { shouldOpenTextDocument } from './util'
+import { webViewPanelType } from './constants'
+import { context } from './extension'
+
+interface PreviewPanel extends vscode.WebviewPanelSerializer {
+  deserializeWebviewPanel: (
+    webviewPanel: vscode.WebviewPanel,
+    state: PreviewState
+  ) => Promise<void>
+
+  /**
+   * The content of the currently previewed file
+   */
+  content: string
+
+  /**
+   * The file system path of the currently previewed file
+   */
+  fsPath: string
+
+  /**
+   * The view column of the preview panel.
+   */
+  viewColumn: vscode.ViewColumn
+}
 
 const rootPath = '../../'
 const previewPath = 'packages/preview/dist'
+
+/**
+ * The webview panel.
+ */
+let panel: vscode.WebviewPanel | undefined
+
+/**
+ * The file system path of the currently previewed file.
+ */
+let fsPath: string | undefined
+
+/**
+ * The latest message that could not be sent because the webview was hidden.
+ */
+const postponedMessages = new Map<Message['command'], Message['payload']>()
+
+/**
+ * The view column of the preview panel.
+ */
+let viewColumn: vscode.ViewColumn
+
+/**
+ * Post a message to the webview.
+ */
+const postMessage = (message: Message): void => {
+  if (panel.visible) {
+    panel.webview.postMessage(message)
+  } else {
+    postponedMessages.set(message.command, message.payload)
+  }
+}
 
 /**
  * Get the absolute path for relative path from the root of this project.
@@ -54,160 +108,105 @@ const getPreviewHTML = memoizeOne(
   }
 )
 
-export interface PreviewPanel extends vscode.WebviewPanelSerializer {
-  deserializeWebviewPanel: (
-    webviewPanel: vscode.WebviewPanel,
-    state: State
-  ) => Promise<void>
-
-  /**
-   * The content of the currently previewed file
-   */
-  content: string
-
-  /**
-   * The file system path of the currently previewed file
-   */
-  fsPath: string
-
-  /**
-   * The view column of the preview panel.
-   */
-  viewColumn: vscode.ViewColumn
+/**
+ * This method is called when a webview panel has been created.
+ */
+const onDidCreatePanel = async (
+  webViewPanel: vscode.WebviewPanel
+): Promise<void> => {
+  panel = webViewPanel
+  context.subscriptions.push(
+    panel.onDidDispose(() => {
+      panel = undefined
+      fsPath = undefined
+    })
+  )
+  context.subscriptions.push(
+    panel.onDidChangeViewState(event => {
+      if (event.webviewPanel.visible) {
+        for (const [command, payload] of postponedMessages) {
+          // @ts-ignore TODO:
+          postMessage({ command, payload })
+        }
+        postponedMessages.clear()
+      }
+    })
+  )
+  context.subscriptions.push(
+    panel.webview.onDidReceiveMessage((message: any) => {
+      // TODO
+      vscode.window.showInformationMessage(message.command)
+    })
+  )
+  panel.webview.html = getPreviewHTML(context.extensionPath)
 }
 
 /**
- * Create a preview panel.
+ * The preview panel.
  */
-export function createPreviewPanel(
-  context: vscode.ExtensionContext
-): PreviewPanel {
-  /**
-   * The webview panel.
-   */
-  let _panel: vscode.WebviewPanel | undefined
-
-  /**
-   * The file system path of the currently previewed file.
-   */
-  let _fsPath: string | undefined
-
-  /**
-   * The latest message that could not be sent because the webview was hidden.
-   */
-  const _postponedMessages = new Map<Command, string>()
-
-  /**
-   * The view column of the preview panel.
-   */
-  let _viewColumn: vscode.ViewColumn
-
-  /**
-   * Post a message to the webview.
-   */
-  const postMessage = (message: Message): void => {
-    if (_panel.visible) {
-      _panel.webview.postMessage(message)
-    } else {
-      _postponedMessages.set(message.command, message.payload)
-    }
-  }
-
-  /**
-   * This method is called when a webview panel has been created.
-   */
-  const onDidCreatePanel = async (
-    webViewPanel: vscode.WebviewPanel
-  ): Promise<void> => {
-    _panel = webViewPanel
-    context.subscriptions.push(
-      _panel.onDidDispose(() => {
-        _panel = undefined
-        _fsPath = undefined
-      })
-    )
-    context.subscriptions.push(
-      _panel.onDidChangeViewState(event => {
-        if (event.webviewPanel.visible) {
-          for (const [command, payload] of _postponedMessages) {
-            postMessage({ command, payload })
+export const previewPanel: PreviewPanel = {
+  get viewColumn() {
+    return viewColumn
+  },
+  set viewColumn(value) {
+    viewColumn = value
+  },
+  set fsPath(value) {
+    fsPath = value
+    const title = `Preview ${path.basename(value)}`
+    if (!panel) {
+      onDidCreatePanel(
+        vscode.window.createWebviewPanel(
+          webViewPanelType,
+          title,
+          {
+            viewColumn,
+            preserveFocus: true,
+          },
+          {
+            enableCommandUris: true,
+            localResourceRoots: [
+              vscode.Uri.file(
+                getPath(context.extensionPath, 'packages/preview/dist')
+              ),
+            ],
+            enableScripts: true,
           }
-          _postponedMessages.clear()
-        }
-      })
-    )
-    context.subscriptions.push(
-      _panel.webview.onDidReceiveMessage((message: any) => {
-        // TODO
-        vscode.window.showInformationMessage(message.command)
-      })
-    )
-    _panel.webview.html = getPreviewHTML(context.extensionPath)
-  }
-
-  return {
-    get viewColumn() {
-      return _viewColumn
-    },
-    set viewColumn(value) {
-      _viewColumn = value
-    },
-    set fsPath(value) {
-      _fsPath = value
-      const title = `Preview ${path.basename(value)}`
-      if (!_panel) {
-        onDidCreatePanel(
-          vscode.window.createWebviewPanel(
-            config.webViewPanelType,
-            title,
-            {
-              viewColumn: _viewColumn,
-              preserveFocus: true,
-            },
-            {
-              enableCommandUris: true,
-              localResourceRoots: [
-                vscode.Uri.file(
-                  getPath(context.extensionPath, 'packages/preview/dist')
-                ),
-              ],
-              enableScripts: true,
-            }
-          )
         )
-      } else {
-        _panel.title = title
-      }
+      )
+    } else {
+      panel.title = title
+    }
+    postMessage({
+      command: 'update.fsPath',
+      payload: value,
+    })
+  },
+  get fsPath() {
+    return fsPath
+  },
+  set content(value: string) {
+    setImmediate(() => {
       postMessage({
-        command: 'update.fsPath',
+        command: 'update.content',
         payload: value,
       })
-    },
-    get fsPath() {
-      return _fsPath
-    },
-    set content(value: string) {
-      setImmediate(() => {
-        postMessage({
-          command: 'update.content',
-          payload: value,
-        })
-      })
-    },
-    async deserializeWebviewPanel(webviewPanel, state) {
-      const didCreatePanelPromise = onDidCreatePanel(webviewPanel)
-      if (
-        state &&
-        vscode.window.activeTextEditor &&
-        shouldOpenTextDocument(vscode.window.activeTextEditor.document) &&
-        vscode.window.activeTextEditor.document.uri.fsPath !== state.fsPath
-      ) {
-        this.fsPath = vscode.window.activeTextEditor.document.uri.fsPath
-        await didCreatePanelPromise
-        this.content = vscode.window.activeTextEditor.document.getText()
-      } else {
-        _fsPath = state.fsPath
-      }
-    },
-  }
+    })
+  },
+  async deserializeWebviewPanel(webviewPanel, state) {
+    const didCreatePanelPromise = onDidCreatePanel(webviewPanel)
+    if (
+      state &&
+      vscode.window.activeTextEditor &&
+      shouldOpenTextDocument(vscode.window.activeTextEditor.document) &&
+      vscode.window.activeTextEditor.document.uri.fsPath !== state.fsPath
+    ) {
+      this.fsPath = vscode.window.activeTextEditor.document.uri.fsPath
+      await didCreatePanelPromise
+      this.content = vscode.window.activeTextEditor.document.getText()
+    } else {
+      // eslint-disable-next-line prefer-destructuring
+      fsPath = state.fsPath
+    }
+  },
 }

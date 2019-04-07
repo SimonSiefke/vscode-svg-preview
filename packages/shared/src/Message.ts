@@ -1,9 +1,20 @@
-export type Command = 'update.content' | 'update.fsPath'
-
 /**
  * Message that can be send from the extension to the preview panel.
  */
-export interface Message {
-  command: Command
-  payload: string
-}
+export type Message =
+  | {
+      command: 'update.content'
+      payload: string
+    }
+  | {
+      command: 'update.fsPath'
+      payload: string
+    }
+  | {
+      command: 'update.panningEnabled'
+      payload: boolean
+    }
+  | {
+      command: 'update.zoomingEnabled'
+      payload: boolean
+    }

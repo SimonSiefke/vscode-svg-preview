@@ -77,7 +77,8 @@
         "svgPreview.autoOpen": {
           "type": "boolean",
           "default": false,
-          "description": "%svgPreview.configuration.autoOpen%"
+          "description": "%svgPreview.configuration.autoOpen%",
+          "scope": "resource"
         }
       }
     }

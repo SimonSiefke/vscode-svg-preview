@@ -3,6 +3,23 @@ import { Transform, createTransform } from './createTransform/createTransform'
 type CleanUp = () => void
 
 /**
+ * The current zoom
+ */
+let zoom = 1
+
+const width = window.innerWidth
+
+/**
+ *  This variable will contain the original coordinates when the user start pressing the mouse or touching the screen.
+ */
+const pointerOrigin = new DOMPoint()
+
+/**
+ * Current pan offset.
+ */
+const pointerOffset = new DOMPoint()
+
+/**
  * Use pan functionality.
  */
 export function usePan(): CleanUp {
@@ -10,16 +27,6 @@ export function usePan(): CleanUp {
    *  This variable will be used later for move events to check if pointer is down or not
    */
   let isPointerDown = false
-
-  /**
-   *  This variable will contain the original coordinates when the user start pressing the mouse or touching the screen.
-   */
-  const pointerOrigin = new DOMPoint()
-
-  /**
-   * Current pan offset.
-   */
-  const pointerOffset = new DOMPoint()
 
   /**
    * Function called by the event listeners when user start pressing.
@@ -45,10 +52,14 @@ export function usePan(): CleanUp {
     // Update the transform coordinates with the distance from origin and current position
     const x = event.clientX + pointerOffset.x - pointerOrigin.x
     const y = event.clientY + pointerOffset.y - pointerOrigin.y
-    document.body.style.transform = `translate(${x}px,${y}px)`
+    const transform = createTransform().translate(x / zoom, y / zoom)
+    document.body.style.transform = `${transform}`
   }
 
   function onPointerUp(event: PointerEvent): void {
+    if (!isPointerDown) {
+      return
+    }
     isPointerDown = false
     // compute the pan offset
     pointerOffset.x += event.clientX - pointerOrigin.x
@@ -67,11 +78,19 @@ export function usePan(): CleanUp {
   }
 }
 
+window.addEventListener('resize', () => {
+  const newWidth = window.innerWidth
+  const scale = newWidth / width
+  pointerOrigin.x *= scale
+  pointerOrigin.y *= scale
+  pointerOffset.x *= scale
+  pointerOffset.y *= scale
+})
+
 /**
  * Use zoom functionality.
  */
 export function useZoom(): CleanUp {
-  let scale = 1
   const minScale = 0.1
   const maxScale = Infinity
   // const scaleFactor = 2
@@ -84,13 +103,13 @@ export function useZoom(): CleanUp {
   function handleWheel(event: WheelEvent): void {
     const direction = event.deltaY < 0 ? 'up' : 'down'
     if (direction === 'up') {
-      scale = Math.min(scale * scaleFactor, maxScale)
+      zoom = Math.min(zoom * scaleFactor, maxScale)
     } else {
-      scale = Math.max(scale / scaleFactor, minScale)
+      zoom = Math.max(zoom / scaleFactor, minScale)
     }
     const transform = createTransform()
       .translate(event.clientX, event.clientY)
-      .scale(scale)
+      .scale(zoom)
       .translate(-event.clientX, -event.clientY)
     setTransform(transform)
   }

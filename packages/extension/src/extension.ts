@@ -1,27 +1,17 @@
 import * as vscode from 'vscode'
-import * as config from './config'
-import { createPreviewPanel, PreviewPanel } from './preview'
+import { previewPanel } from './preview'
 import { shouldOpenTextDocument } from './util'
+import { webViewPanelType } from './constants'
+import { configuration } from './configuration'
 
-/**
- * The preview panel.
- */
-let previewPanel: PreviewPanel
+// eslint-disable-next-line import/no-mutable-exports
+export let context: vscode.ExtensionContext
 
 /**
  * Activate the extension.
  */
-export async function activate(
-  context: vscode.ExtensionContext
-): Promise<void> {
-  previewPanel = createPreviewPanel(context)
-  const options = {
-    get autoOpen() {
-      return vscode.workspace
-        .getConfiguration('svgPreview')
-        .get<boolean>('autoOpen')
-    },
-  }
+export async function activate(c: vscode.ExtensionContext): Promise<void> {
+  context = c
   context.subscriptions.push(
     vscode.commands.registerTextEditorCommand(
       'svgPreview.showPreview',
@@ -50,7 +40,10 @@ export async function activate(
   )
   context.subscriptions.push(
     vscode.window.onDidChangeActiveTextEditor(textEditor => {
-      if (!options.autoOpen && !previewPanel.fsPath) {
+      if (
+        !previewPanel.fsPath &&
+        !configuration.get('autoOpen', textEditor.document.uri)
+      ) {
         return
       }
       const textDocument = textEditor.document
@@ -72,10 +65,7 @@ export async function activate(
     })
   )
   context.subscriptions.push(
-    vscode.window.registerWebviewPanelSerializer(
-      config.webViewPanelType,
-      previewPanel
-    )
+    vscode.window.registerWebviewPanelSerializer(webViewPanelType, previewPanel)
   )
 }
 
