@@ -59,8 +59,6 @@ export const configuration: Configuration = {
     listeners.push(callback)
   },
   get(key, resource) {
-    console.log('get')
-    console.log(context)
     return vscode.workspace
       .getConfiguration('svgPreview', resource)
       .get<any>(key)
