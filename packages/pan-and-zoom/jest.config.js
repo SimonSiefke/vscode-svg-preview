@@ -1,10 +1,11 @@
 const base = require('../../jest.config.base.js')
-const package = require('./package')
+// @ts-ignore TODO:
+const pkg = require('./package.json')
 
 module.exports = {
   ...base,
-  displayName: package.name,
-  name: package.name,
+  displayName: pkg.name,
+  name: pkg.name,
   rootDir: '../..',
-  testMatch: [`<rootDir>/packages/${package.name}/src/**/*.spec.ts`],
+  testMatch: [`<rootDir>/packages/${pkg.name}/src/**/*.spec.ts`],
 }

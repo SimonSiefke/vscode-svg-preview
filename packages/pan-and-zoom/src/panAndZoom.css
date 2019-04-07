@@ -4,6 +4,7 @@ html {
     cursor: -webkit-grab;
     touch-action: none;
     text-align: center;
+    transform-origin: top left
 }
 
 html:active{

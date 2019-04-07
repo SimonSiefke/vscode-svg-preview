@@ -74,6 +74,7 @@ export function useZoom(): CleanUp {
   let scale = 1
   const minScale = 0.1
   const maxScale = Infinity
+  // const scaleFactor = 2
   const scaleFactor = 1.3
 
   function setTransform(transform: Transform): void {
@@ -82,21 +83,15 @@ export function useZoom(): CleanUp {
 
   function handleWheel(event: WheelEvent): void {
     const direction = event.deltaY < 0 ? 'up' : 'down'
-    const width = document.documentElement.offsetWidth
-    const height = document.documentElement.offsetHeight
-
     if (direction === 'up') {
       scale = Math.min(scale * scaleFactor, maxScale)
     } else {
       scale = Math.max(scale / scaleFactor, minScale)
     }
-    const relativeFactor = 1
-    const relativeX = (event.clientX - width / 2) * relativeFactor
-    const relativeY = (event.clientY - height / 2) * relativeFactor
     const transform = createTransform()
-      .translate(relativeX, relativeY)
+      .translate(event.clientX, event.clientY)
       .scale(scale)
-      .translate(-relativeX, -relativeY)
+      .translate(-event.clientX, -event.clientY)
     setTransform(transform)
   }
   document.documentElement.addEventListener('wheel', handleWheel)
