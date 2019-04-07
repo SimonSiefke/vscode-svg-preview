@@ -22,7 +22,6 @@ const state = new Proxy<PreviewState>(
           break
         case 'panningEnabled':
           if (value && !panningCleanUp) {
-            console.log('USE PAN')
             panningCleanUp = usePan()
           }
           if (!value && panningCleanUp) {

@@ -195,10 +195,6 @@ const onDidCreatePanel = async (
   )
   configuration.addChangeListener(event => {
     if (event.affectsConfiguration('panningEnabled')) {
-      console.log(
-        'change in panning',
-        configuration.get('panningEnabled', vscode.Uri.file(fsPath))
-      )
       state.panningEnabled = configuration.get(
         'panningEnabled',
         vscode.Uri.file(fsPath)
