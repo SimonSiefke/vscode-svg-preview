@@ -1,0 +1,11 @@
+{
+  "name": "pan-and-zoom",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "dev": "parcel example/index.html"
+  },
+  "devDependencies": {
+    "parcel-bundler": "^1.12.3"
+  }
+}

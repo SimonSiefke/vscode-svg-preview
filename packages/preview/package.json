@@ -1,12 +1,6 @@
 {
   "name": "preview",
-  "version": "1.0.0",
-  "description": "",
-  "main": ".eslintrc.js",
   "scripts": {
     "test": "echo test1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  }
 }

@@ -1,6 +1,9 @@
 import { Message } from '../../shared/src/Message'
+import { usePan } from '../../pan-and-zoom/src/panAndZoom'
 
 const vscode = acquireVsCodeApi()
+
+usePan()
 
 const state = new Proxy<State>(
   {},

@@ -7,3 +7,4 @@ rollup.config.prod.js
 **/node_modules
 **/coverage
 *.md
+jest.config.js
