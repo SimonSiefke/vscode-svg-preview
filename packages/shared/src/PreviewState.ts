@@ -13,9 +13,9 @@ export interface PreviewState {
   /**
    * Whether or not panning is enabled
    */
-  panningEnabled: boolean
+  panningEnabled?: boolean
   /**
    * Whether or not zooming is enabled
    */
-  zoomingEnabled: boolean
+  zoomingEnabled?: boolean
 }

@@ -1,19 +1,17 @@
 import { Message } from '../../shared/src/Message'
-import { usePan } from '../../pan-and-zoom/src/panAndZoom'
+import { usePan, useZoom } from '../../pan-and-zoom/src/panAndZoom'
 
 const vscode = acquireVsCodeApi()
 
-usePan()
+let panningCleanUp: (() => void) | undefined
+let zoomingCleanup: (() => void) | undefined
 
 const state = new Proxy<PreviewState>(
-  {
-    panningEnabled: true,
-    zoomingEnabled: false,
-  },
+  {},
   {
     set(target, key: keyof PreviewState, value) {
       if (target[key] === value) {
-        vscode.postMessage({ command: `unnecessary${key}${value}` })
+        vscode.postMessage({ command: `unnecessary update "${key}${value}"` })
         return true
       }
       switch (key) {
@@ -21,6 +19,25 @@ const state = new Proxy<PreviewState>(
           document.body.innerHTML = value
           break
         case 'fsPath':
+          break
+        case 'panningEnabled':
+          if (value && !panningCleanUp) {
+            console.log('USE PAN')
+            panningCleanUp = usePan()
+          }
+          if (!value && panningCleanUp) {
+            panningCleanUp()
+            panningCleanUp = undefined
+          }
+          break
+        case 'zoomingEnabled':
+          if (value && !zoomingCleanup) {
+            zoomingCleanup = useZoom()
+          }
+          if (!value && zoomingCleanup) {
+            zoomingCleanup()
+            zoomingCleanup = undefined
+          }
           break
         default:
           throw new Error(`invalid key "${key}"`)
@@ -52,7 +69,14 @@ window.addEventListener('message', event => {
     case 'update.content':
       state.content = message.payload
       break
+    case 'update.panningEnabled':
+      state.panningEnabled = message.payload
+      break
+    case 'update.zoomingEnabled':
+      state.zoomingEnabled = message.payload
+      break
     default:
+      // @ts-ignore
       throw new Error(`unknown command ${message.command}`)
   }
 })

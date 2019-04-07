@@ -82,7 +82,7 @@
         },
         "svgPreview.panningEnabled": {
           "type": "boolean",
-          "default": false,
+          "default": true,
           "description": "%svgPreview.configuration.panningEnabled%",
           "scope": "resource"
         },

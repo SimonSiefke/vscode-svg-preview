@@ -6,6 +6,7 @@ import { PreviewState } from '../../shared/src/PreviewState'
 import { shouldOpenTextDocument } from './util'
 import { webViewPanelType } from './constants'
 import { context } from './extension'
+import { configuration } from './configuration'
 
 interface PreviewPanel extends vscode.WebviewPanelSerializer {
   deserializeWebviewPanel: (
@@ -108,6 +109,51 @@ const getPreviewHTML = memoizeOne(
   }
 )
 
+const state = new Proxy<PreviewState>(
+  {},
+  {
+    set(target, key: keyof PreviewState, value) {
+      if (target[key] === value) {
+        return true
+      }
+      switch (key) {
+        case 'content':
+          postMessage({
+            command: 'update.content',
+            payload: value,
+          })
+          break
+        case 'fsPath':
+          postMessage({
+            command: 'update.fsPath',
+            payload: value,
+          })
+          break
+        case 'panningEnabled':
+          postMessage({
+            command: 'update.panningEnabled',
+            payload: value,
+          })
+          break
+        case 'zoomingEnabled':
+          postMessage({
+            command: 'update.zoomingEnabled',
+            payload: value,
+          })
+          break
+        default:
+          throw new Error(`invalid key "${key}"`)
+      }
+      // eslint-disable-next-line no-param-reassign
+      target[key] = value
+      return true
+    },
+    get(target, key) {
+      return target[key]
+    },
+  }
+)
+
 /**
  * This method is called when a webview panel has been created.
  */
@@ -139,6 +185,31 @@ const onDidCreatePanel = async (
     })
   )
   panel.webview.html = getPreviewHTML(context.extensionPath)
+  state.panningEnabled = configuration.get(
+    'panningEnabled',
+    vscode.Uri.file(fsPath)
+  )
+  state.zoomingEnabled = configuration.get(
+    'zoomingEnabled',
+    vscode.Uri.file(fsPath)
+  )
+  configuration.addChangeListener(event => {
+    if (event.affectsConfiguration('panningEnabled')) {
+      console.log(
+        'change in panning',
+        configuration.get('panningEnabled', vscode.Uri.file(fsPath))
+      )
+      state.panningEnabled = configuration.get(
+        'panningEnabled',
+        vscode.Uri.file(fsPath)
+      )
+    } else if (event.affectsConfiguration('zoomingEnabled')) {
+      state.zoomingEnabled = configuration.get(
+        'zoomingEnabled',
+        vscode.Uri.file(fsPath)
+      )
+    }
+  })
 }
 
 /**
@@ -177,36 +248,30 @@ export const previewPanel: PreviewPanel = {
     } else {
       panel.title = title
     }
-    postMessage({
-      command: 'update.fsPath',
-      payload: value,
-    })
+    state.fsPath = value
   },
   get fsPath() {
     return fsPath
   },
   set content(value: string) {
     setImmediate(() => {
-      postMessage({
-        command: 'update.content',
-        payload: value,
-      })
+      state.content = value
     })
   },
-  async deserializeWebviewPanel(webviewPanel, state) {
-    const didCreatePanelPromise = onDidCreatePanel(webviewPanel)
+  async deserializeWebviewPanel(webviewPanel, deserializedState) {
     if (
-      state &&
+      deserializedState &&
       vscode.window.activeTextEditor &&
       shouldOpenTextDocument(vscode.window.activeTextEditor.document) &&
-      vscode.window.activeTextEditor.document.uri.fsPath !== state.fsPath
+      vscode.window.activeTextEditor.document.uri.fsPath !==
+        deserializedState.fsPath
     ) {
       this.fsPath = vscode.window.activeTextEditor.document.uri.fsPath
-      await didCreatePanelPromise
+      await onDidCreatePanel(webviewPanel)
       this.content = vscode.window.activeTextEditor.document.getText()
     } else {
-      // eslint-disable-next-line prefer-destructuring
-      fsPath = state.fsPath
+      fsPath = deserializedState.fsPath
+      onDidCreatePanel(webviewPanel)
     }
   },
 }
