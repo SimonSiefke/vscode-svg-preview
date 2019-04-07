@@ -79,6 +79,18 @@
           "default": false,
           "description": "%svgPreview.configuration.autoOpen%",
           "scope": "resource"
+        },
+        "svgPreview.panningEnabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "%svgPreview.configuration.panningEnabled%",
+          "scope": "resource"
+        },
+        "svgPreview.zoomingEnabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "%svgPreview.configuration.zoomingEnabled%",
+          "scope": "resource"
         }
       }
     }

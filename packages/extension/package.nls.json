@@ -1,5 +1,7 @@
 {
   "svgPreview.command.showPreview": "Open Preview",
   "svgPreview.command.showPreviewToSide": "Open Preview to the Side",
-  "svgPreview.configuration.autoOpen": "Automatically open the preview when an svg file is opened"
+  "svgPreview.configuration.autoOpen": "Automatically open the preview when an svg file is opened",
+  "svgPreview.configuration.panningEnabled": "Whether or not to enable panning in the preview",
+  "svgPreview.configuration.zoomingEnabled": "Whether or not to enable zooming in the preview"
 }

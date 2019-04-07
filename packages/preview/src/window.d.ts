@@ -1,8 +1,8 @@
-type State = import('../../shared/src/State').State
+type PreviewState = import('../../shared/src/PreviewState').PreviewState
 
 interface VSCodeApi {
-  getState(): State
-  setState(state: State): void
+  getState(): PreviewState
+  setState(state: PreviewState): void
   postMessage(message: any): void
 }
 

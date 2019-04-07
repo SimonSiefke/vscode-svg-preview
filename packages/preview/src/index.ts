@@ -5,10 +5,13 @@ const vscode = acquireVsCodeApi()
 
 usePan()
 
-const state = new Proxy<State>(
-  {},
+const state = new Proxy<PreviewState>(
   {
-    set(target, key: keyof State, value) {
+    panningEnabled: true,
+    zoomingEnabled: false,
+  },
+  {
+    set(target, key: keyof PreviewState, value) {
       if (target[key] === value) {
         vscode.postMessage({ command: `unnecessary${key}${value}` })
         return true
