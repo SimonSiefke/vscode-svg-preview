@@ -7,6 +7,8 @@
   "scripts": {
     "dev": "rollup --config --no-esModule --no-strict --watch",
     "build": "rollup --config rollup.config.prod.js --no-esModule --no-strict",
+    "lint": "eslint . && prettier **/*.* --list-different",
+    "lint:fix": "eslint --fix . && prettier --write **/*.*",
     "test": "jest --collect-coverage",
     "test:watch": "jest --watch",
     "bundlesize": "bundlesize",
@@ -36,7 +38,12 @@
   "bundlesize": [
     {
       "path": "./packages/extension/dist/extension.js",
-      "maxSize": "2.5 kB"
+      "maxSize": "6.5 kB",
+      "compression": "none"
+    },
+    {
+      "path": "./packages/preview/dist/index.js",
+      "maxSize": "1.5 kB"
     }
   ]
 }
