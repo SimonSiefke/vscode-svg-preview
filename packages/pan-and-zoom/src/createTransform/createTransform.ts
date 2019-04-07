@@ -1,6 +1,6 @@
 export interface Transform {
   translate: (x?: number, y?: number) => Transform
-  scale: (value: number) => Transform
+  scale: (x?: number, y?: number) => Transform
   toString: () => string
 }
 

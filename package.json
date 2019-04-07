@@ -7,7 +7,8 @@
   "scripts": {
     "dev": "rollup --config --no-esModule --no-strict --watch",
     "build": "rollup --config rollup.config.prod.js --no-esModule --no-strict",
-    "test": "jest",
+    "test": "jest --collect-coverage",
+    "test:watch": "jest --watch",
     "bundlesize": "bundlesize",
     "postinstall": "lerna bootstrap"
   },
@@ -18,7 +19,7 @@
     "@types/jest": "^24.0.11",
     "bundlesize": "^0.17.1",
     "eslint": "^5.16.0",
-    "eslint-config-bitworkers": "^1.21.6",
+    "eslint-config-bitworkers": "^1.21.7",
     "jest": "^24.7.1",
     "lerna": "^3.13.1",
     "prettier": "^1.16.4",
