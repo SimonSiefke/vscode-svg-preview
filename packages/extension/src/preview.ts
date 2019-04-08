@@ -129,18 +129,6 @@ const state = new Proxy<PreviewState>(
             payload: value,
           })
           break
-        case 'panningEnabled':
-          postMessage({
-            command: 'update.panningEnabled',
-            payload: value,
-          })
-          break
-        case 'zoomingEnabled':
-          postMessage({
-            command: 'update.zoomingEnabled',
-            payload: value,
-          })
-          break
         default:
           throw new Error(`invalid key "${key}"`)
       }
@@ -189,15 +177,6 @@ const onDidCreatePanel = (
     )
   }
   panel.webview.html = getPreviewHTML(context.extensionPath)
-  state.panningEnabled = configuration.get('panningEnabled', uri)
-  state.zoomingEnabled = configuration.get('zoomingEnabled', uri)
-  configuration.addChangeListener(event => {
-    if (event.affectsConfiguration('panningEnabled')) {
-      state.panningEnabled = configuration.get('panningEnabled', uri)
-    } else if (event.affectsConfiguration('zoomingEnabled')) {
-      state.zoomingEnabled = configuration.get('zoomingEnabled', uri)
-    }
-  })
 }
 
 /**
@@ -248,7 +227,6 @@ export const previewPanel: PreviewPanel = {
     })
   },
   async deserializeWebviewPanel(webviewPanel, deserializedState) {
-    console.log('sederisalize')
     if (
       deserializedState &&
       vscode.window.activeTextEditor &&

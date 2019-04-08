@@ -10,11 +10,3 @@ export type Message =
       command: 'update.fsPath'
       payload: string
     }
-  | {
-      command: 'update.panningEnabled'
-      payload: boolean
-    }
-  | {
-      command: 'update.zoomingEnabled'
-      payload: boolean
-    }

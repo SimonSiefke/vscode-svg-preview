@@ -1,6 +1,11 @@
 import { Transform, createTransform } from './createTransform/createTransform'
 
-type CleanUp = () => void
+export type CleanUp = () => void
+
+interface Point {
+  x: number
+  y: number
+}
 
 /**
  * The current zoom
@@ -10,17 +15,41 @@ let zoom = 1
 /**
  *  This variable will contain the original coordinates when the user start pressing the mouse or touching the screen.
  */
-const pointerOrigin = new DOMPoint()
+const pointerOrigin: Point = {
+  x: 0,
+  y: 0,
+}
 
 /**
  * Current pan offset.
  */
-const pointerOffset = new DOMPoint()
+const pointerOffset: Point = {
+  x: 0,
+  y: 0,
+}
 
 /**
  * Use pan functionality.
  */
-export function usePan(): CleanUp {
+export function usePan({
+  initialPointerOffset,
+  onPointerOffsetChange = () => {},
+}: {
+  onPointerOffsetChange?: (pointerOffset: Point) => void
+  initialPointerOffset?: Point
+} = {}): CleanUp {
+  if (initialPointerOffset) {
+    pointerOffset.x = initialPointerOffset.x
+    pointerOffset.y = initialPointerOffset.y
+  } else {
+    pointerOffset.x = 0
+    pointerOffset.y = 0
+  }
+  document.body.style.transform = `${createTransform().translate(
+    pointerOffset.x,
+    pointerOffset.y
+  )}`
+
   /**
    *  This variable will be used later for move events to check if pointer is down or not
    */
@@ -60,6 +89,7 @@ export function usePan(): CleanUp {
     isPointerDown = false
     pointerOffset.x += event.clientX - pointerOrigin.x
     pointerOffset.y += event.clientY - pointerOrigin.y
+    onPointerOffsetChange(pointerOffset)
   }
 
   document.documentElement.addEventListener('pointerdown', onPointerDown) // Pointer is pressed

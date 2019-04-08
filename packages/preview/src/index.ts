@@ -1,79 +1,45 @@
+import { usePan, CleanUp } from '../../pan-and-zoom/src/panAndZoom'
+import { PreviewState } from '../../shared/src/PreviewState'
 import { Message } from '../../shared/src/Message'
-import { usePan, useZoom } from '../../pan-and-zoom/src/panAndZoom'
 
 const vscode = acquireVsCodeApi()
-
-let panningCleanUp: (() => void) | undefined
-let zoomingCleanup: (() => void) | undefined
-
-const state = new Proxy<PreviewState>(
-  {},
-  {
-    set(target, key: keyof PreviewState, value) {
-      if (target[key] === value) {
-        vscode.postMessage({ command: `unnecessary update "${key}${value}"` })
-        return true
-      }
-      switch (key) {
-        case 'content':
-          document.body.innerHTML = value
-          break
-        case 'fsPath':
-          break
-        case 'panningEnabled':
-          if (value && !panningCleanUp) {
-            panningCleanUp = usePan()
-          }
-          if (!value && panningCleanUp) {
-            panningCleanUp()
-            panningCleanUp = undefined
-          }
-          break
-        case 'zoomingEnabled':
-          if (value && !zoomingCleanup) {
-            zoomingCleanup = useZoom()
-          }
-          if (!value && zoomingCleanup) {
-            zoomingCleanup()
-            zoomingCleanup = undefined
-          }
-          break
-        default:
-          throw new Error(`invalid key "${key}"`)
-      }
-      vscode.setState({ ...target, [key]: value })
-      // eslint-disable-next-line no-param-reassign
-      target[key] = value
-      return true
-    },
-    get(target, key) {
-      return target[key]
-    },
-  }
-)
-
-const initialState = vscode.getState()
-if (initialState && initialState.content) {
-  console.log('initial state', initialState)
-  for (const [key, value] of Object.entries(initialState)) {
-    state[key] = value
-  }
+const state: PreviewState = vscode.getState() || {}
+function invalidateState(): void {
+  vscode.setState(state)
 }
-
+function invalidateContent(): void {
+  document.body.innerHTML = state.content
+}
+let cleanUpPan: CleanUp | undefined
+function invalidatePan(): void {
+  if (cleanUpPan) {
+    cleanUpPan()
+  }
+  cleanUpPan = usePan({
+    initialPointerOffset: state.pointerOffset,
+    onPointerOffsetChange(pointerOffset) {
+      state.pointerOffset = pointerOffset
+      invalidateState()
+    },
+  })
+}
+invalidatePan()
+if (state.content !== undefined) {
+  invalidateContent()
+}
 window.addEventListener('message', event => {
   const message: Message = event.data
   switch (message.command) {
     case 'update.fsPath':
       state.fsPath = message.payload
+      state.pointerOffset = undefined
+      invalidatePan()
+      invalidateState()
       break
     case 'update.content':
       state.content = message.payload
-      break
-    case 'update.panningEnabled':
-      state.panningEnabled = message.payload
-      break
-    case 'update.zoomingEnabled':
-      state.zoomingEnabled = message.payload
+      invalidateContent()
+      invalidateState()
       break
     default:
       // @ts-ignore

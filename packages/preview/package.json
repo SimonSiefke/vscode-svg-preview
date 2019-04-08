@@ -2,5 +2,8 @@
   "name": "preview",
   "scripts": {
     "test": "echo test1"
+  },
+  "dependencies": {
+    "lru_map": "^0.3.3"
   }
 }
