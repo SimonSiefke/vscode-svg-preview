@@ -54,6 +54,7 @@ const state = new Proxy<PreviewState>(
 
 const initialState = vscode.getState()
 if (initialState && initialState.content) {
+  console.log('initial state', initialState)
   for (const [key, value] of Object.entries(initialState)) {
     state[key] = value
   }

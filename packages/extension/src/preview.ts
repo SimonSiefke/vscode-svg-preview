@@ -39,7 +39,7 @@ const previewPath = 'packages/preview/dist'
 let panel: vscode.WebviewPanel | undefined
 
 /**
- * The file system path of the currently previewed file.
+ * The file system path of the currently previewed file. TODO: confusing: fsPath, set fsPath and state.fsPath
  */
 let fsPath: string | undefined
 
@@ -57,7 +57,7 @@ let viewColumn: vscode.ViewColumn
  * Post a message to the webview.
  */
 const postMessage = (message: Message): void => {
-  if (panel.visible) {
+  if (panel && panel.visible) {
     panel.webview.postMessage(message)
   } else {
     postponedMessages.set(message.command, message.payload)
@@ -113,9 +113,9 @@ const state = new Proxy<PreviewState>(
   {},
   {
     set(target, key: keyof PreviewState, value) {
-      if (target[key] === value) {
-        return true
-      }
+      // if (target[key] === value) {
+      //   return true
+      // }
       switch (key) {
         case 'content':
           postMessage({
@@ -157,9 +157,10 @@ const state = new Proxy<PreviewState>(
 /**
  * This method is called when a webview panel has been created.
  */
-const onDidCreatePanel = async (
-  webViewPanel: vscode.WebviewPanel
-): Promise<void> => {
+const onDidCreatePanel = (
+  webViewPanel: vscode.WebviewPanel,
+  uri: vscode.Uri
+): void => {
   panel = webViewPanel
   context.subscriptions.push(
     panel.onDidDispose(() => {
@@ -178,32 +179,23 @@ const onDidCreatePanel = async (
       }
     })
   )
-  context.subscriptions.push(
-    panel.webview.onDidReceiveMessage((message: any) => {
-      // TODO
-      vscode.window.showInformationMessage(message.command)
-    })
-  )
+
+  if (DEVELOPMENT) {
+    // TODO
+    context.subscriptions.push(
+      panel.webview.onDidReceiveMessage((message: any) => {
+        vscode.window.showInformationMessage(message.command)
+      })
+    )
+  }
   panel.webview.html = getPreviewHTML(context.extensionPath)
-  state.panningEnabled = configuration.get(
-    'panningEnabled',
-    vscode.Uri.file(fsPath)
-  )
-  state.zoomingEnabled = configuration.get(
-    'zoomingEnabled',
-    vscode.Uri.file(fsPath)
-  )
+  state.panningEnabled = configuration.get('panningEnabled', uri)
+  state.zoomingEnabled = configuration.get('zoomingEnabled', uri)
   configuration.addChangeListener(event => {
     if (event.affectsConfiguration('panningEnabled')) {
-      state.panningEnabled = configuration.get(
-        'panningEnabled',
-        vscode.Uri.file(fsPath)
-      )
+      state.panningEnabled = configuration.get('panningEnabled', uri)
     } else if (event.affectsConfiguration('zoomingEnabled')) {
-      state.zoomingEnabled = configuration.get(
-        'zoomingEnabled',
-        vscode.Uri.file(fsPath)
-      )
+      state.zoomingEnabled = configuration.get('zoomingEnabled', uri)
     }
   })
 }
@@ -239,7 +231,8 @@ export const previewPanel: PreviewPanel = {
             ],
             enableScripts: true,
           }
-        )
+        ),
+        vscode.Uri.file(value)
       )
     } else {
       panel.title = title
@@ -255,6 +248,7 @@ export const previewPanel: PreviewPanel = {
     })
   },
   async deserializeWebviewPanel(webviewPanel, deserializedState) {
+    console.log('sederisalize')
     if (
       deserializedState &&
       vscode.window.activeTextEditor &&
@@ -263,11 +257,11 @@ export const previewPanel: PreviewPanel = {
         deserializedState.fsPath
     ) {
       this.fsPath = vscode.window.activeTextEditor.document.uri.fsPath
-      await onDidCreatePanel(webviewPanel)
+      onDidCreatePanel(webviewPanel, vscode.Uri.file(fsPath))
       this.content = vscode.window.activeTextEditor.document.getText()
     } else {
       fsPath = deserializedState.fsPath
-      onDidCreatePanel(webviewPanel)
+      onDidCreatePanel(webviewPanel, vscode.Uri.file(fsPath))
     }
   },
 }

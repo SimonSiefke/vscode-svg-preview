@@ -41,8 +41,9 @@ export async function activate(c: vscode.ExtensionContext): Promise<void> {
   context.subscriptions.push(
     vscode.window.onDidChangeActiveTextEditor(textEditor => {
       if (
-        !previewPanel.fsPath &&
-        !configuration.get('autoOpen', textEditor.document.uri)
+        !textEditor ||
+        (!previewPanel.fsPath &&
+          !configuration.get('autoOpen', textEditor.document.uri))
       ) {
         return
       }

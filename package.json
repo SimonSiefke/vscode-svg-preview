@@ -5,8 +5,8 @@
     "url": "https://github.com/SimonSiefke/vscode-svg-preview.git"
   },
   "scripts": {
-    "dev": "rollup --config --no-esModule --no-strict --watch",
-    "build": "rollup --config rollup.config.prod.js --no-esModule --no-strict",
+    "dev": "rollup --config --no-esModule --no-strict --watch --environment NODE_ENV:development",
+    "build": "rollup --config --no-esModule --no-strict --environment NODE_ENV:production",
     "lint": "eslint . && prettier **/*.* --list-different",
     "lint:fix": "eslint --fix . && prettier --write **/*.*",
     "test": "jest --collect-coverage",
@@ -30,6 +30,7 @@
     "rollup-plugin-copy-glob": "^0.3.0",
     "rollup-plugin-import-alias": "^1.0.6",
     "rollup-plugin-node-resolve": "^4.2.1",
+    "rollup-plugin-replace": "^2.1.1",
     "rollup-plugin-terser": "^4.0.4",
     "rollup-plugin-typescript2": "^0.20.1",
     "ts-jest": "^24.0.2",
