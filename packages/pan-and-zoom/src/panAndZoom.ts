@@ -7,7 +7,8 @@ type CleanUp = () => void
  */
 let zoom = 1
 
-const width = window.innerWidth
+let width = window.innerWidth
+let widthAfterResize = width
 
 /**
  *  This variable will contain the original coordinates when the user start pressing the mouse or touching the screen.
@@ -34,6 +35,14 @@ export function usePan(): CleanUp {
   function onPointerDown(event: PointerEvent): void {
     isPointerDown = true
     // We get the pointer position on click so we can get the value once the user starts to drag
+    const scale = widthAfterResize / width
+    width = widthAfterResize
+    console.log(scale)
+    // pointerOrigin.x *= scale
+    // pointerOrigin.y *= scale
+    // pointerOffset.x *= scale
+    // pointerOffset.y *= scale
+
     pointerOrigin.x = event.clientX
     pointerOrigin.y = event.clientY
   }
@@ -66,26 +75,25 @@ export function usePan(): CleanUp {
     pointerOffset.y += event.clientY - pointerOrigin.y
   }
 
+  function onResize(): void {
+    widthAfterResize = window.innerWidth
+  }
+
   document.documentElement.addEventListener('pointerdown', onPointerDown) // Pointer is pressed
   document.documentElement.addEventListener('pointerup', onPointerUp) // Releasing the pointer
   document.documentElement.addEventListener('pointerleave', onPointerUp) // Pointer gets out of the document.documentElement area
   document.documentElement.addEventListener('pointermove', onPointerMove) // Pointer is moving
+
+  window.addEventListener('resize', onResize)
+
   return () => {
     document.documentElement.removeEventListener('pointerdown', onPointerDown)
     document.documentElement.removeEventListener('pointerup', onPointerUp)
     document.documentElement.removeEventListener('pointerleave', onPointerUp)
     document.documentElement.removeEventListener('pointermove', onPointerMove)
+    window.removeEventListener('resize', onResize)
   }
 }
-
-window.addEventListener('resize', () => {
-  const newWidth = window.innerWidth
-  const scale = newWidth / width
-  pointerOrigin.x *= scale
-  pointerOrigin.y *= scale
-  pointerOffset.x *= scale
-  pointerOffset.y *= scale
-})
 
 /**
  * Use zoom functionality.
