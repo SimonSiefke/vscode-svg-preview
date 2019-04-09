@@ -39,12 +39,12 @@
   "bundlesize": [
     {
       "path": "./packages/extension/dist/extension.js",
-      "maxSize": "6.5 kB",
+      "maxSize": "6 kB",
       "compression": "none"
     },
     {
       "path": "./packages/preview/dist/index.js",
-      "maxSize": "1.5 kB"
+      "maxSize": "1 kB"
     }
   ]
 }
