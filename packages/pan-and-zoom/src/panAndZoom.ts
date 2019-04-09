@@ -45,6 +45,7 @@ export function usePan({
     pointerOffset.x = 0
     pointerOffset.y = 0
   }
+  console.log('transform', pointerOffset)
   document.body.style.transform = `${createTransform().translate(
     pointerOffset.x,
     pointerOffset.y

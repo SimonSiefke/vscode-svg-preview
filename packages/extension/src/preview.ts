@@ -6,63 +6,9 @@ import { PreviewState } from '../../shared/src/PreviewState'
 import { shouldOpenTextDocument } from './util'
 import { webViewPanelType } from './constants'
 import { context } from './extension'
-import { configuration } from './configuration'
-
-interface PreviewPanel extends vscode.WebviewPanelSerializer {
-  deserializeWebviewPanel: (
-    webviewPanel: vscode.WebviewPanel,
-    state: PreviewState
-  ) => Promise<void>
-
-  /**
-   * The content of the currently previewed file
-   */
-  content: string
-
-  /**
-   * The file system path of the currently previewed file
-   */
-  fsPath: string
-
-  /**
-   * The view column of the preview panel.
-   */
-  viewColumn: vscode.ViewColumn
-}
 
 const rootPath = '../../'
 const previewPath = 'packages/preview/dist'
-
-/**
- * The webview panel.
- */
-let panel: vscode.WebviewPanel | undefined
-
-/**
- * The file system path of the currently previewed file. TODO: confusing: fsPath, set fsPath and state.fsPath
- */
-let fsPath: string | undefined
-
-/**
- * The latest message that could not be sent because the webview was hidden.
- */
-const postponedMessages = new Map<Message['command'], Message['payload']>()
-
-/**
- * The view column of the preview panel.
- */
-let viewColumn: vscode.ViewColumn
-
-/**
- * Post a message to the webview.
- */
-const postMessage = (message: Message): void => {
-  if (panel && panel.visible) {
-    panel.webview.postMessage(message)
-  } else {
-    postponedMessages.set(message.command, message.payload)
-  }
-}
 
 /**
  * Get the absolute path for relative path from the root of this project.
@@ -109,61 +55,104 @@ const getPreviewHTML = memoizeOne(
   }
 )
 
-const state = new Proxy<PreviewState>(
-  {},
-  {
-    set(target, key: keyof PreviewState, value) {
-      // if (target[key] === value) {
-      //   return true
-      // }
-      switch (key) {
-        case 'content':
-          postMessage({
-            command: 'update.content',
-            payload: value,
-          })
-          break
-        case 'fsPath':
-          postMessage({
-            command: 'update.fsPath',
-            payload: value,
-          })
-          break
-        default:
-          throw new Error(`invalid key "${key}"`)
-      }
-      // eslint-disable-next-line no-param-reassign
-      target[key] = value
-      return true
-    },
-    get(target, key) {
-      return target[key]
-    },
+interface PreviewPanel extends vscode.WebviewPanelSerializer {
+  deserializeWebviewPanel: (
+    webviewPanel: vscode.WebviewPanel,
+    state: PreviewState
+  ) => Promise<void>
+  /**
+   * The file system path of the currently previewed file
+   */
+  fsPath: string
+
+  /**
+   * Show the webview panel.
+   */
+  show: ({
+    viewColumn,
+    fsPath,
+  }: {
+    viewColumn?: vscode.ViewColumn
+    fsPath: string
+  }) => void
+
+  /**
+   * The content of the currently previewed file
+   */
+  content: string
+}
+
+interface State {
+  /**
+   * The webview panel.
+   */
+  panel?: vscode.WebviewPanel
+  /**
+   *  The file system path of the currently previewed file.
+   */
+  fsPath?: string
+  /**
+   * The view column of the webview panel.
+   */
+  viewColumn?: vscode.ViewColumn
+  /**
+   * The content of the currently previewed file
+   */
+  content?: string
+
+  /**
+   * The latest messages that could not be sent because the webview was hidden.
+   */
+  postponedMessages?: Map<Message['command'], Message['payload']>
+}
+
+const state: State = {}
+
+/**
+ * Post a message to the webview.
+ */
+const postMessage = (message: Message): void => {
+  if (state.panel && state.panel.visible) {
+    state.panel.webview.postMessage(message)
+  } else {
+    state.postponedMessages.set(message.command, message.payload)
   }
-)
+}
+
+function invalidateContent(): void {
+  postMessage({
+    command: 'update.content',
+    payload: state.content,
+  })
+}
+
+function invalidateFsPath(): void {
+  state.postponedMessages = new Map()
+  postMessage({
+    command: 'update.fsPath',
+    payload: state.fsPath,
+  })
+}
 
 /**
  * This method is called when a webview panel has been created.
  */
-const onDidCreatePanel = (
-  webViewPanel: vscode.WebviewPanel,
-  uri: vscode.Uri
-): void => {
-  panel = webViewPanel
+const onDidCreatePanel = (webViewPanel: vscode.WebviewPanel): void => {
+  state.panel = webViewPanel
   context.subscriptions.push(
-    panel.onDidDispose(() => {
-      panel = undefined
-      fsPath = undefined
+    state.panel.onDidDispose(() => {
+      state.panel = undefined
+      state.fsPath = undefined
     })
   )
   context.subscriptions.push(
-    panel.onDidChangeViewState(event => {
+    state.panel.onDidChangeViewState(event => {
       if (event.webviewPanel.visible) {
-        for (const [command, payload] of postponedMessages) {
+        for (const [command, payload] of state.postponedMessages) {
           // @ts-ignore TODO:
           postMessage({ command, payload })
         }
-        postponedMessages.clear()
+        state.postponedMessages.clear()
       }
     })
   )
@@ -171,28 +160,22 @@ const onDidCreatePanel = (
   if (DEVELOPMENT) {
     // TODO
     context.subscriptions.push(
-      panel.webview.onDidReceiveMessage((message: any) => {
+      state.panel.webview.onDidReceiveMessage((message: any) => {
         vscode.window.showInformationMessage(message.command)
       })
     )
   }
-  panel.webview.html = getPreviewHTML(context.extensionPath)
+  state.panel.webview.html = getPreviewHTML(context.extensionPath)
 }
 
 /**
  * The preview panel.
  */
 export const previewPanel: PreviewPanel = {
-  get viewColumn() {
-    return viewColumn
-  },
-  set viewColumn(value) {
-    viewColumn = value
-  },
-  set fsPath(value) {
-    fsPath = value
-    const title = `Preview ${path.basename(value)}`
-    if (!panel) {
+  show({ viewColumn, fsPath }) {
+    state.fsPath = fsPath
+    const title = `Preview ${path.basename(fsPath)}`
+    if (!state.panel) {
       onDidCreatePanel(
         vscode.window.createWebviewPanel(
           webViewPanelType,
@@ -210,20 +193,20 @@ export const previewPanel: PreviewPanel = {
             ],
             enableScripts: true,
           }
-        ),
-        vscode.Uri.file(value)
+        )
       )
     } else {
-      panel.title = title
+      state.panel.title = title
     }
-    state.fsPath = value
+    invalidateFsPath()
   },
   get fsPath() {
-    return fsPath
+    return state.fsPath
   },
   set content(value: string) {
     setImmediate(() => {
       state.content = value
+      invalidateContent()
     })
   },
   async deserializeWebviewPanel(webviewPanel, deserializedState) {
@@ -234,12 +217,14 @@ export const previewPanel: PreviewPanel = {
       vscode.window.activeTextEditor.document.uri.fsPath !==
         deserializedState.fsPath
     ) {
-      this.fsPath = vscode.window.activeTextEditor.document.uri.fsPath
-      onDidCreatePanel(webviewPanel, vscode.Uri.file(fsPath))
-      this.content = vscode.window.activeTextEditor.document.getText()
+      state.fsPath = vscode.window.activeTextEditor.document.uri.fsPath
+      onDidCreatePanel(webviewPanel)
+      invalidateFsPath()
+      state.content = vscode.window.activeTextEditor.document.getText()
+      invalidateContent()
     } else {
-      fsPath = deserializedState.fsPath
-      onDidCreatePanel(webviewPanel, vscode.Uri.file(fsPath))
+      state.fsPath = deserializedState.fsPath
+      onDidCreatePanel(webviewPanel)
     }
   },
 }

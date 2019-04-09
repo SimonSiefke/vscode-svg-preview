@@ -18,8 +18,10 @@ export async function activate(c: vscode.ExtensionContext): Promise<void> {
       textEditor => {
         const textDocument = textEditor.document
         if (shouldOpenTextDocument(textDocument, previewPanel.fsPath)) {
-          previewPanel.viewColumn = vscode.ViewColumn.Active
-          previewPanel.fsPath = textDocument.uri.fsPath
+          previewPanel.show({
+            viewColumn: vscode.ViewColumn.Active,
+            fsPath: textDocument.uri.fsPath,
+          })
           previewPanel.content = textDocument.getText()
         }
       }
@@ -31,8 +33,10 @@ export async function activate(c: vscode.ExtensionContext): Promise<void> {
       textEditor => {
         const textDocument = textEditor.document
         if (shouldOpenTextDocument(textDocument, previewPanel.fsPath)) {
-          previewPanel.viewColumn = vscode.ViewColumn.Beside
-          previewPanel.fsPath = textDocument.uri.fsPath
+          previewPanel.show({
+            viewColumn: vscode.ViewColumn.Beside,
+            fsPath: textDocument.uri.fsPath,
+          })
           previewPanel.content = textDocument.getText()
         }
       }
@@ -49,8 +53,10 @@ export async function activate(c: vscode.ExtensionContext): Promise<void> {
       }
       const textDocument = textEditor.document
       if (shouldOpenTextDocument(textDocument, previewPanel.fsPath)) {
-        previewPanel.viewColumn = vscode.ViewColumn.Beside
-        previewPanel.fsPath = textDocument.uri.fsPath
+        previewPanel.show({
+          viewColumn: vscode.ViewColumn.Beside,
+          fsPath: textDocument.uri.fsPath,
+        })
         previewPanel.content = textDocument.getText()
       }
     })
