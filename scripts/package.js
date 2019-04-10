@@ -44,6 +44,9 @@ fs.copySync(
   path.join(root, `packages/preview/dist`),
   `dist/packages/preview/dist`
 )
+for (const file of ['README.md', 'CHANGELOG.md']) {
+  fs.copySync(path.join(root, file), `dist/${file}`)
+}
 
 exec('cd dist && npm install', err => {
   if (err) {

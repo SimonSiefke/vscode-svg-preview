@@ -24,8 +24,7 @@
   },
   "appInsightsKey": "TODO",
   "categories": [
-    "Other",
-    "Debuggers"
+    "Other"
   ],
   "keywords": [
     "svg preview"

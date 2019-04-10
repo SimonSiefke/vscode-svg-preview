@@ -1,3 +1,3 @@
 module.exports = {
-  extends: 'semantic-release-config-bitworkers/src/vsce-monorepo',
+  extends: 'semantic-release-config-bitworkers/src',
 }
