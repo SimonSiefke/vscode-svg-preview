@@ -24,21 +24,33 @@ function invalidatePan(): void {
   })
 }
 invalidatePan()
+function invalidateBackground(): void {
+  document.body.style.background = state.background
+}
+invalidateBackground()
 if (state.content !== undefined) {
   invalidateContent()
 }
 window.addEventListener('message', event => {
   const message: Message = event.data
   switch (message.command) {
-    case 'update.fsPath':
-      state.fsPath = message.payload
+    case 'reset.pan':
       state.pointerOffset = undefined
       invalidatePan()
+      invalidateState()
+      break
+    case 'update.fsPath':
+      state.fsPath = message.payload
       invalidateState()
       break
     case 'update.content':
       state.content = message.payload
       invalidateContent()
+      invalidateState()
+      break
+    case 'update.background':
+      state.background = message.payload
+      invalidateBackground()
       invalidateState()
       break
     default:

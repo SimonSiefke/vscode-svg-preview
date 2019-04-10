@@ -11,19 +11,14 @@ export interface PreviewState {
    */
   content?: string
   /**
-   * Whether or not panning is enabled
-   */
-  // panningEnabled?: boolean
-  /**
-   * Whether or not zooming is enabled
-   */
-  // zoomingEnabled?: boolean
-
-  /**
-   * The Pointer offset during panning
+   * The Pointer offset during panning.
    */
   pointerOffset?: {
     x: number
     y: number
   }
+  /**
+   * The background of the preview.
+   */
+  background?: string
 }

@@ -10,3 +10,11 @@ export type Message =
       command: 'update.fsPath'
       payload: string
     }
+  | {
+      command: 'update.background'
+      payload: string
+    }
+  | {
+      command: 'reset.pan'
+      payload: undefined
+    }

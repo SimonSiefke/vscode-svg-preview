@@ -61,6 +61,15 @@ export async function activate(c: vscode.ExtensionContext): Promise<void> {
       }
     })
   )
+  if (DEVELOPMENT) {
+    // This is still proposed api so it cannot be used in production at the moment
+    vscode.workspace.onDidRenameFile(event => {
+      if (previewPanel.fsPath !== event.oldUri.fsPath) {
+        return
+      }
+      previewPanel.fsPath = event.newUri.fsPath
+    })
+  }
   context.subscriptions.push(
     vscode.workspace.onDidChangeTextDocument(event => {
       const shouldUpdateTextDocument =

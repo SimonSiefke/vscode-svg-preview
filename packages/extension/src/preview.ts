@@ -134,6 +134,13 @@ function invalidateFsPath(): void {
   })
 }
 
+function invalidatePan(): void {
+  postMessage({
+    command: 'reset.pan',
+    payload: undefined,
+  })
+}
+
 /**
  * This method is called when a webview panel has been created.
  */
@@ -156,7 +163,6 @@ const onDidCreatePanel = (webViewPanel: vscode.WebviewPanel): void => {
       }
     })
   )
-
   if (DEVELOPMENT) {
     // TODO
     context.subscriptions.push(
@@ -166,6 +172,10 @@ const onDidCreatePanel = (webViewPanel: vscode.WebviewPanel): void => {
     )
   }
   state.panel.webview.html = getPreviewHTML(context.extensionPath)
+  // postMessage({
+  //   command: 'update.background',
+  //   payload: 'red',
+  // })
 }
 
 /**
@@ -199,6 +209,13 @@ export const previewPanel: PreviewPanel = {
       state.panel.title = title
     }
     invalidateFsPath()
+    invalidatePan()
+  },
+  set fsPath(value: string) {
+    state.fsPath = value
+    const title = `Preview ${path.basename(value)}`
+    state.panel.title = title
+    invalidateFsPath()
   },
   get fsPath() {
     return state.fsPath
@@ -220,6 +237,7 @@ export const previewPanel: PreviewPanel = {
       state.fsPath = vscode.window.activeTextEditor.document.uri.fsPath
       onDidCreatePanel(webviewPanel)
       invalidateFsPath()
+      invalidatePan()
       state.content = vscode.window.activeTextEditor.document.getText()
       invalidateContent()
     } else {

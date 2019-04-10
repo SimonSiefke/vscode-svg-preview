@@ -6,6 +6,7 @@
   "publisher": "SimonSiefke",
   "author": "Simon Siefke",
   "license": "MIT",
+  "enableProposedApi": true,
   "homepage": "https://github.com/SimonSiefke/vscode-svg-preview/blob/master",
   "repository": {
     "type": "git",
