@@ -82,7 +82,8 @@
     "test": "echo test"
   },
   "dependencies": {
-    "memoize-one": "^5.0.4"
+    "memoize-one": "^5.0.4",
+    "vscode-nls": "^4.1.0"
   },
   "devDependencies": {
     "@types/node": "^11.13.2",

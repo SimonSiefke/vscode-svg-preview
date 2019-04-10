@@ -1,5 +1,5 @@
 {
-  "name": "svg-preview",
+  "name": "vscode-svg-preview",
   "repository": {
     "type": "git",
     "url": "https://github.com/SimonSiefke/vscode-svg-preview.git"
@@ -37,7 +37,7 @@
     "rollup-plugin-terser": "^4.0.4",
     "rollup-plugin-typescript2": "^0.20.1",
     "semantic-release": "^15.13.3",
-    "semantic-release-config-bitworkers": "^1.2.4",
+    "semantic-release-config-bitworkers": "^1.3.0",
     "ts-jest": "^24.0.2",
     "typescript": "^3.4.2"
   },

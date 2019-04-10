@@ -15,8 +15,6 @@ const pkg = require('../packages/extension/package.json')
 
 pkg.main = './packages/extension/dist/extension.js'
 
-delete pkg.dependencies
-delete pkg.devDependencies
 delete pkg.enableProposedApi
 fs.writeFileSync(
   path.join(root, 'dist/package.json'),
