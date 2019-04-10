@@ -12,9 +12,12 @@ const terserPlugin = terser({
   ecma: 9,
   toplevel: true,
   mangle: false, // keep output readable
+  compress: {
+    booleans_as_integers: true,
+    // unsafe: true,
+  },
   output: {
     inline_script: false,
-    quote_style: 1,
   },
 })
 

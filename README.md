@@ -5,6 +5,7 @@
 > Svg Preview for VSCode
 
 <!-- TODO image -->
+<!-- TODO logo -->
 
 ## Features
 

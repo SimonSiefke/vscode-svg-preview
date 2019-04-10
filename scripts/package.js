@@ -44,7 +44,7 @@ fs.copySync(
   path.join(root, `packages/preview/dist`),
   `dist/packages/preview/dist`
 )
-for (const file of ['README.md', 'CHANGELOG.md']) {
+for (const file of ['README.md']) {
   fs.copySync(path.join(root, file), `dist/${file}`)
 }
 

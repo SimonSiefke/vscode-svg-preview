@@ -85,7 +85,7 @@
     "vscode-nls": "^4.1.0"
   },
   "devDependencies": {
-    "@types/node": "^11.13.2",
+    "@types/node": "^11.13.4",
     "vscode": "^1.1.33"
   }
 }
