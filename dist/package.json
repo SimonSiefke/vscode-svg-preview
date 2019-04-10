@@ -1,0 +1,89 @@
+{
+  "name": "svg-preview",
+  "displayName": "Svg Preview",
+  "description": "Preview for Svg files",
+  "version": "0.0.0-semantically-released",
+  "publisher": "SimonSiefke",
+  "license": "MIT",
+  "homepage": "https://github.com/SimonSiefke/vscode-svg-preview/blob/master",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SimonSiefke/vscode-svg-preview.git"
+  },
+  "bugs": {
+    "url": "https://github.com/SimonSiefke/vscode-svg-preview/issues"
+  },
+  "badges": [],
+  "icon": "icon.png",
+  "galleryBanner": {
+    "color": "#1e415e",
+    "theme": "dark"
+  },
+  "engines": {
+    "vscode": "^1.31.0"
+  },
+  "appInsightsKey": "TODO",
+  "categories": [
+    "Other",
+    "Debuggers"
+  ],
+  "keywords": [
+    "svg preview"
+  ],
+  "activationEvents": [
+    "onLanguage:xml",
+    "onWebviewPanel:svgPreview",
+    "onCommand:svgPreview.showPreview",
+    "onCommand:svgPreview.showPreviewToSide"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "category": "Svg Preview",
+        "command": "svgPreview.showPreview",
+        "title": "%svgPreview.command.showPreview%"
+      },
+      {
+        "category": "Svg Preview",
+        "command": "svgPreview.showPreviewToSide",
+        "title": "%svgPreview.command.showPreviewToSide%"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "svgPreview.showPreview",
+          "when": "editorLangId == xml && resourceExtname == .svg",
+          "group": "navigation"
+        },
+        {
+          "command": "svgPreview.showPreviewToSide",
+          "when": "editorLangId == xml && resourceExtname == .svg",
+          "group": "navigation"
+        }
+      ]
+    },
+    "configuration": {
+      "type": "object",
+      "title": "Svg Preview",
+      "properties": {
+        "svgPreview.autoOpen": {
+          "type": "boolean",
+          "default": false,
+          "description": "%svgPreview.configuration.autoOpen%",
+          "scope": "resource"
+        }
+      }
+    }
+  },
+  "main": "./packages/extension/dist/extension.js",
+  "scripts": {
+    "test": "echo test"
+  },
+  "dependencies": {
+    "vscode-nls": "^4.1.0"
+  },
+  "devDependencies": {
+    "vscode": "^1.1.33"
+  }
+}
