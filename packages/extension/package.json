@@ -80,18 +80,6 @@
           "default": false,
           "description": "%svgPreview.configuration.autoOpen%",
           "scope": "resource"
-        },
-        "svgPreview.panningEnabled": {
-          "type": "boolean",
-          "default": true,
-          "description": "%svgPreview.configuration.panningEnabled%",
-          "scope": "resource"
-        },
-        "svgPreview.zoomingEnabled": {
-          "type": "boolean",
-          "default": false,
-          "description": "%svgPreview.configuration.zoomingEnabled%",
-          "scope": "resource"
         }
       }
     }
@@ -101,10 +89,10 @@
     "test": "echo test"
   },
   "dependencies": {
-    "memoize-one": "^5.0.2"
+    "memoize-one": "^5.0.4"
   },
   "devDependencies": {
-    "@types/node": "^11.13.0",
+    "@types/node": "^11.13.2",
     "vscode": "^1.1.33"
   }
 }

@@ -1,6 +1,7 @@
 import { usePan, CleanUp } from '../../pan-and-zoom/src/panAndZoom'
 import { PreviewState } from '../../shared/src/PreviewState'
 import { Message } from '../../shared/src/Message'
+import './index.css'
 
 const vscode = acquireVsCodeApi()
 const state: PreviewState = vscode.getState() || {}

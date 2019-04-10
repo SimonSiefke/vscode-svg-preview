@@ -1,9 +1,10 @@
 import importAlias from 'rollup-plugin-import-alias'
 import nodeResolve from 'rollup-plugin-node-resolve'
 import typescriptPlugin from 'rollup-plugin-typescript2'
-import copy from 'rollup-plugin-copy-glob'
 import { terser } from 'rollup-plugin-terser'
 import replace from 'rollup-plugin-replace'
+import postcss from 'rollup-plugin-postcss'
+import autoprefixer from 'autoprefixer'
 
 const DEV = process.env.NODE_ENV === 'development'
 
@@ -51,15 +52,10 @@ const previewConfig = {
     },
   },
   plugins: [
-    copy(
-      [
-        {
-          files: 'packages/preview/src/*.{html,css}',
-          dest: 'packages/preview/dist',
-        },
-      ],
-      { watch: DEV }
-    ),
+    postcss({
+      extract: true,
+      plugins: [autoprefixer()],
+    }),
     // @ts-ignore
     nodeResolve(),
     // @ts-ignore
@@ -85,7 +81,7 @@ for (const config of configs) {
   // Set NODE_ENV
   config.plugins.unshift(
     replace({
-      DEVELOPMENT: process.env.NODE_ENV === 'development',
+      DEVELOPMENT: `${process.env.NODE_ENV === 'development'}`,
     })
   )
   // Disable circular dependency warnings

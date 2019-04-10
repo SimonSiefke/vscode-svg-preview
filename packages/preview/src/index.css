@@ -1,15 +1,11 @@
 html {
     cursor: grab;
-    /* TODO autoprefixer */
-    cursor: -webkit-grab;
     touch-action: none;
     text-align: center;
 }
 
 html:active{
     cursor: grabbing;
-    cursor: -moz-grabbing;
-    cursor: -webkit-grabbing;
 }
 
 
