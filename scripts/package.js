@@ -3,6 +3,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 const path = require('path')
 const fs = require('fs-extra')
+const { exec } = require('child_process')
 
 const root = path.join(__dirname, '..')
 
@@ -15,6 +16,16 @@ const pkg = require('../packages/extension/package.json')
 
 pkg.main = './packages/extension/dist/extension.js'
 
+for (const d in pkg.dependencies) {
+  if (!d.includes('vscode')) {
+    delete pkg.dependencies[d]
+  }
+}
+for (const d in pkg.devDependencies) {
+  if (!d.includes('vscode')) {
+    delete pkg.devDependencies[d]
+  }
+}
 delete pkg.enableProposedApi
 fs.writeFileSync(
   path.join(root, 'dist/package.json'),
@@ -33,3 +44,10 @@ fs.copySync(
   path.join(root, `packages/preview/dist`),
   `dist/packages/preview/dist`
 )
+
+exec('cd dist && npm install', err => {
+  if (err) {
+    console.error(`exec error: ${err}`)
+    process.exit(1)
+  }
+})
