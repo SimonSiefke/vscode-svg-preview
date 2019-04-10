@@ -1,10 +1,9 @@
 {
   "name": "svg-preview",
   "displayName": "Svg Preview",
-  "description": "Preview for SVG files",
-  "version": "1.0.0",
+  "description": "Preview for Svg files",
+  "version": "0.0.0-semantically-released",
   "publisher": "SimonSiefke",
-  "author": "Simon Siefke",
   "license": "MIT",
   "enableProposedApi": true,
   "homepage": "https://github.com/SimonSiefke/vscode-svg-preview/blob/master",

@@ -14,6 +14,7 @@ const terserPlugin = terser({
   mangle: false, // keep output readable
   output: {
     inline_script: false,
+    quote_style: 1,
   },
 })
 
@@ -81,7 +82,8 @@ for (const config of configs) {
   // Set NODE_ENV
   config.plugins.unshift(
     replace({
-      DEVELOPMENT: `${process.env.NODE_ENV === 'development'}`,
+      DEVELOPMENT: `${DEV}`,
+      ROOT: DEV ? "'../../'" : "'./'",
     })
   )
   // Disable circular dependency warnings

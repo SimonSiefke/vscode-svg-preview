@@ -7,7 +7,7 @@ import { shouldOpenTextDocument } from './util'
 import { webViewPanelType } from './constants'
 import { context } from './extension'
 
-const rootPath = '../../'
+const rootPath = ROOT
 const previewPath = 'packages/preview/dist'
 
 /**

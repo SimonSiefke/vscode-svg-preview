@@ -4,5 +4,6 @@ module.exports = {
   },
   globals: {
     DEVELOPMENT: true,
+    ROOT: true,
   },
 }

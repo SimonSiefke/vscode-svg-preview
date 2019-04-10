@@ -12,7 +12,8 @@
     "test": "jest --collect-coverage",
     "test:watch": "jest --watch",
     "bundlesize": "bundlesize",
-    "postinstall": "lerna bootstrap"
+    "postinstall": "lerna bootstrap",
+    "package": "npm run lint && npm run test && npm run build && npm run bundlesize && node ./scripts/package.js"
   },
   "keywords": [],
   "author": "Simon Siefke",
@@ -23,6 +24,7 @@
     "bundlesize": "^0.17.1",
     "eslint": "^5.16.0",
     "eslint-config-bitworkers": "^1.21.8",
+    "fs-extra": "^7.0.1",
     "jest": "^24.7.1",
     "lerna": "^3.13.2",
     "prettier": "^1.16.4",
@@ -34,6 +36,8 @@
     "rollup-plugin-replace": "^2.2.0",
     "rollup-plugin-terser": "^4.0.4",
     "rollup-plugin-typescript2": "^0.20.1",
+    "semantic-release": "^15.13.3",
+    "semantic-release-config-bitworkers": "^1.2.4",
     "ts-jest": "^24.0.2",
     "typescript": "^3.4.2"
   },

@@ -1,0 +1,20 @@
+language: node_js
+node_js: lts/*
+
+script:
+  - npm run lint
+  - npm run test
+  - npm run build
+  - npm run bundlesize
+
+stages:
+  - name: release
+    if: branch = master AND type = push AND fork = false
+
+jobs:
+  include:
+    - stage: release
+      script:
+        - npm run package
+        - cd dist
+        - npx semantic-release
