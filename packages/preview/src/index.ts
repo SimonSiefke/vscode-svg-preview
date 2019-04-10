@@ -33,29 +33,31 @@ if (state.content !== undefined) {
   invalidateContent()
 }
 window.addEventListener('message', event => {
-  const message: Message = event.data
-  switch (message.command) {
-    case 'reset.pan':
-      state.pointerOffset = undefined
-      invalidatePan()
-      invalidateState()
-      break
-    case 'update.fsPath':
-      state.fsPath = message.payload
-      invalidateState()
-      break
-    case 'update.content':
-      state.content = message.payload
-      invalidateContent()
-      invalidateState()
-      break
-    case 'update.background':
-      state.background = message.payload
-      invalidateBackground()
-      invalidateState()
-      break
-    default:
-      // @ts-ignore
-      throw new Error(`unknown command ${message.command}`)
+  const messages: Message[] = event.data
+  for (const message of messages) {
+    switch (message.command) {
+      case 'reset.pan':
+        state.pointerOffset = undefined
+        invalidatePan()
+        invalidateState()
+        break
+      case 'update.fsPath':
+        state.fsPath = message.payload
+        invalidateState()
+        break
+      case 'update.content':
+        state.content = message.payload
+        invalidateContent()
+        invalidateState()
+        break
+      case 'update.background':
+        state.background = message.payload
+        invalidateBackground()
+        invalidateState()
+        break
+      default:
+        // @ts-ignore
+        throw new Error(`unknown command ${message.command}`)
+    }
   }
 })

@@ -103,20 +103,34 @@ interface State {
   /**
    * The latest messages that could not be sent because the webview was hidden.
    */
-  postponedMessages?: Map<Message['command'], Message['payload']>
+  postponedMessages?: Map<Message['command'], Message>
 }
 
-const state: State = {}
+const state: State = {
+  postponedMessages: new Map(),
+}
+
+let immediate
+
+function sendPostponedMessages(): void {
+  state.panel.webview.postMessage([...state.postponedMessages.values()])
+  state.postponedMessages.clear()
+}
 
 /**
  * Post a message to the webview.
  */
 const postMessage = (message: Message): void => {
-  if (state.panel && state.panel.visible) {
-    state.panel.webview.postMessage(message)
-  } else {
-    state.postponedMessages.set(message.command, message.payload)
+  state.postponedMessages.set(message.command, message)
+  if (immediate) {
+    return
   }
+  immediate = setImmediate(() => {
+    if (state.panel && state.panel.visible) {
+      sendPostponedMessages()
+      immediate = undefined
+    }
+  })
 }
 
 function invalidateContent(): void {
@@ -127,7 +141,7 @@ function invalidateContent(): void {
 }
 
 function invalidateFsPath(): void {
-  state.postponedMessages = new Map()
+  state.postponedMessages.clear()
   postMessage({
     command: 'update.fsPath',
     payload: state.fsPath,
@@ -155,11 +169,7 @@ const onDidCreatePanel = (webViewPanel: vscode.WebviewPanel): void => {
   context.subscriptions.push(
     state.panel.onDidChangeViewState(event => {
       if (event.webviewPanel.visible) {
-        for (const [command, payload] of state.postponedMessages) {
-          // @ts-ignore TODO:
-          postMessage({ command, payload })
-        }
-        state.postponedMessages.clear()
+        sendPostponedMessages()
       }
     })
   )
