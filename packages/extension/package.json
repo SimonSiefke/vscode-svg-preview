@@ -14,13 +14,7 @@
   "bugs": {
     "url": "https://github.com/SimonSiefke/vscode-svg-preview/issues"
   },
-  "badges": [
-    {
-      "url": "https://travis-ci.org/Microsoft/vscode-python.svg?branch=master",
-      "href": "https://travis-ci.org/Microsoft/vscode-python",
-      "description": "Continuous integration (Travis)"
-    }
-  ],
+  "badges": [],
   "icon": "icon.png",
   "galleryBanner": {
     "color": "#1e415e",
