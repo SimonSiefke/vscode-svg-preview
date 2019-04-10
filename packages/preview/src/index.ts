@@ -29,9 +29,6 @@ function invalidateBackground(): void {
   document.body.style.background = state.background
 }
 invalidateBackground()
-if (state.content !== undefined) {
-  invalidateContent()
-}
 window.addEventListener('message', event => {
   const messages: Message[] = event.data
   for (const message of messages) {

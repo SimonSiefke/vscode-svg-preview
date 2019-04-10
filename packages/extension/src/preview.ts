@@ -103,14 +103,14 @@ interface State {
   /**
    * The latest messages that could not be sent because the webview was hidden.
    */
-  postponedMessages?: Map<Message['command'], Message>
+  postponedMessages: Map<Message['command'], Message>
 }
 
 const state: State = {
   postponedMessages: new Map(),
 }
 
-let immediate
+let immediate: NodeJS.Immediate
 
 function sendPostponedMessages(): void {
   state.panel.webview.postMessage([...state.postponedMessages.values()])
@@ -231,10 +231,8 @@ export const previewPanel: PreviewPanel = {
     return state.fsPath
   },
   set content(value: string) {
-    setImmediate(() => {
-      state.content = value
-      invalidateContent()
-    })
+    state.content = value
+    invalidateContent()
   },
   async deserializeWebviewPanel(webviewPanel, deserializedState) {
     if (
@@ -246,13 +244,14 @@ export const previewPanel: PreviewPanel = {
     ) {
       state.fsPath = vscode.window.activeTextEditor.document.uri.fsPath
       onDidCreatePanel(webviewPanel)
-      invalidateFsPath()
-      invalidatePan()
+      this.show({ fsPath: state.fsPath })
       state.content = vscode.window.activeTextEditor.document.getText()
       invalidateContent()
     } else {
       state.fsPath = deserializedState.fsPath
       onDidCreatePanel(webviewPanel)
+      state.content = deserializedState.content
+      invalidateContent()
     }
   },
 }
