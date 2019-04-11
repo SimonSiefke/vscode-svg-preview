@@ -1,4 +1,7 @@
 import * as vscode from 'vscode'
+import * as path from 'path'
+import { rootPath } from './constants'
+import { context } from './extension'
 
 export function shouldOpenTextDocument(
   textDocument: vscode.TextDocument,
@@ -17,4 +20,16 @@ export function shouldOpenTextDocument(
   }
   // 3. its preview is not open and its an svg
   return true
+}
+
+/**
+ * Get the absolute path for relative path from the root of this project.
+ *
+ * @example
+ * ```js
+ * getPath('packages/preview/dist/index.css')
+ * ```
+ */
+export function getPath(relativePath: string): string {
+  return path.join(context.extensionPath, rootPath, relativePath)
 }

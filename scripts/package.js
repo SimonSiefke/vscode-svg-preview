@@ -1,3 +1,4 @@
+/* eslint-disable no-continue */
 /* eslint-disable import/no-dynamic-require */
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable import/no-extraneous-dependencies */
@@ -48,6 +49,13 @@ fs.copySync(
 )
 for (const file of ['README.md', 'LICENSE']) {
   fs.copySync(path.join(root, file), `dist/${file}`)
+}
+
+for (const file of fs.readdirSync(path.join(root, 'images'))) {
+  if (!file.includes('optimized') || file.startsWith('extension_icon')) {
+    continue
+  }
+  fs.copySync(path.join(root, `images/${file}`), `dist/images/${file}`)
 }
 
 exec('cd dist && npm install', err => {

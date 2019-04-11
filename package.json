@@ -44,7 +44,7 @@
   "bundlesize": [
     {
       "path": "./packages/extension/dist/extension.js",
-      "maxSize": "6.1 kB",
+      "maxSize": "6.2 kB",
       "compression": "none"
     },
     {

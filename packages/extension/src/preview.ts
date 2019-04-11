@@ -3,34 +3,22 @@ import * as path from 'path'
 import * as vscode from 'vscode'
 import { Message } from '../../shared/src/Message'
 import { PreviewState } from '../../shared/src/PreviewState'
-import { shouldOpenTextDocument } from './util'
+import { shouldOpenTextDocument, getPath } from './util'
 import { webViewPanelType } from './constants'
 import { context } from './extension'
 
-const rootPath = ROOT
 const previewPath = 'packages/preview/dist'
-
-/**
- * Get the absolute path for relative path from the root of this project.
- *
- * @example
- * ```js
- * getPath(context.extensionPath, 'packages/preview/dist/index.css')
- * ```
- */
-function getPath(extensionPath: string, relativePath: string): string {
-  return path.join(extensionPath, rootPath, relativePath)
-}
+const iconPath = 'images/bolt_original_optimized.svg'
 
 /**
  * Get the html for the svg preview panel.
  */
 const getPreviewHTML = memoizeOne(
-  (extensionPath: string): string => {
+  (): string => {
     /**
      * The base url for links inside the html file.
      */
-    const base = vscode.Uri.file(getPath(extensionPath, previewPath)).with({
+    const base = vscode.Uri.file(getPath(previewPath)).with({
       scheme: 'vscode-resource',
     })
     return `<!DOCTYPE html>
@@ -163,6 +151,7 @@ function invalidatePan(): void {
  */
 const onDidCreatePanel = (webViewPanel: vscode.WebviewPanel): void => {
   state.panel = webViewPanel
+  state.panel.iconPath = vscode.Uri.file(getPath(iconPath))
   context.subscriptions.push(
     state.panel.onDidDispose(() => {
       state.panel = undefined
@@ -185,7 +174,7 @@ const onDidCreatePanel = (webViewPanel: vscode.WebviewPanel): void => {
       })
     )
   }
-  state.panel.webview.html = getPreviewHTML(context.extensionPath)
+  state.panel.webview.html = getPreviewHTML()
   // postMessage({
   //   command: 'update.background',
   //   payload: 'red',
@@ -211,9 +200,7 @@ export const previewPanel: PreviewPanel = {
           {
             enableCommandUris: true,
             localResourceRoots: [
-              vscode.Uri.file(
-                getPath(context.extensionPath, 'packages/preview/dist')
-              ),
+              vscode.Uri.file(getPath('packages/preview/dist')),
             ],
             enableScripts: true,
           }
