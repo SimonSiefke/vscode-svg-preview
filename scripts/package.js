@@ -34,7 +34,7 @@ fs.writeFileSync(
   `${JSON.stringify(pkg, null, 2)}\n`
 )
 
-for (const file of ['icon.png', 'package.nls.json']) {
+for (const file of ['icon.png']) {
   fs.copySync(path.join(root, `packages/extension/${file}`), `dist/${file}`)
 }
 
