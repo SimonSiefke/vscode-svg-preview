@@ -28,7 +28,9 @@
     "Other"
   ],
   "keywords": [
-    "svg preview"
+    "svg preview",
+    "svg",
+    "preview"
   ],
   "activationEvents": [
     "onLanguage:xml",
