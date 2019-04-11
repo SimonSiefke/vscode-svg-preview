@@ -8,3 +8,4 @@ rollup.config.prod.js
 **/coverage
 *.md
 jest.config.js
+*.svg
