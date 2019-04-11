@@ -53,8 +53,8 @@ for (const file of fs.readdirSync(
   if (
     [
       'icon.png',
-      'bolt_original_darkgray_optimized',
-      'bolt_original_lightgray_optimized',
+      'bolt_original_darkgray_optimized.svg',
+      'bolt_original_lightgray_optimized.svg',
     ].includes(file)
   ) {
     fs.copySync(
