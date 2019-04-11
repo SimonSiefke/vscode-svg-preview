@@ -16,16 +16,18 @@ const pkg = require('../packages/extension/package.json')
 
 pkg.main = './packages/extension/dist/extension.js'
 
-for (const d in pkg.dependencies) {
-  if (!d.includes('vscode')) {
-    delete pkg.dependencies[d]
-  }
-}
-for (const d in pkg.devDependencies) {
-  if (!d.includes('vscode')) {
-    delete pkg.devDependencies[d]
-  }
-}
+// for (const d in pkg.dependencies) {
+//   if (!d.includes('vscode')) {
+//     delete pkg.dependencies[d]
+//   }
+// }
+// for (const d in pkg.devDependencies) {
+//   if (!d.includes('vscode')) {
+//     delete pkg.devDependencies[d]
+//   }
+// }
+delete pkg.dependencies
+delete pkg.devDependencies
 delete pkg.enableProposedApi
 fs.writeFileSync(
   path.join(root, 'dist/package.json'),

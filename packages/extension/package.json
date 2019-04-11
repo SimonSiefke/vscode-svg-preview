@@ -43,12 +43,12 @@
       {
         "category": "Svg Preview",
         "command": "svgPreview.showPreview",
-        "title": "%svgPreview.command.showPreview%"
+        "title": "Open Preview"
       },
       {
         "category": "Svg Preview",
         "command": "svgPreview.showPreviewToSide",
-        "title": "%svgPreview.command.showPreviewToSide%"
+        "title": "Open Preview to the Side"
       }
     ],
     "menus": {
@@ -72,7 +72,7 @@
         "svgPreview.autoOpen": {
           "type": "boolean",
           "default": false,
-          "description": "%svgPreview.configuration.autoOpen%",
+          "description": "Automatically open the preview when an svg file is opened",
           "scope": "resource"
         }
       }
@@ -83,8 +83,7 @@
     "test": "echo test"
   },
   "dependencies": {
-    "memoize-one": "^5.0.4",
-    "vscode-nls": "^4.1.0"
+    "memoize-one": "^5.0.4"
   },
   "devDependencies": {
     "@types/node": "^11.13.4",
