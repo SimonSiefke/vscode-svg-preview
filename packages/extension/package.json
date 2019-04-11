@@ -17,13 +17,12 @@
   "badges": [],
   "icon": "icon.png",
   "galleryBanner": {
-    "color": "#1e415e",
+    "color": "#242b2b",
     "theme": "dark"
   },
   "engines": {
     "vscode": "^1.31.0"
   },
-  "appInsightsKey": "TODO",
   "categories": [
     "Other"
   ],
