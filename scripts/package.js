@@ -35,10 +35,6 @@ fs.writeFileSync(
   `${JSON.stringify(pkg, null, 2)}\n`
 )
 
-for (const file of ['icon.png']) {
-  fs.copySync(path.join(root, `packages/extension/${file}`), `dist/${file}`)
-}
-
 fs.copySync(
   path.join(root, `packages/extension/dist`),
   `dist/packages/extension/dist`
@@ -51,11 +47,19 @@ for (const file of ['README.md', 'LICENSE']) {
   fs.copySync(path.join(root, file), `dist/${file}`)
 }
 
-for (const file of fs.readdirSync(path.join(root, 'images'))) {
-  if (!file.includes('optimized') || file.startsWith('extension_icon')) {
+for (const file of fs.readdirSync(
+  path.join(root, 'packages/extension/images')
+)) {
+  if (
+    file !== 'icon.png' &&
+    (!file.includes('optimized') || file.startsWith('extension_icon'))
+  ) {
     continue
   }
-  fs.copySync(path.join(root, `images/${file}`), `dist/images/${file}`)
+  fs.copySync(
+    path.join(root, `packages/extension/images/${file}`),
+    `dist/images/${file}`
+  )
 }
 
 exec('cd dist && npm install', err => {

@@ -33,3 +33,14 @@ export function shouldOpenTextDocument(
 export function getPath(relativePath: string): string {
   return path.join(context.extensionPath, rootPath, relativePath)
 }
+
+interface Context {
+  svgPreviewIsOpen: boolean
+}
+
+export function setContext(
+  key: keyof Context,
+  value: Context[typeof key]
+): Thenable<void> {
+  return vscode.commands.executeCommand('setContext', key, value)
+}

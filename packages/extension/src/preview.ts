@@ -3,12 +3,12 @@ import * as path from 'path'
 import * as vscode from 'vscode'
 import { Message } from '../../shared/src/Message'
 import { PreviewState } from '../../shared/src/PreviewState'
-import { shouldOpenTextDocument, getPath } from './util'
+import { shouldOpenTextDocument, getPath, setContext } from './util'
 import { webViewPanelType } from './constants'
 import { context } from './extension'
 
 const previewPath = 'packages/preview/dist'
-const iconPath = 'images/bolt_original_optimized.svg'
+const iconPath = 'packages/extension/images/bolt_original_yellow_optimized.svg'
 
 /**
  * Get the html for the svg preview panel.
@@ -150,12 +150,14 @@ function invalidatePan(): void {
  * This method is called when a webview panel has been created.
  */
 const onDidCreatePanel = (webViewPanel: vscode.WebviewPanel): void => {
+  setContext('svgPreviewIsOpen', true)
   state.panel = webViewPanel
   state.panel.iconPath = vscode.Uri.file(getPath(iconPath))
   context.subscriptions.push(
     state.panel.onDidDispose(() => {
       state.panel = undefined
       state.fsPath = undefined
+      setContext('svgPreviewIsOpen', false)
     })
   )
   context.subscriptions.push(

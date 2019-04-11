@@ -14,7 +14,7 @@
   "bugs": {
     "url": "https://github.com/SimonSiefke/vscode-svg-preview/issues"
   },
-  "icon": "icon.png",
+  "icon": "images/icon.png",
   "galleryBanner": {
     "color": "#242b2b",
     "theme": "dark"
@@ -46,7 +46,11 @@
       {
         "category": "Svg Preview",
         "command": "svgPreview.showPreviewToSide",
-        "title": "Open Preview to the Side"
+        "title": "Open Preview to the Side",
+        "icon": {
+          "light": "images/bolt_original_darkgray_optimized.svg",
+          "dark": "images/bolt_original_lightgray_optimized.svg"
+        }
       }
     ],
     "menus": {
@@ -60,6 +64,13 @@
           "command": "svgPreview.showPreviewToSide",
           "when": "editorLangId == xml && resourceExtname == .svg",
           "group": "navigation"
+        }
+      ],
+      "editor/title": [
+        {
+          "command": "svgPreview.showPreviewToSide",
+          "group": "navigation",
+          "when": "editorLangId == xml && resourceExtname == .svg && svgPreviewIsOpen == false"
         }
       ]
     },
