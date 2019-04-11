@@ -113,8 +113,11 @@ const state: State = {
 let immediate: NodeJS.Immediate
 
 function sendPostponedMessages(): void {
-  state.panel.webview.postMessage([...state.postponedMessages.values()])
-  state.postponedMessages.clear()
+  const postponedMessages = [...state.postponedMessages.values()]
+  if (postponedMessages.length > 0) {
+    state.panel.webview.postMessage([...state.postponedMessages.values()])
+    state.postponedMessages.clear()
+  }
 }
 
 /**
@@ -126,9 +129,9 @@ const postMessage = (message: Message): void => {
     return
   }
   immediate = setImmediate(() => {
+    immediate = undefined
     if (state.panel && state.panel.visible) {
       sendPostponedMessages()
-      immediate = undefined
     }
   })
 }
@@ -169,6 +172,7 @@ const onDidCreatePanel = (webViewPanel: vscode.WebviewPanel): void => {
   context.subscriptions.push(
     state.panel.onDidChangeViewState(event => {
       if (event.webviewPanel.visible) {
+        invalidateContent()
         sendPostponedMessages()
       }
     })
@@ -177,7 +181,7 @@ const onDidCreatePanel = (webViewPanel: vscode.WebviewPanel): void => {
     // TODO
     context.subscriptions.push(
       state.panel.webview.onDidReceiveMessage((message: any) => {
-        vscode.window.showInformationMessage(message.command)
+        vscode.window.showInformationMessage(message)
       })
     )
   }
