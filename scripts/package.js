@@ -51,15 +51,22 @@ for (const file of fs.readdirSync(
   path.join(root, 'packages/extension/images')
 )) {
   if (
-    file !== 'icon.png' &&
-    (!file.includes('optimized') || file.startsWith('extension_icon'))
+    [
+      'icon.png',
+      'bolt_original_darkgray_optimized',
+      'bolt_original_lightgray_optimized',
+    ].includes(file)
   ) {
-    continue
+    fs.copySync(
+      path.join(root, `packages/extension/images/${file}`),
+      `dist/images/${file}`
+    )
+  } else if (['bolt_original_yellow_optimized.svg'].includes(file)) {
+    fs.copySync(
+      path.join(root, `packages/extension/images/${file}`),
+      `dist/packages/extension/images/${file}`
+    )
   }
-  fs.copySync(
-    path.join(root, `packages/extension/images/${file}`),
-    `dist/images/${file}`
-  )
 }
 
 exec('cd dist && npm install', err => {
