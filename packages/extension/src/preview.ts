@@ -24,18 +24,17 @@ const getPreviewHTML = memoizeOne(
     return `<!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'none'; img-src vscode-resource: https:; style-src 'unsafe-inline' vscode-resource:; script-src vscode-resource:;"
-    />
-
-    <base href="${base}/" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="index.css" />
+      content="default-src 'none'; img-src 'self' data:; style-src 'unsafe-inline' vscode-resource:; script-src vscode-resource:;"
+    >
+    <base href="${base}/" >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" >
+    <link rel="stylesheet" href="index.css" >
   </head>
-
   <body>
+    <img>
     <script src="index.js"></script>
   </body>
 </html>

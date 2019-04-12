@@ -5,11 +5,15 @@ import './index.css'
 
 const vscode = acquireVsCodeApi()
 const state: PreviewState = vscode.getState() || {}
+const $image = document.querySelector('img')
 function invalidateState(): void {
   vscode.setState(state)
 }
 function invalidateContent(): void {
-  document.body.innerHTML = state.content
+  $image.setAttribute(
+    'src',
+    `data:image/svg+xml,${encodeURIComponent(state.content)}`
+  )
 }
 let cleanUpPan: CleanUp | undefined
 function invalidatePan(): void {
