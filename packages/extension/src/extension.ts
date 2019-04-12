@@ -20,14 +20,15 @@ export async function activate(c: vscode.ExtensionContext): Promise<void> {
     vscode.commands.registerCommand(
       'svgPreview.showPreview',
       async (uri: vscode.Uri) => {
-        if (!shouldOpenUri(uri)) {
+        const actualUri = uri || vscode.window.activeTextEditor.document.uri
+        if (!shouldOpenUri(actualUri)) {
           return
         }
         previewPanel.show({
           viewColumn: vscode.ViewColumn.Active,
-          fsPath: uri.fsPath,
+          fsPath: actualUri.fsPath,
         })
-        const textDocument = await vscode.workspace.openTextDocument(uri)
+        const textDocument = await vscode.workspace.openTextDocument(actualUri)
         previewPanel.content = textDocument.getText()
       }
     )
