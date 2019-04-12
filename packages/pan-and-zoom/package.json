@@ -2,12 +2,17 @@
   "name": "pan-and-zoom",
   "license": "MIT",
   "scripts": {
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "dev": "parcel example/index.html"
+    "test": "echo test",
+    "e2e:watch": "concurrently \"npm run dev\" \"cypress open\"",
+    "dev": "parcel --port 3000 example/index.html"
   },
   "devDependencies": {
-    "jest": "^24.7.1",
-    "parcel-bundler": "^1.12.3"
+    "@cypress/webpack-preprocessor": "^4.0.3",
+    "concurrently": "^4.1.0",
+    "cypress": "^3.2.0",
+    "parcel-bundler": "^1.12.3",
+    "ts-loader": "^5.3.3",
+    "typescript": "^3.4.3",
+    "webpack": "^4.30.0"
   }
 }

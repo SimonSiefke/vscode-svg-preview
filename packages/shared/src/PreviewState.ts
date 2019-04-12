@@ -18,6 +18,10 @@ export interface PreviewState {
     y: number
   }
   /**
+   * The zoom.
+   */
+  zoom?: number
+  /**
    * The background of the preview.
    */
   background?: string

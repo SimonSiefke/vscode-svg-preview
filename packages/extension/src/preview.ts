@@ -158,7 +158,7 @@ function invalidateFsPath(): void {
  */
 function invalidatePan(): void {
   postMessage({
-    command: 'reset.pan',
+    command: 'reset.panAndZoom',
     payload: undefined,
   })
 }
@@ -189,7 +189,7 @@ const onDidCreatePanel = (webViewPanel: vscode.WebviewPanel): void => {
     // TODO
     context.subscriptions.push(
       state.panel.webview.onDidReceiveMessage((message: any) => {
-        vscode.window.showInformationMessage(message)
+        vscode.window.showInformationMessage(JSON.stringify(message))
       })
     )
   }
@@ -236,6 +236,7 @@ export const previewPanel: PreviewPanel = {
     const title = `Preview ${path.basename(value)}`
     state.panel.title = title
     invalidateFsPath()
+    invalidatePan()
   },
   get fsPath() {
     return state.fsPath

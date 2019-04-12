@@ -15,6 +15,6 @@ export type Message =
       payload: string
     }
   | {
-      command: 'reset.pan'
+      command: 'reset.panAndZoom'
       payload: undefined
     }

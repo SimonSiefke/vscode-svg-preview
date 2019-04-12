@@ -11,3 +11,5 @@ declare function acquireVsCodeApi(): VSCodeApi
 interface Window {
   acquireVsCodeApi: () => VSCodeApi
 }
+
+declare const DEVELOPMENT: boolean

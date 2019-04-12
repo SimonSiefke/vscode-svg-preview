@@ -1,2 +1,2 @@
-declare const DEVELOPMENT: boolean
 declare const ROOT: string
+declare const DEVELOPMENT: boolean

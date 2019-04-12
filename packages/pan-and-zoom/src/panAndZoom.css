@@ -1,42 +1,67 @@
 html {
-    cursor: grab;
-    /* TODO autoprefixer */
-    cursor: -webkit-grab;
-    touch-action: none;
-    text-align: center;
-    transform-origin: top left
+  cursor: grab;
+  /* TODO autoprefixer */
+  cursor: -webkit-grab;
+  touch-action: none;
+  text-align: center;
+  transform-origin: top left;
 }
 
-html:active{
-    cursor: grabbing;
-    cursor: -moz-grabbing;
-    cursor: -webkit-grabbing;
+html:active {
+  cursor: grabbing;
+  cursor: -moz-grabbing;
+  cursor: -webkit-grabbing;
 }
 
-
-html, body{
+html,
+body {
   height: 100%;
-       overflow: hidden;
-
+  overflow: hidden;
 }
 
-body{
+body {
   background: snow;
   margin: 0;
 }
 
 /* TODO */
 
-.a { fill: #b4343c;}
-.b { fill: #ce3b45;}
-.c { fill: #6d3600;}
-.d { fill: #315e98;}
-.e { fill: #fff;}
-.f { fill: #283d54;}
-.g { fill: #ffa738;}
-.h { fill: #ff8e38;}
-.i { fill: #dc7a30;}
-.j { fill: #2072ac;}
-.k { fill: #ffc26d;}
-.l { fill: #2086cc;}
-.m { fill: #20b1cc;}
+.a {
+  fill: #b4343c;
+}
+.b {
+  fill: #ce3b45;
+}
+.c {
+  fill: #6d3600;
+}
+.d {
+  fill: #315e98;
+}
+.e {
+  fill: #fff;
+}
+.f {
+  fill: #283d54;
+}
+.g {
+  fill: #ffa738;
+}
+.h {
+  fill: #ff8e38;
+}
+.i {
+  fill: #dc7a30;
+}
+.j {
+  fill: #2072ac;
+}
+.k {
+  fill: #ffc26d;
+}
+.l {
+  fill: #2086cc;
+}
+.m {
+  fill: #20b1cc;
+}

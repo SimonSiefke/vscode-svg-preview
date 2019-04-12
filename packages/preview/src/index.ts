@@ -1,9 +1,16 @@
-import { usePan, CleanUp } from '../../pan-and-zoom/src/panAndZoom'
+import { usePan, CleanUp, useZoom } from '../../pan-and-zoom/src/panAndZoom'
 import { PreviewState } from '../../shared/src/PreviewState'
 import { Message } from '../../shared/src/Message'
 import './index.css'
 
 const vscode = acquireVsCodeApi()
+if (DEVELOPMENT) {
+  window.addEventListener('error', event => {
+    console.error(event)
+    vscode.postMessage({ command: 'error', payload: event.message })
+  })
+}
+
 const state: PreviewState = vscode.getState() || {}
 const $image = document.querySelector('img')
 function invalidateState(): void {
@@ -23,12 +30,27 @@ function invalidatePan(): void {
   cleanUpPan = usePan({
     initialPointerOffset: state.pointerOffset,
     onPointerOffsetChange(pointerOffset) {
+      console.log(pointerOffset)
       state.pointerOffset = pointerOffset
       invalidateState()
     },
   })
 }
 invalidatePan()
+let cleanUpZoom: CleanUp | undefined
+function invalidateZoom(): void {
+  if (cleanUpZoom) {
+    cleanUpZoom()
+  }
+  cleanUpZoom = useZoom({
+    initialZoom: state.zoom,
+    onZoomChange(zoom) {
+      state.zoom = zoom
+      invalidateState()
+    },
+  })
+}
+invalidateZoom()
 function invalidateBackground(): void {
   document.body.style.background = state.background
 }
@@ -37,9 +59,11 @@ window.addEventListener('message', event => {
   const messages: Message[] = event.data
   for (const message of messages) {
     switch (message.command) {
-      case 'reset.pan':
+      case 'reset.panAndZoom':
         state.pointerOffset = undefined
+        state.zoom = undefined
         invalidatePan()
+        invalidateZoom()
         invalidateState()
         break
       case 'update.fsPath':

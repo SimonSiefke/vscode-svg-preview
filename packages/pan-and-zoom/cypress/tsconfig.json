@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "baseUrl": "../node_modules",
+    "lib": ["esnext", "dom"],
+    "types": ["cypress"]
+  },
+  "include": ["**/*.ts", "support/index.js"]
+}
