@@ -3,19 +3,13 @@ import * as path from 'path'
 import { rootPath } from './constants'
 import { context } from './extension'
 
-export function shouldOpenTextDocument(
-  textDocument: vscode.TextDocument,
-  fsPath?: string
-): boolean {
+export function shouldOpenUri(uri: vscode.Uri, fsPath?: string): boolean {
   // 1. its preview already open
-  if (fsPath === textDocument.uri.fsPath) {
+  if (fsPath === uri.fsPath) {
     return false
   }
   // 2. its preview is not open and its not an svg
-  if (
-    textDocument.languageId !== 'xml' ||
-    !textDocument.fileName.endsWith('.svg')
-  ) {
+  if (!uri.fsPath.endsWith('.svg')) {
     return false
   }
   // 3. its preview is not open and its an svg

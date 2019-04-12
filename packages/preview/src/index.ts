@@ -3,14 +3,12 @@ import { PreviewState } from '../../shared/src/PreviewState'
 import { Message } from '../../shared/src/Message'
 import './index.css'
 
-console.log('init')
 const vscode = acquireVsCodeApi()
 const state: PreviewState = vscode.getState() || {}
 function invalidateState(): void {
   vscode.setState(state)
 }
 function invalidateContent(): void {
-  console.log('update content')
   document.body.innerHTML = state.content
 }
 let cleanUpPan: CleanUp | undefined

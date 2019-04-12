@@ -1,6 +1,6 @@
 import * as vscode from 'vscode'
 import { previewPanel } from './preview'
-import { shouldOpenTextDocument } from './util'
+import { shouldOpenUri } from './util'
 import { webViewPanelType } from './constants'
 import { configuration } from './configuration'
 
@@ -17,17 +17,18 @@ export async function activate(c: vscode.ExtensionContext): Promise<void> {
    */
   let lastEventWasClose = false
   context.subscriptions.push(
-    vscode.commands.registerTextEditorCommand(
+    vscode.commands.registerCommand(
       'svgPreview.showPreview',
-      textEditor => {
-        const textDocument = textEditor.document
-        if (shouldOpenTextDocument(textDocument, previewPanel.fsPath)) {
-          previewPanel.show({
-            viewColumn: vscode.ViewColumn.Active,
-            fsPath: textDocument.uri.fsPath,
-          })
-          previewPanel.content = textDocument.getText()
+      async (uri: vscode.Uri) => {
+        if (!shouldOpenUri(uri)) {
+          return
         }
+        previewPanel.show({
+          viewColumn: vscode.ViewColumn.Active,
+          fsPath: uri.fsPath,
+        })
+        const textDocument = await vscode.workspace.openTextDocument(uri)
+        previewPanel.content = textDocument.getText()
       }
     )
   )
@@ -36,13 +37,14 @@ export async function activate(c: vscode.ExtensionContext): Promise<void> {
       'svgPreview.showPreviewToSide',
       textEditor => {
         const textDocument = textEditor.document
-        if (shouldOpenTextDocument(textDocument, previewPanel.fsPath)) {
-          previewPanel.show({
-            viewColumn: vscode.ViewColumn.Beside,
-            fsPath: textDocument.uri.fsPath,
-          })
-          previewPanel.content = textDocument.getText()
+        if (!shouldOpenUri(textDocument.uri, previewPanel.fsPath)) {
+          return
         }
+        previewPanel.show({
+          viewColumn: vscode.ViewColumn.Beside,
+          fsPath: textDocument.uri.fsPath,
+        })
+        previewPanel.content = textDocument.getText()
       }
     )
   )
@@ -58,7 +60,7 @@ export async function activate(c: vscode.ExtensionContext): Promise<void> {
         return
       }
       // don't open if it's not an svg
-      if (!shouldOpenTextDocument(textEditor.document, previewPanel.fsPath)) {
+      if (!shouldOpenUri(textEditor.document.uri, previewPanel.fsPath)) {
         return
       }
       // don't open if auto-open setting isn't enabled
@@ -69,10 +71,15 @@ export async function activate(c: vscode.ExtensionContext): Promise<void> {
         return
       }
       // open the preview
-      previewPanel.show({
-        viewColumn: vscode.ViewColumn.Beside,
-        fsPath: textEditor.document.uri.fsPath,
-      })
+      if (previewPanel.visible) {
+        // TODO need to check if there is a webview that can be restored, otherwise there will be 2 open previews at the same time which should not happen, probably need to wait for https://github.com/Microsoft/vscode/issues/15178
+        previewPanel.fsPath = textEditor.document.uri.fsPath
+      } else {
+        previewPanel.show({
+          viewColumn: vscode.ViewColumn.Beside,
+          fsPath: textEditor.document.uri.fsPath,
+        })
+      }
       previewPanel.content = textEditor.document.getText()
     })
   )

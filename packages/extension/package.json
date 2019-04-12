@@ -31,7 +31,6 @@
     "preview"
   ],
   "activationEvents": [
-    "onLanguage:xml",
     "onWebviewPanel:svgPreview",
     "onCommand:svgPreview.showPreview",
     "onCommand:svgPreview.showPreviewToSide"
@@ -64,6 +63,13 @@
           "command": "svgPreview.showPreviewToSide",
           "when": "editorLangId == xml && resourceExtname == .svg",
           "group": "navigation"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "svgPreview.showPreview",
+          "group": "navigation",
+          "when": "resourceLangId == xml && resourceExtname == .svg"
         }
       ],
       "editor/title": [

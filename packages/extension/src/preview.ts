@@ -3,7 +3,7 @@ import * as path from 'path'
 import * as vscode from 'vscode'
 import { Message } from '../../shared/src/Message'
 import { PreviewState } from '../../shared/src/PreviewState'
-import { shouldOpenTextDocument, getPath, setContext } from './util'
+import { shouldOpenUri, getPath, setContext } from './util'
 import { webViewPanelType } from './constants'
 import { context } from './extension'
 
@@ -68,6 +68,11 @@ interface PreviewPanel extends vscode.WebviewPanelSerializer {
    * The content of the currently previewed file
    */
   content: string
+
+  /**
+   * Whether or not the panel is visible.
+   */
+  visible: boolean
 }
 
 interface State {
@@ -100,6 +105,9 @@ const state: State = {
 
 let immediate: NodeJS.Immediate
 
+/**
+ * Send all the messages that could not be send because the webview was hidden.
+ */
 function sendPostponedMessages(): void {
   const postponedMessages = [...state.postponedMessages.values()]
   if (postponedMessages.length > 0) {
@@ -116,6 +124,7 @@ const postMessage = (message: Message): void => {
   if (immediate) {
     return
   }
+  // Use an immediate to send multiple messages at once (prevents flickering in the preview and is more efficient)
   immediate = setImmediate(() => {
     immediate = undefined
     if (state.panel && state.panel.visible) {
@@ -124,6 +133,9 @@ const postMessage = (message: Message): void => {
   })
 }
 
+/**
+ * Update the contents.
+ */
 function invalidateContent(): void {
   postMessage({
     command: 'update.content',
@@ -131,6 +143,9 @@ function invalidateContent(): void {
   })
 }
 
+/**
+ * Update the fs path.
+ */
 function invalidateFsPath(): void {
   state.postponedMessages.clear()
   postMessage({
@@ -139,6 +154,9 @@ function invalidateFsPath(): void {
   })
 }
 
+/**
+ * Reset the panning.
+ */
 function invalidatePan(): void {
   postMessage({
     command: 'reset.pan',
@@ -227,24 +245,35 @@ export const previewPanel: PreviewPanel = {
     state.content = value
     invalidateContent()
   },
+  get visible() {
+    return state.panel.visible
+  },
   async deserializeWebviewPanel(webviewPanel, deserializedState) {
+    if (state.panel) {
+      // TODO deserialized panel should already be disposed at this point
+      // There is already an open preview
+      webviewPanel.dispose()
+      return
+    }
     if (
       deserializedState &&
       vscode.window.activeTextEditor &&
-      shouldOpenTextDocument(vscode.window.activeTextEditor.document) &&
+      shouldOpenUri(vscode.window.activeTextEditor.document.uri) &&
       vscode.window.activeTextEditor.document.uri.fsPath !==
         deserializedState.fsPath
     ) {
+      // another svg file is currently open so we preview that instead of the one saved
       state.fsPath = vscode.window.activeTextEditor.document.uri.fsPath
       onDidCreatePanel(webviewPanel)
       this.show({ fsPath: state.fsPath })
       state.content = vscode.window.activeTextEditor.document.getText()
       invalidateContent()
-    } else {
-      state.fsPath = deserializedState.fsPath
-      onDidCreatePanel(webviewPanel)
-      state.content = deserializedState.content
-      invalidateContent()
+      return
     }
+    // preview the saved file
+    state.fsPath = deserializedState.fsPath
+    onDidCreatePanel(webviewPanel)
+    state.content = deserializedState.content
+    invalidateContent()
   },
 }
