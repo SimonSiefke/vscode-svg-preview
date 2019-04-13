@@ -2,8 +2,8 @@
 
 # Svg Preview for VSCode
 
-<!-- TODO image -->
-<!-- TODO logo -->
+![demo](./demo.gif)
+
 <!-- TODO need to figure out why animation is restarted so often -->
 <!-- TODO support external css -->
 
