@@ -11,4 +11,5 @@
 
 - Live editing of svg files
 - Panning of the preview
+- Zooming (currently work in progress)
 - Ability to automatically open preview (can be enabled via settings)
