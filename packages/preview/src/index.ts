@@ -30,7 +30,6 @@ function invalidatePan(): void {
   cleanUpPan = usePan({
     initialPointerOffset: state.pointerOffset,
     onPointerOffsetChange(pointerOffset) {
-      console.log(pointerOffset)
       state.pointerOffset = pointerOffset
       invalidateState()
     },

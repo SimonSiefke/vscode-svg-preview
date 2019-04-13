@@ -4,6 +4,8 @@
 
 <!-- TODO image -->
 <!-- TODO logo -->
+<!-- TODO need to figure out why animation is restarted so often -->
+<!-- TODO support external css -->
 
 ## Features
 
