@@ -4,6 +4,7 @@
 
 ![demo](./demo.gif)
 
+<!-- TODO smaller demo image -->
 <!-- TODO need to figure out why animation is restarted so often -->
 <!-- TODO support external css -->
 
