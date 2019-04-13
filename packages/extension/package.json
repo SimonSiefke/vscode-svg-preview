@@ -87,7 +87,7 @@
         "svgPreview.autoOpen": {
           "type": "boolean",
           "default": false,
-          "description": "Automatically open the preview when an svg file is opened",
+          "description": "Automatically open the preview when an svg file is opened.",
           "scope": "resource"
         }
       }
