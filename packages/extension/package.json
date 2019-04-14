@@ -28,7 +28,8 @@
   "keywords": [
     "svg preview",
     "svg",
-    "preview"
+    "preview",
+    "svg viewer"
   ],
   "activationEvents": [
     "onWebviewPanel:svgPreview",
@@ -98,11 +99,19 @@
     "test": "echo test"
   },
   "dependencies": {
-    "memoize-one": "^5.0.4"
+    "fetch-base64": "^2.1.2",
+    "memoize-one": "^5.0.4",
+    "mime": "^2.4.2",
+    "mime-types": "^2.1.22",
+    "node-fetch": "^2.3.0",
+    "request": "^2.88.0"
   },
   "devDependencies": {
     "@types/memoize-one": "^4.1.1",
+    "@types/mime": "^2.0.1",
+    "@types/mime-types": "^2.1.0",
     "@types/node": "^11.13.4",
+    "@types/node-fetch": "^2.3.2",
     "vscode": "^1.1.33"
   }
 }

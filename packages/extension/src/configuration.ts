@@ -40,6 +40,7 @@ export const configuration: Configuration = {
   addChangeListener(callback) {
     if (!listeners) {
       listeners = []
+      console.log('inside')
       context.subscriptions.push(
         vscode.workspace.onDidChangeConfiguration(event => {
           if (!event.affectsConfiguration('svgPreview')) {
@@ -59,8 +60,11 @@ export const configuration: Configuration = {
     listeners.push(callback)
   },
   get(key, resource) {
-    return vscode.workspace
+    console.log('before')
+    const result = vscode.workspace
       .getConfiguration('svgPreview', resource)
       .get<any>(key)
+    console.log('after')
+    return result
   },
 }

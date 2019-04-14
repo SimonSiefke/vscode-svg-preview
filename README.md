@@ -4,9 +4,11 @@
 
 ![demo](./demo.gif)
 
-<!-- TODO smaller demo image -->
 <!-- TODO need to figure out why animation is restarted so often -->
 <!-- TODO support external css -->
+<!-- TODO work in html -->
+<!-- TODO update content when just opened -->
+<!-- TODO handle active text editor before extension is activated -->
 
 ## Features
 

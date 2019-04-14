@@ -5,6 +5,8 @@ import { terser } from 'rollup-plugin-terser'
 import replace from 'rollup-plugin-replace'
 import postcss from 'rollup-plugin-postcss'
 import autoprefixer from 'autoprefixer'
+import commonjs from 'rollup-plugin-commonjs'
+import json from 'rollup-plugin-json'
 
 const DEV = process.env.NODE_ENV === 'development'
 
@@ -32,7 +34,13 @@ const extensionConfig = {
   },
   plugins: [
     // @ts-ignore
-    nodeResolve(),
+    json(),
+    // @ts-ignore
+    nodeResolve({
+      jsnext: true,
+      main: true,
+    }),
+    commonjs(),
     // @ts-ignore
     importAlias({
       '@': './packages/extension/src',

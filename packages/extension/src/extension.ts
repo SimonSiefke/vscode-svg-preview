@@ -1,5 +1,5 @@
 import * as vscode from 'vscode'
-import { previewPanel } from './preview'
+import { previewPanel } from './preview/preview'
 import { shouldOpenUri } from './util'
 import { webViewPanelType } from './constants'
 import { configuration } from './configuration'
