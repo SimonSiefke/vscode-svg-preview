@@ -140,15 +140,13 @@ const postMessage = (message: Message): void => {
   })
 }
 
-// const fontUrls = ['eot', 'woff', 'woff2', 'ttf']
-
 /**
  * Update the contents.
  */
 async function invalidateContent(): Promise<void> {
   postMessage({
     command: 'update.content',
-    payload: await withInlineStyles(state.fsPath, state.content),
+    payload: await withInlineStyles(path.dirname(state.fsPath), state.content),
   })
 }
 

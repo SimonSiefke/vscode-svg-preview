@@ -38,3 +38,7 @@ export function setContext(
 ): Thenable<void> {
   return vscode.commands.executeCommand('setContext', key, value)
 }
+
+export function isRemote(url: string): boolean {
+  return /^https?/.test(url)
+}
