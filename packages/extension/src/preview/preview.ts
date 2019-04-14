@@ -140,13 +140,41 @@ const postMessage = (message: Message): void => {
   })
 }
 
+function indexOfGroup(match, n): number {
+  let { index } = match
+  for (let i = 1; i < n; i++) {
+    index += match[i].length
+  }
+  return index
+}
+
+async function getActualContent(): Promise<string> {
+  let content = await withInlineStyles(
+    path.dirname(state.fsPath),
+    state.content
+  )
+  const match = /(<svg)([^>]*?)(>)/i.exec(content)
+  if (match) {
+    // insert xmlns if it doesn't exist
+    const svgTagStart = indexOfGroup(match, 0)
+    const svgTagEnd = indexOfGroup(match, 3)
+    const svgTagContent = content.slice(svgTagStart, svgTagEnd)
+    if (!/xmlns=/.test(svgTagContent)) {
+      content = `${content.slice(
+        0,
+        svgTagStart + 4
+      )} xmlns="http://www.w3.org/2000/svg" ${content.slice(svgTagStart + 4)}`
+    }
+  }
+  return content
+}
 /**
  * Update the contents.
  */
 async function invalidateContent(): Promise<void> {
   postMessage({
     command: 'update.content',
-    payload: await withInlineStyles(path.dirname(state.fsPath), state.content),
+    payload: await getActualContent(),
   })
 }
 
