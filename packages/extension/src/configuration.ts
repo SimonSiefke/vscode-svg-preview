@@ -7,19 +7,17 @@ import { context } from './extension'
  */
 interface Options {
   readonly autoOpen: boolean
-  readonly panningEnabled: boolean
-  readonly zoomingEnabled: boolean
+  readonly background: 'transparent' | 'checkerboard'
 }
 
 type GetConfiguration = ((key: 'autoOpen', resource: vscode.Uri) => boolean) &
-  ((key: 'panningEnabled', resource: vscode.Uri) => boolean) &
-  ((key: 'zoomingEnabled', resource: vscode.Uri) => boolean)
+  ((key: 'background', resource: vscode.Uri) => 'transparent' | 'checkerboard')
 
-interface ConfigurationChangeEvent {
-  affectsConfiguration: (key: keyof Options, resource?: vscode.Uri) => boolean
+export interface ConfigurationChangeEvent {
+  affectsConfiguration: (key: keyof Options, resource: vscode.Uri) => boolean
 }
 
-interface Configuration {
+interface Configuration extends vscode.Disposable {
   /**
    * Get the configuration for a property from the vscode workspace settings.
    */
@@ -34,12 +32,12 @@ interface Configuration {
 /**
  * An array of callback functions that are executed when the configuration changes
  */
-let listeners: ((event: vscode.ConfigurationChangeEvent) => void)[]
+let listeners: Set<(event: vscode.ConfigurationChangeEvent) => void>
 
 export const configuration: Configuration = {
   addChangeListener(callback) {
     if (!listeners) {
-      listeners = []
+      listeners = new Set()
       context.subscriptions.push(
         vscode.workspace.onDidChangeConfiguration(event => {
           if (!event.affectsConfiguration('svgPreview')) {
@@ -56,12 +54,15 @@ export const configuration: Configuration = {
         })
       )
     }
-    listeners.push(callback)
+    listeners.add(callback)
   },
   get(key, resource) {
     const result = vscode.workspace
       .getConfiguration('svgPreview', resource)
       .get<any>(key)
     return result
+  },
+  dispose() {
+    listeners = undefined
   },
 }

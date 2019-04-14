@@ -51,7 +51,7 @@ function invalidateZoom(): void {
 }
 invalidateZoom()
 function invalidateBackground(): void {
-  document.body.style.background = state.background
+  document.body.dataset.background = state.background
 }
 invalidateBackground()
 window.addEventListener('message', event => {

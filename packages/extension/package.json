@@ -90,6 +90,16 @@
           "default": false,
           "description": "Automatically open the preview when an svg file is opened.",
           "scope": "resource"
+        },
+        "svgPreview.background": {
+          "type": "string",
+          "default": "transparent",
+          "enum": [
+            "transparent",
+            "checkerboard"
+          ],
+          "description": "The background of the preview.",
+          "scope": "resource"
         }
       }
     }

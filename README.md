@@ -5,10 +5,10 @@
 ![demo](./demo.gif)
 
 <!-- TODO need to figure out why animation is restarted so often -->
-<!-- TODO support external css -->
 <!-- TODO work in html -->
 <!-- TODO update content when just opened -->
 <!-- TODO handle active text editor before extension is activated -->
+<!-- TODO vscode live share -->
 
 ## Features
 
@@ -16,3 +16,11 @@
 - Panning of the preview
 - Zooming (currently work in progress)
 - Ability to automatically open preview (can be enabled via settings)
+- Ability to change background of the preview
+
+## Settings
+
+| Property | Description | Default |
+| --- | --- | --- |
+| svgPreview.autoOpen | Automatically open the preview when an svg file is opened | `false` |
+| svgPreview.background | The background of the preview | `"transparent"` |

@@ -1,3 +1,8 @@
+html,
+body,
+main {
+  height: 100%;
+}
 html {
   cursor: grab;
 }
@@ -7,10 +12,46 @@ html:active {
 }
 
 body {
-  height: 100%;
   overflow: hidden;
   margin: 0;
   /* don't need to be able to select image because that doesn't work well with panning */
   user-select: none;
   pointer-events: none;
+}
+
+/* Background */
+body[data-background='transparent'] {
+  background: transparent;
+}
+
+body[data-background='checkerboard'] {
+  --checker-size: 16px;
+  --checker-color: transparent;
+  background-size: var(--checker-size) var(--checker-size);
+  background-position: 0 0,
+    calc(var(--checker-size) / 2) calc(var(--checker-size) / 2);
+  background-image: linear-gradient(
+      45deg,
+      var(--checker-color) 25%,
+      transparent 25%,
+      transparent 75%,
+      var(--checker-color) 75%,
+      var(--checker-color)
+    ),
+    linear-gradient(
+      45deg,
+      var(--checker-color) 25%,
+      transparent 25%,
+      transparent 75%,
+      var(--checker-color) 75%,
+      var(--checker-color)
+    );
+}
+
+body.vscode-light {
+  --checker-color: #e6e6e6;
+}
+
+body.vscode-dark {
+  --checker-color: #141414;
 }

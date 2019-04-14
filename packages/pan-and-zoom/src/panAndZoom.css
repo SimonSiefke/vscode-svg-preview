@@ -17,51 +17,41 @@ html,
 body {
   height: 100%;
   overflow: hidden;
-}
-
-body {
-  background: snow;
   margin: 0;
 }
 
-/* TODO */
+body[data-background='transparent'] {
+  background: transparent;
+}
 
-.a {
-  fill: #b4343c;
+body[data-background^='checkerboard'] {
+  --checker-size: 16px;
+  --checker-color: transparent;
+  background-size: var(--checker-size) var(--checker-size);
+  background-position: 0 0,
+    calc(var(--checker-size) / 2) calc(var(--checker-size) / 2);
+  background-image: linear-gradient(
+      45deg,
+      var(--checker-color) 25%,
+      transparent 25%,
+      transparent 75%,
+      var(--checker-color) 75%,
+      var(--checker-color)
+    ),
+    linear-gradient(
+      45deg,
+      var(--checker-color) 25%,
+      transparent 25%,
+      transparent 75%,
+      var(--checker-color) 75%,
+      var(--checker-color)
+    );
 }
-.b {
-  fill: #ce3b45;
+
+body[data-background='checkerboard-light'] {
+  --checker-color: #e6e6e6;
 }
-.c {
-  fill: #6d3600;
-}
-.d {
-  fill: #315e98;
-}
-.e {
-  fill: #fff;
-}
-.f {
-  fill: #283d54;
-}
-.g {
-  fill: #ffa738;
-}
-.h {
-  fill: #ff8e38;
-}
-.i {
-  fill: #dc7a30;
-}
-.j {
-  fill: #2072ac;
-}
-.k {
-  fill: #ffc26d;
-}
-.l {
-  fill: #2086cc;
-}
-.m {
-  fill: #20b1cc;
+
+body[data-background='checkerboard-dark'] {
+  --checker-color: #141414;
 }

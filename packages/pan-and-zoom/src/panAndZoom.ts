@@ -5,6 +5,9 @@ interface Point {
   y: number
 }
 
+const $root = document.documentElement
+const $element = document.querySelector('main')
+
 /**
  * The transformation matrix.
  */
@@ -14,7 +17,7 @@ const domMatrix = new DOMMatrix()
  * Apply the domMatrix transformations.
  */
 function applyTransform(): void {
-  document.documentElement.style.transform = `${domMatrix}`
+  $element.style.transform = `${domMatrix}`
 }
 
 /**
@@ -84,15 +87,15 @@ export function usePan({
       y: domMatrix.f,
     })
   }
-  document.documentElement.addEventListener('pointerdown', onPointerDown) // Pointer is pressed
-  document.documentElement.addEventListener('pointerup', onPointerUp) // Releasing the pointer
-  document.documentElement.addEventListener('pointerleave', onPointerUp) // Pointer gets out of the document.documentElement area
-  document.documentElement.addEventListener('pointermove', onPointerMove) // Pointer is moving
+  $root.addEventListener('pointerdown', onPointerDown) // Pointer is pressed
+  $root.addEventListener('pointerup', onPointerUp) // Releasing the pointer
+  $root.addEventListener('pointerleave', onPointerUp) // Pointer gets out of the $root area
+  $root.addEventListener('pointermove', onPointerMove) // Pointer is moving
   return () => {
-    document.documentElement.removeEventListener('pointerdown', onPointerDown)
-    document.documentElement.removeEventListener('pointerup', onPointerUp)
-    document.documentElement.removeEventListener('pointerleave', onPointerUp)
-    document.documentElement.removeEventListener('pointermove', onPointerMove)
+    $root.removeEventListener('pointerdown', onPointerDown)
+    $root.removeEventListener('pointerup', onPointerUp)
+    $root.removeEventListener('pointerleave', onPointerUp)
+    $root.removeEventListener('pointermove', onPointerMove)
   }
 }
 
@@ -132,8 +135,8 @@ export function useZoom({
     domMatrix.translateSelf(-event.clientX, -event.clientY)
     applyTransform()
   }
-  document.documentElement.addEventListener('wheel', handleWheel)
+  $root.addEventListener('wheel', handleWheel, { passive: true })
   return () => {
-    document.documentElement.removeEventListener('wheel', handleWheel)
+    $root.removeEventListener('wheel', handleWheel)
   }
 }

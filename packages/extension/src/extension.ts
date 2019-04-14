@@ -123,4 +123,6 @@ export async function activate(c: vscode.ExtensionContext): Promise<void> {
 /**
  * Deactivate the extension.
  */
-export function deactivate(): void {}
+export function deactivate(): void {
+  configuration.dispose()
+}

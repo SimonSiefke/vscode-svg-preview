@@ -1,6 +1,7 @@
 import memoizeOne from 'memoize-one'
 import * as path from 'path'
 import * as vscode from 'vscode'
+import { configuration, ConfigurationChangeEvent } from '../configuration'
 import { Message } from '../../../shared/src/Message'
 import { PreviewState } from '../../../shared/src/PreviewState'
 import { shouldOpenUri, getPath, setContext } from '../util'
@@ -65,6 +66,10 @@ interface State {
    * The latest messages that could not be sent because the webview was hidden.
    */
   postponedMessages: Map<Message['command'], Message>
+  /**
+   * The background of the preview.
+   */
+  background?: string
 }
 
 const state: State = {
@@ -102,7 +107,9 @@ const getPreviewHTML = memoizeOne(
     <link rel="stylesheet" href="${previewBase}/index.css" >
   </head>
   <body>
-    <img alt="">
+    <main>
+      <img alt="">
+    </main>
     <script src="${previewBase}/index.js"></script>
   </body>
 </html>
@@ -199,6 +206,27 @@ function invalidatePan(): void {
   })
 }
 
+function invalidateBackground(): void {
+  postMessage({
+    command: 'update.background',
+    payload: state.background,
+  })
+}
+
+function onDidChangeBackground(): void {
+  state.background = configuration.get(
+    'background',
+    vscode.Uri.file(state.fsPath)
+  )
+  invalidateBackground()
+}
+
+function onMightHaveChangedBackground(event: ConfigurationChangeEvent): void {
+  if (event.affectsConfiguration('background', vscode.Uri.file(state.fsPath))) {
+    onDidChangeBackground()
+  }
+}
+
 /**
  * This method is called when a webview panel has been created.
  */
@@ -230,10 +258,8 @@ const onDidCreatePanel = (webViewPanel: vscode.WebviewPanel): void => {
     )
   }
   state.panel.webview.html = getPreviewHTML()
-  // postMessage({
-  //   command: 'update.background',
-  //   payload: 'green',
-  // })
+  onDidChangeBackground()
+  configuration.addChangeListener(onMightHaveChangedBackground)
 }
 
 /**
