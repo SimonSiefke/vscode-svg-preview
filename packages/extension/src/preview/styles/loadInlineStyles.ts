@@ -1,8 +1,7 @@
-import mime from 'mime-types'
+import * as mime from 'mime-types'
 import { fetch } from '../fetch/fetch'
-import { isRemote } from '../util'
+import { isRemote } from '../shared/isRemote'
 
-const stylesheetRegex = /<\?\s*xml-stylesheet\s+.*href="(.+?)".*\s*\?>/gi
 const urlRegex = /url\((.*?)\)/gi
 
 // TODO show error message when fetch fails
@@ -32,15 +31,14 @@ async function loadCss(stylesheetUrls: string[]): Promise<string> {
   )).join('')
 }
 
-/**
- * Inline svg xml stylesheets because otherwise they won't work with html.
- */
-export async function withInlineStyles(
+const stylesheetRegex = /<\?\s*xml-stylesheet\s+.*href="(.+?)".*\s*\?>/gi
+
+export async function loadInlineStyles(
   baseUrl: string,
-  svg: string
+  svg: string,
+  matches: string[]
 ): Promise<string> {
-  const svgWithoutComments = svg.replace(/<!--(.*?)-->/g, '')
-  const styleUrls: string[] = (svgWithoutComments.match(stylesheetRegex) || [])
+  const styleUrls: string[] = matches
     .map(match => match.replace(stylesheetRegex, '$1'))
     .map(url => {
       if (isRemote(url)) {
@@ -49,13 +47,15 @@ export async function withInlineStyles(
       return `${baseUrl}/${url}`
     })
   const defsEndIndex = svg.toLowerCase().indexOf('</defs>')
+  const $styles = await loadCss(styleUrls)
   if (defsEndIndex === -1) {
     const svgEndIndex = svg.toLowerCase().indexOf('</svg>')
-    return `${svg.slice(0, svgEndIndex)}<defs>${await loadCss(
-      styleUrls
-    )}</defs>${svg.slice(svgEndIndex, svg.length)}`
+    return `${svg.slice(0, svgEndIndex)}<defs>${$styles}</defs>${svg.slice(
+      svgEndIndex,
+      svg.length
+    )}`
   }
-  return `${svg.slice(0, defsEndIndex)}${await loadCss(styleUrls)}${svg.slice(
+  return `${svg.slice(0, defsEndIndex)}${$styles}${svg.slice(
     defsEndIndex,
     svg.length
   )}`

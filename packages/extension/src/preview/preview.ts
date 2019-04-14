@@ -6,7 +6,7 @@ import { PreviewState } from '../../../shared/src/PreviewState'
 import { shouldOpenUri, getPath, setContext } from '../util'
 import { webViewPanelType } from '../constants'
 import { context } from '../extension'
-import { withInlineStyles } from './withInlineStyles'
+import { withInlineStyles } from './styles/withInlineStyles'
 
 const previewPath = 'packages/preview/dist'
 const iconPath = 'packages/extension/images/bolt_original_yellow_optimized.svg'

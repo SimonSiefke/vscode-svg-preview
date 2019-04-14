@@ -25,8 +25,11 @@ const terserPlugin = terser({
 
 /** @type {import('rollup').RollupOptions} */
 const extensionConfig = {
-  external: ['vscode', 'path', 'util', 'fs', 'http'],
-  input: 'packages/extension/src/extension.ts',
+  external: ['vscode', 'path', 'util', 'fs', 'http', 'https'],
+  input: [
+    'packages/extension/src/extension.ts',
+    'packages/extension/src/preview/styles/loadInlineStyles.ts',
+  ],
   output: {
     dir: 'packages/extension/dist',
     format: 'cjs',
@@ -36,10 +39,7 @@ const extensionConfig = {
     // @ts-ignore
     json(),
     // @ts-ignore
-    nodeResolve({
-      jsnext: true,
-      main: true,
-    }),
+    nodeResolve(),
     commonjs(),
     // @ts-ignore
     importAlias({
