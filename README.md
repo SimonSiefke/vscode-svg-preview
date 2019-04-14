@@ -9,6 +9,7 @@
 <!-- TODO update content when just opened -->
 <!-- TODO handle active text editor before extension is activated -->
 <!-- TODO vscode live share -->
+<!-- TODO allow custom styles instead of checkerboard pattern -->
 
 ## Features
 
