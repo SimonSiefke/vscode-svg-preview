@@ -2,7 +2,7 @@
 
 # Svg Preview for VSCode
 
-![demo](./demo.gif)
+![demo](./demo_images/demo.gif)
 
 <!-- TODO need to figure out why animation is restarted so often -->
 <!-- TODO work in html -->
@@ -22,4 +22,50 @@
 | Property | Description | Default |
 | --- | --- | --- |
 | svgPreview.autoOpen | Automatically open the preview when an svg file is opened | `false` |
-| svgPreview.background | The background of the preview | `"transparent"` |
+| svgPreview.style | The background of the preview | `{ body: {}, img: {} }` |
+
+## How to use the `svgPreview.style` setting
+
+You can change the background color:
+
+<img src="./demo_images/demo_white_background.png" alt="drawing" style="width:50%;"/>
+
+```json
+{
+  "svgPreview.style": {
+    "body": {
+      "background": "white"
+    }
+  }
+}
+```
+
+Or make a gradient background (note that you need to use `-webkit` prefix radial gradients):
+
+<img src="./demo_images/demo_gradient_background.png" alt="drawing" style="width:50%;"/>
+
+```json
+{
+  "svgPreview.style": {
+    "body": {
+      "background": "-webkit-radial-gradient(center, circle cover, hsl(195, 80%, 20%) 0%,hsl(220, 100%, 5%) 100%)"
+    }
+  }
+}
+```
+
+Or you can make a checkerboard background:
+
+<img src="./demo_images/demo_checkerboard_background.png" alt="drawing" style="width:50%;"/>
+
+```json
+{
+  "svgPreview.style": {
+    "body": {
+      "background-position": "0 0, 13px 13px",
+      "background-size": "26px 26px",
+      "background-image": "linear-gradient(45deg,  #141414 25%, transparent 25%, transparent 75%, #141414 75%, #141414), linear-gradient(45deg, #141414 25%, transparent 25%, transparent 75%, #141414 75%, #141414)"
+    }
+  }
+}
+```

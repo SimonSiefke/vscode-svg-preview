@@ -1,3 +1,5 @@
+import { StyleConfiguration } from './StyleConfiguration';
+
 /**
  * State of the preview panel.
  */
@@ -22,7 +24,7 @@ export interface PreviewState {
    */
   zoom?: number
   /**
-   * The background of the preview.
+   * Custom styles for the preview.
    */
-  background?: string
+  style?: StyleConfiguration
 }

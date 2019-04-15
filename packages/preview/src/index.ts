@@ -2,6 +2,7 @@ import { usePan, CleanUp, useZoom } from '../../pan-and-zoom/src/panAndZoom'
 import { PreviewState } from '../../shared/src/PreviewState'
 import { Message } from '../../shared/src/Message'
 import './index.css'
+import { StyleConfiguration } from '../../shared/src/StyleConfiguration'
 
 const vscode = acquireVsCodeApi()
 if (DEVELOPMENT) {
@@ -10,9 +11,9 @@ if (DEVELOPMENT) {
     vscode.postMessage({ command: 'error', payload: event.message })
   })
 }
-
 const state: PreviewState = vscode.getState() || {}
 const $image = document.querySelector('img')
+const $style = document.querySelector('#custom-style')
 function invalidateState(): void {
   vscode.setState(state)
 }
@@ -50,10 +51,25 @@ function invalidateZoom(): void {
   })
 }
 invalidateZoom()
-function invalidateBackground(): void {
-  document.body.dataset.background = state.background
+function createStyleString(styleObject: StyleConfiguration): string {
+  let style = ``
+  for (const [key, value] of Object.entries(styleObject)) {
+    const left = key
+    const right = Object.entries(value).reduce(
+      (styleString, [propName, propValue]) =>
+        `${styleString}${propName}:${propValue};`,
+      ''
+    )
+    style = `${style}${left}{${right}}`
+  }
+  return style
 }
-invalidateBackground()
+function invalidateStyle(): void {
+  if (state.style) {
+    $style.textContent = createStyleString(state.style)
+  }
+}
+invalidateStyle()
 window.addEventListener('message', event => {
   const messages: Message[] = event.data
   for (const message of messages) {
@@ -74,9 +90,9 @@ window.addEventListener('message', event => {
         invalidateContent()
         invalidateState()
         break
-      case 'update.background':
-        state.background = message.payload
-        invalidateBackground()
+      case 'update.style':
+        state.style = message.payload
+        invalidateStyle()
         invalidateState()
         break
       default:

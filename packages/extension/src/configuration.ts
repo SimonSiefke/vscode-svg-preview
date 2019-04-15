@@ -1,17 +1,17 @@
 /* eslint-disable import/export */
 import * as vscode from 'vscode'
 import { context } from './extension'
-
+import { StyleConfiguration } from '../../shared/src/StyleConfiguration'
 /**
  * Options - should match with `contributes.configuration` in `package.json`
  */
 interface Options {
   readonly autoOpen: boolean
-  readonly background: 'transparent' | 'checkerboard'
+  readonly style: StyleConfiguration
 }
 
 type GetConfiguration = ((key: 'autoOpen', resource: vscode.Uri) => boolean) &
-  ((key: 'background', resource: vscode.Uri) => 'transparent' | 'checkerboard')
+  ((key: 'style', resource: vscode.Uri) => StyleConfiguration)
 
 export interface ConfigurationChangeEvent {
   affectsConfiguration: (key: keyof Options, resource: vscode.Uri) => boolean

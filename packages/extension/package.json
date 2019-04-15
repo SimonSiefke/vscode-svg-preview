@@ -91,14 +91,72 @@
           "description": "Automatically open the preview when an svg file is opened.",
           "scope": "resource"
         },
-        "svgPreview.background": {
-          "type": "string",
-          "default": "transparent",
-          "enum": [
-            "transparent",
-            "checkerboard"
-          ],
-          "description": "The background of the preview.",
+        "svgPreview.style": {
+          "type": "object",
+          "description": "Custom style for the preview.",
+          "additionalProperties": false,
+          "default": {
+            "body": {},
+            "img": {}
+          },
+          "properties": {
+            "body": {
+              "type": "object",
+              "description": "Custom style for the body.",
+              "additionalProperties": false,
+              "properties": {
+                "background": {
+                  "type": "string"
+                },
+                "background-color": {
+                  "type": "string"
+                },
+                "background-position": {
+                  "type": "string"
+                },
+                "background-image": {
+                  "type": "string"
+                },
+                "background-size": {
+                  "type": "string"
+                },
+                "background-repeat": {
+                  "type": "string",
+                  "enum": [
+                    "repeat",
+                    "space",
+                    "round",
+                    "repeat-y",
+                    "repeat-x",
+                    "repeat no-repeat",
+                    "no-repeat"
+                  ]
+                },
+                "margin": {
+                  "type": "string"
+                },
+                "padding": {
+                  "type": "string"
+                }
+              }
+            },
+            "img": {
+              "type": "object",
+              "description": "Custom style for the image.",
+              "additionalProperties": false,
+              "properties": {
+                "border": {
+                  "type": "string"
+                },
+                "margin": {
+                  "type": "string"
+                },
+                "padding": {
+                  "type": "string"
+                }
+              }
+            }
+          },
           "scope": "resource"
         }
       }

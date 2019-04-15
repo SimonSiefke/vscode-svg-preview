@@ -8,6 +8,7 @@ import { shouldOpenUri, getPath, setContext } from '../util'
 import { webViewPanelType } from '../constants'
 import { context } from '../extension'
 import { withInlineStyles } from './styles/withInlineStyles'
+import { StyleConfiguration } from '../../../shared/src/StyleConfiguration'
 
 const previewPath = 'packages/preview/dist'
 const iconPath = 'packages/extension/images/bolt_original_yellow_optimized.svg'
@@ -67,9 +68,9 @@ interface State {
    */
   postponedMessages: Map<Message['command'], Message>
   /**
-   * The background of the preview.
+   * Custom styles for the preview.
    */
-  background?: string
+  style?: StyleConfiguration
 }
 
 const state: State = {
@@ -105,6 +106,7 @@ const getPreviewHTML = memoizeOne(
     <base href="${base}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" >
     <link rel="stylesheet" href="${previewBase}/index.css" >
+    <style id="custom-style"></style>
   </head>
   <body>
     <main>
@@ -208,22 +210,19 @@ function invalidatePan(): void {
 
 function invalidateBackground(): void {
   postMessage({
-    command: 'update.background',
-    payload: state.background,
+    command: 'update.style',
+    payload: state.style,
   })
 }
 
-function onDidChangeBackground(): void {
-  state.background = configuration.get(
-    'background',
-    vscode.Uri.file(state.fsPath)
-  )
+function onDidChangeStyle(): void {
+  state.style = configuration.get('style', vscode.Uri.file(state.fsPath))
   invalidateBackground()
 }
 
-function onMightHaveChangedBackground(event: ConfigurationChangeEvent): void {
-  if (event.affectsConfiguration('background', vscode.Uri.file(state.fsPath))) {
-    onDidChangeBackground()
+function onMightHaveChangedStyle(event: ConfigurationChangeEvent): void {
+  if (event.affectsConfiguration('style', vscode.Uri.file(state.fsPath))) {
+    onDidChangeStyle()
   }
 }
 
@@ -258,8 +257,8 @@ const onDidCreatePanel = (webViewPanel: vscode.WebviewPanel): void => {
     )
   }
   state.panel.webview.html = getPreviewHTML()
-  onDidChangeBackground()
-  configuration.addChangeListener(onMightHaveChangedBackground)
+  onDidChangeStyle()
+  configuration.addChangeListener(onMightHaveChangedStyle)
 }
 
 /**
