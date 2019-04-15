@@ -307,7 +307,7 @@ export const previewPanel: PreviewPanel = {
     invalidateContent()
   },
   get visible() {
-    return state.panel.visible
+    return state.panel && state.panel.visible
   },
   async deserializeWebviewPanel(webviewPanel, deserializedState) {
     if (state.panel) {
