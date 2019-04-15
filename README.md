@@ -28,7 +28,7 @@
 
 You can change the background color:
 
-<img src="./demo_images/demo_white_background.png" alt="demo of the svg preview with white background" align="right"/>
+<img src="https://github.com/SimonSiefke/vscode-svg-preview/tree/master/demo_images/demo_white_background.png" alt="demo of the svg preview with white background" align="right"/>
 
 ```json
 {
@@ -42,7 +42,7 @@ You can change the background color:
 
 Or make a gradient background (note that you need to use `-webkit` prefix radial gradients):
 
-<img src="./demo_images/demo_gradient_background.png" alt="demo of the svg preview with a blue gradient background" align="right"/>
+<img src="https://github.com/SimonSiefke/vscode-svg-preview/tree/master/demo_images/demo_gradient_background.png" alt="demo of the svg preview with a blue gradient background" align="right"/>
 
 ```json
 {
@@ -56,7 +56,7 @@ Or make a gradient background (note that you need to use `-webkit` prefix radial
 
 Or you can make a checkerboard background:
 
-<img src="./demo_images/demo_checkerboard_background.png" alt="demo of the svg preview with a checkerboard pattern background" align="right"/>
+<img src="https://github.com/SimonSiefke/vscode-svg-preview/tree/master/demo_images/demo_checkerboard_background.png" alt="demo of the svg preview with a checkerboard pattern background" align="right"/>
 
 ```json
 {
