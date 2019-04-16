@@ -1,4 +1,4 @@
-import { StyleConfiguration } from './StyleConfiguration';
+import { StyleConfiguration } from './StyleConfiguration'
 
 /**
  * Message that can be send from the extension to the preview panel.
@@ -18,5 +18,4 @@ export type Message =
     }
   | {
       command: 'reset.panAndZoom'
-      payload: undefined
     }

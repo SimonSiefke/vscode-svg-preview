@@ -204,7 +204,6 @@ function invalidateFsPath(): void {
 function invalidatePan(): void {
   postMessage({
     command: 'reset.panAndZoom',
-    payload: undefined,
   })
 }
 

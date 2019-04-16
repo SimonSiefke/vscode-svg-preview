@@ -1,5 +1,3 @@
-import { loadInlineStyles } from './loadInlineStyles'
-
 const stylesheetRegex = /<\?\s*xml-stylesheet\s+.*href="(.+?)".*\s*\?>/gi
 
 /**
@@ -14,5 +12,6 @@ export async function withInlineStyles(
   if (matches.length === 0) {
     return svg
   }
+  const { loadInlineStyles } = await import('./loadInlineStyles')
   return loadInlineStyles(baseUrl, svg, matches)
 }

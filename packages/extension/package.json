@@ -33,6 +33,7 @@
   ],
   "activationEvents": [
     "onLanguage:xml",
+    "onLanguage:svg",
     "onWebviewPanel:svgPreview",
     "onCommand:svgPreview.showPreview",
     "onCommand:svgPreview.showPreviewToSide"
