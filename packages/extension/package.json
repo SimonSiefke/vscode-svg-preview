@@ -29,7 +29,7 @@
     "svg preview",
     "svg",
     "preview",
-    "svg viewer"
+    "live"
   ],
   "activationEvents": [
     "onLanguage:xml",
