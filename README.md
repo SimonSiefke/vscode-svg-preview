@@ -5,15 +5,22 @@
 ![demo](./demo_images/demo.gif)
 
 <!-- TODO need to figure out why animation is restarted so often -->
-<!-- TODO work in html -->
+<!-- TODO work in html, js -->
 <!-- TODO update content when just opened / handle active text editor before extension is activated-->
 <!-- TODO vscode live share -->
+<!-- TODO rename reset to reload? -->
 
 ## Features
 
 - Live editing of svg files
 - Panning of the preview
 - Zooming
+
+## Commands
+
+- Svg Preview: Open Preview to the Side
+- Svg Preview: Open Preview
+- Svg Preview: Reset Preview
 
 ## Settings
 

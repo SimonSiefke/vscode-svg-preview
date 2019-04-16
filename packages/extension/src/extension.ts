@@ -50,6 +50,12 @@ export async function activate(c: vscode.ExtensionContext): Promise<void> {
     )
   )
   context.subscriptions.push(
+    vscode.commands.registerCommand(
+      'svgPreview.resetPreview',
+      previewPanel.reset
+    )
+  )
+  context.subscriptions.push(
     vscode.window.onDidChangeActiveTextEditor(textEditor => {
       // there is nothing to open
       if (!textEditor) {

@@ -30,6 +30,7 @@ export function getPath(relativePath: string): string {
 
 interface Context {
   svgPreviewIsOpen: boolean
+  svgPreviewIsFocused: boolean
 }
 
 export function setContext(

@@ -43,6 +43,11 @@ interface PreviewPanel extends vscode.WebviewPanelSerializer {
    * Whether or not the panel is visible.
    */
   visible: boolean
+
+  /**
+   * Reset the panning and zooming of the preview.
+   */
+  reset: () => void
 }
 
 interface State {
@@ -202,7 +207,7 @@ function invalidateFsPath(): void {
 /**
  * Reset the panning.
  */
-function invalidatePan(): void {
+function invalidatePanAndZoom(): void {
   postMessage({
     command: 'reset.panAndZoom',
   })
@@ -242,6 +247,7 @@ const onDidCreatePanel = (webViewPanel: vscode.WebviewPanel): void => {
   )
   context.subscriptions.push(
     state.panel.onDidChangeViewState(event => {
+      setContext('svgPreviewIsFocused', event.webviewPanel.active)
       if (event.webviewPanel.visible) {
         invalidateContent()
         sendPostponedMessages()
@@ -265,6 +271,7 @@ const onDidCreatePanel = (webViewPanel: vscode.WebviewPanel): void => {
  * The preview panel.
  */
 export const previewPanel: PreviewPanel = {
+  reset: invalidatePanAndZoom,
   show({ viewColumn, fsPath }) {
     state.fsPath = fsPath
     const title = `Preview ${path.basename(fsPath)}`
@@ -290,14 +297,14 @@ export const previewPanel: PreviewPanel = {
       state.panel.title = title
     }
     invalidateFsPath()
-    invalidatePan()
+    invalidatePanAndZoom()
   },
   set fsPath(value: string) {
     state.fsPath = value
     const title = `Preview ${path.basename(value)}`
     state.panel.title = title
     invalidateFsPath()
-    invalidatePan()
+    invalidatePanAndZoom()
   },
   get fsPath() {
     return state.fsPath

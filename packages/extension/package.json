@@ -53,6 +53,15 @@
           "light": "images/bolt_original_darkgray_optimized.svg",
           "dark": "images/bolt_original_lightgray_optimized.svg"
         }
+      },
+      {
+        "category": "Svg Preview",
+        "command": "svgPreview.resetPreview",
+        "title": "Reset Preview",
+        "icon": {
+          "light": "images/refresh_original_darkgray_optimized.svg",
+          "dark": "images/refresh_original_lightgray_optimized.svg"
+        }
       }
     ],
     "menus": {
@@ -65,6 +74,11 @@
         {
           "command": "svgPreview.showPreviewToSide",
           "when": "editorLangId == xml && resourceExtname == .svg",
+          "group": "navigation"
+        },
+        {
+          "command": "svgPreview.resetPreview",
+          "when": "svgPreviewIsOpen == true",
           "group": "navigation"
         }
       ],
@@ -80,6 +94,11 @@
           "command": "svgPreview.showPreviewToSide",
           "group": "navigation",
           "when": "editorLangId == xml && resourceExtname == .svg && svgPreviewIsOpen == false"
+        },
+        {
+          "command": "svgPreview.resetPreview",
+          "when": "svgPreviewIsFocused && !editorLangId",
+          "group": "navigation"
         }
       ]
     },
