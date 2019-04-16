@@ -2,3 +2,5 @@
 **/dist
 **/coverage
 *.svg
+*.png
+*.gif

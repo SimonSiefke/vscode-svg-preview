@@ -55,3 +55,18 @@ body[data-background='checkerboard-light'] {
 body[data-background='checkerboard-dark'] {
   --checker-color: #141414;
 }
+
+main {
+  transform-origin: top left;
+}
+
+img {
+  box-sizing: border-box;
+}
+
+body {
+  overflow: hidden;
+  width: 600px;
+  height: 600px;
+  border: 1px solid orange;
+}

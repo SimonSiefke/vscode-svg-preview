@@ -9,3 +9,5 @@ rollup.config.prod.js
 *.md
 jest.config.js
 *.svg
+*.png
+*.gif

@@ -19,6 +19,10 @@ body {
   pointer-events: none;
 }
 
+main {
+  transform-origin: top left;
+}
+
 img {
   box-sizing: border-box;
 }

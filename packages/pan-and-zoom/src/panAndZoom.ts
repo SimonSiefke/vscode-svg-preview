@@ -11,7 +11,7 @@ const $element = document.querySelector('main')
 /**
  * The transformation matrix.
  */
-const domMatrix = new DOMMatrix()
+let domMatrix = new DOMMatrix()
 
 /**
  * Apply the domMatrix transformations.
@@ -99,6 +99,8 @@ export function usePan({
   }
 }
 
+// TODO when zoom is large, panning isn't as smooth because the steps between numbers become very large (e.g. zoom = 8192 then panning moves 10px or more)
+
 /**
  * Use zoom functionality.
  */
@@ -109,30 +111,29 @@ export function useZoom({
   onZoomChange?: (zoom: number) => void
   initialZoom?: number
 } = {}): CleanUp {
-  /**
-   * The current zoom
-   */
+  const minZoom = 0.1
+  const maxZoom = 2 ** 12
+  const zoomFactor = 1.3
   let zoom = initialZoom
-  function setZoom(): void {
-    domMatrix.a = zoom
-    domMatrix.d = zoom
-  }
-  setZoom()
+  domMatrix.a = zoom
+  domMatrix.d = zoom
   applyTransform()
-  const minScale = 0.1
-  const maxScale = 2 ** 20
-  const scaleFactor = 2
   function handleWheel(event: WheelEvent): void {
     const direction = event.deltaY < 0 ? 'up' : 'down'
-    if (direction === 'up') {
-      zoom = Math.min(zoom * scaleFactor, maxScale)
-    } else {
-      zoom = Math.max(zoom / scaleFactor, minScale)
+    const currentZoomFactor = direction === 'up' ? zoomFactor : 1 / zoomFactor
+    if (
+      (direction === 'up' && zoom >= maxZoom) ||
+      (direction === 'down' && zoom < minZoom)
+    ) {
+      return
     }
+    zoom *= currentZoomFactor
     onZoomChange(zoom)
-    domMatrix.translateSelf(event.clientX, event.clientY)
-    setZoom()
-    domMatrix.translateSelf(-event.clientX, -event.clientY)
+    domMatrix = new DOMMatrix()
+      .translateSelf(event.clientX, event.clientY)
+      .scaleSelf(currentZoomFactor)
+      .translateSelf(-event.clientX, -event.clientY)
+      .multiplySelf(domMatrix)
     applyTransform()
   }
   $root.addEventListener('wheel', handleWheel, { passive: true })
