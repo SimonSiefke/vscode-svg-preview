@@ -116,14 +116,11 @@
           "type": "object",
           "description": "Custom style for the preview.",
           "additionalProperties": false,
-          "default": {
-            "body": {},
-            "img": {}
-          },
+          "default": {},
           "properties": {
-            "body": {
+            "main": {
               "type": "object",
-              "description": "Custom style for the body.",
+              "description": "Custom style for the main element.",
               "additionalProperties": false,
               "properties": {
                 "background": {
@@ -158,6 +155,13 @@
                 },
                 "padding": {
                   "type": "string"
+                },
+                "place-items": {
+                  "type": "string",
+                  "enum": [
+                    "center",
+                    "start center"
+                  ]
                 }
               }
             },

@@ -27,7 +27,7 @@
 | Property | Description | Default |
 | --- | --- | --- |
 | svgPreview.autoOpen | Automatically open the preview when an svg file is opened | `false` |
-| svgPreview.style | The background of the preview | `{ body: {}, img: {} }` |
+| svgPreview.style | Custom style for the preview | `{}` |
 
 ## How to use the `svgPreview.style` setting
 
@@ -38,7 +38,7 @@ You can change the background color:
 ```json
 {
   "svgPreview.style": {
-    "body": {
+    "main": {
       "background": "white"
     }
   }
@@ -52,7 +52,7 @@ Or make a gradient background (note that you need to use `-webkit` prefix radial
 ```json
 {
   "svgPreview.style": {
-    "body": {
+    "main": {
       "background": "-webkit-radial-gradient(center, circle cover, hsl(195, 80%, 20%) 0%,hsl(220, 100%, 5%) 100%)"
     }
   }
@@ -66,7 +66,7 @@ Or you can make a checkerboard background:
 ```json
 {
   "svgPreview.style": {
-    "body": {
+    "main": {
       "background-position": "0 0, 13px 13px",
       "background-size": "26px 26px",
       "background-image": "linear-gradient(45deg,  #141414 25%, transparent 25%, transparent 75%, #141414 75%, #141414), linear-gradient(45deg, #141414 25%, transparent 25%, transparent 75%, #141414 75%, #141414)"

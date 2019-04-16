@@ -5,5 +5,5 @@ type Style = Partial<{
 }>
 
 export interface StyleConfiguration {
-  body: Style
+  main: Style
 }

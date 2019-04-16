@@ -21,6 +21,7 @@ body {
 
 main {
   transform-origin: top left;
+  display: grid;
 }
 
 img {
