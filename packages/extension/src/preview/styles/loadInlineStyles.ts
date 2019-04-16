@@ -1,4 +1,5 @@
 import * as mime from 'mime-types'
+import * as vscode from 'vscode'
 import { fetch } from '../fetch/fetch'
 import { isRemote } from '../shared/isRemote'
 
@@ -24,9 +25,10 @@ async function loadCss(stylesheetUrls: string[]): Promise<string> {
         )
         return `<style type="text/css"><![CDATA[${result}]]></style>`
       } catch (error) {
+        vscode.window.showErrorMessage(`[Svg Preview] ${error.message}`)
         console.error(error)
+        return ''
       }
-      return ''
     })
   )).join('')
 }

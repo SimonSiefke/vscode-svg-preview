@@ -95,24 +95,25 @@ const getPreviewHTML = memoizeOne(
     const base = vscode.Uri.file(state.fsPath).with({
       scheme: 'vscode-resource',
     })
+    const nonce = Math.round(Math.random() * 2 ** 20)
     return `<!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
     <meta charset="UTF-8">
-   <!-- <meta
+    <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'none'; img-src 'self' data:; style-src 'unsafe-inline' vscode-resource:; script-src vscode-resource:;"
-    >-->
+      content="default-src 'none'; img-src 'self' data:; style-src vscode-resource: 'nonce-${nonce}'; script-src 'nonce-${nonce}';"
+    >
     <base href="${base}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" >
-    <link rel="stylesheet" href="${previewBase}/index.css" >
-    <style id="custom-style"></style>
+    <link rel="stylesheet" href="${previewBase}/index.css" nonce="${nonce}" >
+    <style id="custom-style" nonce="${nonce}"></style>
   </head>
   <body>
     <main>
       <img alt="">
     </main>
-    <script src="${previewBase}/index.js"></script>
+    <script src="${previewBase}/index.js" nonce="${nonce}"></script>
   </body>
 </html>
 `
