@@ -6,16 +6,14 @@
 
 <!-- TODO need to figure out why animation is restarted so often -->
 <!-- TODO work in html -->
-<!-- TODO update content when just opened -->
-<!-- TODO handle active text editor before extension is activated -->
+<!-- TODO update content when just opened / handle active text editor before extension is activated-->
 <!-- TODO vscode live share -->
-<!-- TODO allow custom styles instead of checkerboard pattern -->
 
 ## Features
 
 - Live editing of svg files
 - Panning of the preview
-- Zooming (currently work in progress)
+- Zooming
 
 ## Settings
 
