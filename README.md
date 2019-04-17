@@ -9,6 +9,7 @@
 <!-- TODO update content when just opened / handle active text editor before extension is activated-->
 <!-- TODO vscode live share -->
 <!-- TODO rename reset to reload? -->
+<!-- TODO don't zoom/pan outside of the window -->
 
 ## Features
 

@@ -18,6 +18,17 @@
       "preLaunchTask": "npm: dev"
     },
     {
+      "name": "Extension (dev & liveshare)",
+      "type": "extensionHost",
+      "request": "launch",
+      "runtimeExecutable": "${execPath}",
+      "args": [
+        "--extensionDevelopmentPath=${workspaceRoot}/packages/extension"
+      ],
+      "outFiles": ["${workspaceFolder}/dist/**/*.js"],
+      "preLaunchTask": "npm: dev"
+    },
+    {
       "type": "extensionHost",
       "request": "launch",
       "name": "Extension (prod)",

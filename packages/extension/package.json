@@ -1,9 +1,9 @@
 {
-  "name": "svg-preview",
+  "name": "vscode-test-explorer-liveshare",
   "displayName": "Svg Preview",
   "description": "Preview for Svg files",
   "version": "0.0.0-semantically-released",
-  "publisher": "SimonSiefke",
+  "publisher": "hbenl",
   "license": "MIT",
   "enableProposedApi": true,
   "homepage": "https://github.com/SimonSiefke/vscode-svg-preview",
@@ -193,7 +193,8 @@
   },
   "dependencies": {
     "memoize-one": "^5.0.4",
-    "mime-types": "^2.1.22"
+    "mime-types": "^2.1.22",
+    "vsls": "^0.3.1291"
   },
   "devDependencies": {
     "@types/memoize-one": "^4.1.1",

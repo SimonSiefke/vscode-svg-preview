@@ -28,6 +28,8 @@ const extensionConfig = {
   external: ['vscode', 'path', 'util', 'fs', 'http', 'https'],
   input: [
     'packages/extension/src/extension.ts',
+    'packages/extension/src/liveshare/guest.ts',
+    'packages/extension/src/liveshare/host.ts',
     'packages/extension/src/preview/styles/loadInlineStyles.ts',
   ],
   output: {

@@ -1,4 +1,3 @@
-/* eslint-disable import/export */
 import * as vscode from 'vscode'
 import { context } from './extension'
 import { StyleConfiguration } from '../../shared/src/StyleConfiguration'

@@ -3,6 +3,7 @@ import { previewPanel } from './preview/preview'
 import { shouldOpenUri } from './util'
 import { webViewPanelType } from './constants'
 import { configuration } from './configuration'
+import { configureLiveShare } from './liveshare/configureLiveShare'
 
 // eslint-disable-next-line import/no-mutable-exports
 export let context: vscode.ExtensionContext
@@ -124,6 +125,7 @@ export async function activate(c: vscode.ExtensionContext): Promise<void> {
   context.subscriptions.push(
     vscode.window.registerWebviewPanelSerializer(webViewPanelType, previewPanel)
   )
+  configureLiveShare()
 }
 
 /**
