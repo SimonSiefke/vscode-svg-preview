@@ -1,0 +1,15 @@
+panel
+set fsPath
+get fsPath?
+
+
+api
+  - set content
+  - set path
+  - reset pan and zoom
+  - show?
+
+
+server
+  - port
+  - path

@@ -32,6 +32,7 @@
     "live"
   ],
   "activationEvents": [
+    "onFileSystem:vsls",
     "onLanguage:xml",
     "onLanguage:svg",
     "onWebviewPanel:svgPreview",

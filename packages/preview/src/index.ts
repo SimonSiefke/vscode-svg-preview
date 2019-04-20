@@ -3,8 +3,8 @@ import { PreviewState } from '../../shared/src/PreviewState'
 import { Message } from '../../shared/src/Message'
 import './index.css'
 import { StyleConfiguration } from '../../shared/src/StyleConfiguration'
+import { vscode } from './vscode'
 
-const vscode = acquireVsCodeApi()
 if (DEVELOPMENT) {
   window.addEventListener('error', event => {
     console.error(event)

@@ -14,7 +14,7 @@ const previewPath = 'packages/preview/dist'
 const iconPath = 'packages/extension/images/bolt_original_yellow_optimized.svg'
 
 interface PreviewPanel extends vscode.WebviewPanelSerializer {
-  deserializeWebviewPanel: (
+  readonly deserializeWebviewPanel: (
     webviewPanel: vscode.WebviewPanel,
     state: PreviewState
   ) => Promise<void>
@@ -26,7 +26,7 @@ interface PreviewPanel extends vscode.WebviewPanelSerializer {
   /**
    * Show the webview panel.
    */
-  show: ({
+  readonly show: ({
     viewColumn,
     fsPath,
   }: {
@@ -42,12 +42,17 @@ interface PreviewPanel extends vscode.WebviewPanelSerializer {
   /**
    * Whether or not the panel is visible.
    */
-  visible: boolean
+  readonly visible: boolean
 
   /**
    * Reset the panning and zooming of the preview.
    */
-  reset: () => void
+  readonly reset: () => void
+
+  /**
+   * The view column of the webview panel.
+   */
+  viewColumn: vscode.ViewColumn
 }
 
 interface State {
@@ -67,7 +72,6 @@ interface State {
    * The content of the currently previewed file
    */
   content?: string
-
   /**
    * The latest messages that could not be sent because the webview was hidden.
    */
@@ -131,9 +135,9 @@ let immediate: NodeJS.Immediate
  * Send all the messages that could not be send because the webview was hidden.
  */
 function sendPostponedMessages(): void {
-  const postponedMessages = [...state.postponedMessages.values()]
-  if (postponedMessages.length > 0) {
-    state.panel.webview.postMessage([...state.postponedMessages.values()])
+  const messages = [...state.postponedMessages.values()]
+  if (messages.length > 0) {
+    state.panel.webview.postMessage(messages)
     state.postponedMessages.clear()
   }
 }
@@ -183,10 +187,12 @@ async function getActualContent(): Promise<string> {
   }
   return content
 }
+
 /**
  * Update the contents.
  */
 async function invalidateContent(): Promise<void> {
+  console.log('state content', state.content)
   postMessage({
     command: 'update.content',
     payload: await getActualContent(),
@@ -300,6 +306,13 @@ export const previewPanel: PreviewPanel = {
     invalidatePanAndZoom()
   },
   set fsPath(value: string) {
+    if (!value) {
+      state.fsPath = undefined
+      state.postponedMessages = new Map()
+      if (state.panel) {
+        state.panel.dispose()
+      }
+    }
     state.fsPath = value
     const title = `Preview ${path.basename(value)}`
     state.panel.title = title
@@ -309,9 +322,18 @@ export const previewPanel: PreviewPanel = {
   get fsPath() {
     return state.fsPath
   },
-  set content(value: string) {
+  get viewColumn() {
+    if (state.panel) {
+      return state.panel.viewColumn
+    }
+    return undefined
+  },
+  set content(value) {
     state.content = value
     invalidateContent()
+  },
+  get content() {
+    return state.content
   },
   get visible() {
     return state.panel && state.panel.visible
