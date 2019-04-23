@@ -1,7 +1,6 @@
 import * as vscode from 'vscode'
 import { previewPanel } from './preview/preview'
 import { shouldOpenUri } from './util'
-import { webViewPanelType } from './constants'
 import { configuration } from './configuration'
 
 // eslint-disable-next-line import/no-mutable-exports
@@ -62,7 +61,7 @@ export async function activate(c: vscode.ExtensionContext): Promise<void> {
         return
       }
       // don't open when a tab was closed
-      if (lastEventWasClose) {
+      if (lastEventWasClose && !previewPanel.visible) {
         lastEventWasClose = false
         return
       }
@@ -122,9 +121,8 @@ export async function activate(c: vscode.ExtensionContext): Promise<void> {
     })
   )
   context.subscriptions.push(
-    vscode.window.registerWebviewPanelSerializer(webViewPanelType, previewPanel)
+    vscode.window.registerWebviewPanelSerializer('svgPreview', previewPanel)
   )
-  configureLiveShare()
 }
 
 /**

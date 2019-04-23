@@ -5,13 +5,17 @@ import { configuration, ConfigurationChangeEvent } from '../configuration'
 import { Message } from '../../../shared/src/Message'
 import { PreviewState } from '../../../shared/src/PreviewState'
 import { shouldOpenUri, getPath, setContext } from '../util'
-import { webViewPanelType } from '../constants'
 import { context } from '../extension'
 import { withInlineStyles } from './styles/withInlineStyles'
 import { StyleConfiguration } from '../../../shared/src/StyleConfiguration'
+import { PreviewWebsocketServer } from '../previewWebSocketServer'
 
 const previewPath = 'packages/preview/dist'
 const iconPath = 'packages/extension/images/bolt_original_yellow_optimized.svg'
+/**
+ * The type of the web view panel. Can be arbitrary, but must match with `onWebviewPanel:svgPreview` in `package.json`.
+ */
+const webViewPanelType = 'svgPreview'
 
 interface PreviewPanel extends vscode.WebviewPanelSerializer {
   readonly deserializeWebviewPanel: (
@@ -90,7 +94,7 @@ const state: State = {
  * Get the html for the svg preview panel.
  */
 const getPreviewHTML = memoizeOne(
-  (): string => {
+  (fsPath: string): string => {
     /**
      * The base for the preview files.
      */
@@ -101,7 +105,7 @@ const getPreviewHTML = memoizeOne(
     /**
      * The base url of the opened document.
      */
-    const base = vscode.Uri.file(state.fsPath).with({
+    const base = vscode.Uri.file(fsPath).with({
       scheme: 'vscode-resource',
     })
     const nonce = Math.round(Math.random() * 2 ** 20)
@@ -111,7 +115,7 @@ const getPreviewHTML = memoizeOne(
     <meta charset="UTF-8">
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'none'; img-src 'self' data:; style-src vscode-resource: 'nonce-${nonce}'; script-src 'nonce-${nonce}';"
+      content="default-src 'none'; img-src 'self' data:; style-src vscode-resource: 'nonce-${nonce}'; script-src 'nonce-${nonce}';connect-src ws://localhost:3000/;"
     >
     <base href="${base}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" >
@@ -131,13 +135,14 @@ const getPreviewHTML = memoizeOne(
 
 let immediate: NodeJS.Immediate
 
+let webSocketServer: PreviewWebsocketServer
 /**
  * Send all the messages that could not be send because the webview was hidden.
  */
 function sendPostponedMessages(): void {
   const messages = [...state.postponedMessages.values()]
   if (messages.length > 0) {
-    state.panel.webview.postMessage(messages)
+    webSocketServer.broadcast(messages)
     state.postponedMessages.clear()
   }
 }
@@ -192,7 +197,6 @@ async function getActualContent(): Promise<string> {
  * Update the contents.
  */
 async function invalidateContent(): Promise<void> {
-  console.log('state content', state.content)
   postMessage({
     command: 'update.content',
     payload: await getActualContent(),
@@ -215,7 +219,15 @@ function invalidateFsPath(): void {
  */
 function invalidatePanAndZoom(): void {
   postMessage({
-    command: 'reset.panAndZoom',
+    command: 'update.pan',
+    payload: {
+      x: 0,
+      y: 0,
+    },
+  })
+  postMessage({
+    command: 'update.zoom',
+    payload: 1,
   })
 }
 
@@ -240,7 +252,14 @@ function onMightHaveChangedStyle(event: ConfigurationChangeEvent): void {
 /**
  * This method is called when a webview panel has been created.
  */
-const onDidCreatePanel = (webViewPanel: vscode.WebviewPanel): void => {
+const onDidCreatePanel = async (
+  webViewPanel: vscode.WebviewPanel
+): Promise<void> => {
+  if (!webSocketServer) {
+    webSocketServer = (await import('../previewWebSocketServer'))
+      .previewWebSocketServer
+    webSocketServer.start()
+  }
   setContext('svgPreviewIsOpen', true)
   state.panel = webViewPanel
   state.panel.iconPath = vscode.Uri.file(getPath(iconPath))
@@ -268,7 +287,7 @@ const onDidCreatePanel = (webViewPanel: vscode.WebviewPanel): void => {
       })
     )
   }
-  state.panel.webview.html = getPreviewHTML()
+  state.panel.webview.html = getPreviewHTML(state.fsPath)
   onDidChangeStyle()
   configuration.addChangeListener(onMightHaveChangedStyle)
 }
@@ -343,25 +362,26 @@ export const previewPanel: PreviewPanel = {
       // TODO deserialized panel should already be disposed at this point
       // There is already an open preview
       webviewPanel.dispose()
+    } else {
+      state.panel = webviewPanel
     }
     if (
-      deserializedState &&
       vscode.window.activeTextEditor &&
       shouldOpenUri(vscode.window.activeTextEditor.document.uri) &&
       vscode.window.activeTextEditor.document.uri.fsPath !==
         deserializedState.fsPath
     ) {
       // another svg file is currently open so we preview that instead of the one saved
-      state.fsPath = vscode.window.activeTextEditor.document.uri.fsPath
       onDidCreatePanel(webviewPanel)
-      this.show({ fsPath: state.fsPath })
+      this.show({ fsPath: vscode.window.activeTextEditor.document.uri.fsPath })
       state.content = vscode.window.activeTextEditor.document.getText()
       invalidateContent()
+    } else {
+      // preview the saved file
+      state.fsPath = deserializedState.fsPath
+      onDidCreatePanel(webviewPanel)
+      state.content = deserializedState.content
+      invalidateContent()
     }
-    // preview the saved file
-    state.fsPath = deserializedState.fsPath
-    onDidCreatePanel(webviewPanel)
-    state.content = deserializedState.content
-    invalidateContent()
   },
 }

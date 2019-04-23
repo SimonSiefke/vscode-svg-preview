@@ -25,11 +25,27 @@ const terserPlugin = terser({
 
 /** @type {import('rollup').RollupOptions} */
 const extensionConfig = {
-  external: ['vscode', 'path', 'util', 'fs', 'http', 'https'],
+  external: [
+    'vscode',
+    'path',
+    'util',
+    'fs',
+    'http',
+    'https',
+    'stream',
+    'utf-8-validate',
+    'zlib',
+    'url',
+    'tls',
+    'crypto',
+    'net',
+    'events',
+    'os',
+  ],
   input: [
     'packages/extension/src/extension.ts',
-    'packages/extension/src/liveshare/guest.ts',
-    'packages/extension/src/liveshare/host.ts',
+    // 'packages/extension/src/liveshare/guest.ts',
+    // 'packages/extension/src/liveshare/host.ts',
     'packages/extension/src/preview/styles/loadInlineStyles.ts',
   ],
   output: {
@@ -42,7 +58,9 @@ const extensionConfig = {
     json(),
     // @ts-ignore
     nodeResolve(),
-    commonjs(),
+    commonjs({
+      ignore: ['bufferutil', 'utf-8-validate'], // optional dependencies of ws
+    }),
     // @ts-ignore
     importAlias({
       '@': './packages/extension/src',

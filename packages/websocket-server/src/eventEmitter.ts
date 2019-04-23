@@ -20,7 +20,14 @@ export interface EventEmitter<Events> {
   readonly removeAllListeners: () => void
 }
 
-export interface BaseEvents { [key: string]: Function }
+export type AddListener<Events> = <E extends keyof Events>(
+  event: E,
+  callback: Events[E]
+) => void
+
+interface BaseEvents {
+  [key: string]: Function
+}
 
 /**
  * Creates an event emitter.
@@ -49,3 +56,6 @@ export function createEventEmitter<Events extends BaseEvents>(): EventEmitter<
     },
   }
 }
+
+// export function EventEmitter(): void {}
+// export class EventEmitter{}

@@ -17,5 +17,10 @@ export type Message =
       payload: StyleConfiguration
     }
   | {
-      command: 'reset.panAndZoom'
+      command: 'update.pan'
+      payload: { x: number; y: number }
+    }
+  | {
+      command: 'update.zoom'
+      payload: number
     }

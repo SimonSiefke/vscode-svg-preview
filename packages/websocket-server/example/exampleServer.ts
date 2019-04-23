@@ -1,12 +1,12 @@
 import http from 'http'
 import * as fs from 'fs'
 import * as path from 'path'
-import { createWebSocketServer } from '../src/server'
+import { createWebSocketServer } from '../src/createWebsocketServer'
 
 const webSocketServer = createWebSocketServer()
-webSocketServer.api.start()
-webSocketServer.api.addListener('message', (message, websocket) => {
-  webSocketServer.api.broadcast(message, { skip: websocket })
+webSocketServer.start()
+webSocketServer.addListener('message', (message, websocket) => {
+  webSocketServer.broadcast(message, { skip: websocket })
 })
 
 const httpServer = http.createServer((request, response) => {
@@ -17,7 +17,7 @@ const httpServer = http.createServer((request, response) => {
     const file = fs.readFileSync(path.join(__dirname, relativePath), 'utf-8')
     const modifiedFile = file.replace(
       'INSERT_PORT_HERE',
-      `${webSocketServer.options.port}`
+      `${webSocketServer.port}`
     )
     if (relativePath.endsWith('.html')) {
       response.writeHead(200, { 'Content-Type': 'text/html' })

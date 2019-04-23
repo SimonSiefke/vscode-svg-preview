@@ -1,6 +1,5 @@
 import * as vscode from 'vscode'
 import * as path from 'path'
-import { rootPath } from './constants'
 import { context } from './extension'
 
 export function shouldOpenUri(uri: vscode.Uri, fsPath?: string): boolean {
@@ -25,7 +24,7 @@ export function shouldOpenUri(uri: vscode.Uri, fsPath?: string): boolean {
  * ```
  */
 export function getPath(relativePath: string): string {
-  return path.join(context.extensionPath, rootPath, relativePath)
+  return path.join(context.extensionPath, ROOT, relativePath)
 }
 
 interface Context {

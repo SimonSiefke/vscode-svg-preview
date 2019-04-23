@@ -8,8 +8,8 @@ export async function withInlineStyles(
   svg: string
 ): Promise<string> {
   const svgWithoutComments = svg.replace(/<!--(.*?)-->/g, '')
-  const matches = svgWithoutComments.match(stylesheetRegex) || []
-  if (matches.length === 0) {
+  const matches = svgWithoutComments.match(stylesheetRegex)
+  if (!matches) {
     return svg
   }
   const { loadInlineStyles } = await import('./loadInlineStyles')

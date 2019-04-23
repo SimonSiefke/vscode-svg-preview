@@ -3,8 +3,8 @@ import { PreviewState } from '../../shared/src/PreviewState'
 import { Message } from '../../shared/src/Message'
 import './index.css'
 import { StyleConfiguration } from '../../shared/src/StyleConfiguration'
-import { vscode } from './vscode'
 
+const vscode = acquireVsCodeApi()
 if (DEVELOPMENT) {
   window.addEventListener('error', event => {
     console.error(event)
@@ -53,14 +53,13 @@ function invalidateZoom(): void {
 invalidateZoom()
 function createStyleString(styleObject: StyleConfiguration): string {
   let style = ``
-  for (const [key, value] of Object.entries(styleObject)) {
-    const left = key
+  for (const [selector, value] of Object.entries(styleObject)) {
     const right = Object.entries(value).reduce(
       (styleString, [propName, propValue]) =>
         `${styleString}${propName}:${propValue};`,
       ''
     )
-    style = `${style}${left}{${right}}`
+    style = `${style}${selector}{${right}}`
   }
   return style
 }
@@ -70,14 +69,18 @@ function invalidateStyle(): void {
   }
 }
 invalidateStyle()
-window.addEventListener('message', event => {
-  const messages: Message[] = event.data
+const ws = new WebSocket(`ws://localhost:3000`)
+ws.addEventListener('message', event => {
+  const messages: Message[] = JSON.parse(event.data)
   for (const message of messages) {
     switch (message.command) {
-      case 'reset.panAndZoom':
+      case 'update.pan':
         state.pointerOffset = undefined
-        state.zoom = undefined
         invalidatePan()
+        invalidateState()
+        break
+      case 'update.zoom':
+        state.zoom = undefined
         invalidateZoom()
         invalidateState()
         break

@@ -35,7 +35,7 @@ fs.copySync(
   path.join(root, `packages/preview/dist`),
   `dist/packages/preview/dist`
 )
-for (const file of ['README.md', 'LICENSE']) {
+for (const file of ['README.md', 'LICENSE', 'CHANGELOG.md']) {
   fs.copySync(path.join(root, file), `dist/${file}`)
 }
 
@@ -47,6 +47,8 @@ for (const file of fs.readdirSync(
       'icon.png',
       'bolt_original_darkgray_optimized.svg',
       'bolt_original_lightgray_optimized.svg',
+      'refresh_original_darkgray_optimized.svg',
+      'refresh_original_lightgray_optimized.svg',
     ].includes(file)
   ) {
     fs.copySync(
