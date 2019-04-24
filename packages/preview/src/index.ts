@@ -69,7 +69,7 @@ function invalidateStyle(): void {
   }
 }
 invalidateStyle()
-const ws = new WebSocket(`ws://localhost:3000`)
+const ws = new WebSocket(`ws://localhost:4994`)
 ws.addEventListener('message', event => {
   const messages: Message[] = JSON.parse(event.data)
   for (const message of messages) {
@@ -86,7 +86,6 @@ ws.addEventListener('message', event => {
         break
       case 'update.fsPath':
         state.fsPath = message.payload
-        vscode.postMessage(state.fsPath)
         invalidateState()
         break
       case 'update.content':

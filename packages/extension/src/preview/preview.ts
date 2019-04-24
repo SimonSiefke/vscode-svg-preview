@@ -115,7 +115,7 @@ const getPreviewHTML = memoizeOne(
     <meta charset="UTF-8">
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'none'; img-src 'self' data:; style-src vscode-resource: 'nonce-${nonce}'; script-src 'nonce-${nonce}';connect-src ws://localhost:3000/;"
+      content="default-src 'none'; img-src 'self' data:; style-src vscode-resource: 'nonce-${nonce}'; script-src 'nonce-${nonce}';connect-src ws://localhost:4994/;"
     >
     <base href="${base}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" >

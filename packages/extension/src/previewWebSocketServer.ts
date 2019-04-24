@@ -18,7 +18,7 @@ export const previewWebSocketServer: PreviewWebsocketServer = {
     webSocketServer.broadcast(messages)
   },
   start() {
-    webSocketServer.start()
+    webSocketServer.start(4994)
     webSocketServer.addListener('message', (message, websocket) => {
       webSocketServer.broadcast(message, { skip: websocket })
     })
