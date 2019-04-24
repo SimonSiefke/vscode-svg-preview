@@ -13,7 +13,7 @@
 
 ## Features
 
-- Live editing of svg files
+- Live editing of svg files and svg's inside files
 - Panning and zooming of the preview
 
 ## Commands
