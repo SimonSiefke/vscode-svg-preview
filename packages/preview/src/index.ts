@@ -86,6 +86,7 @@ ws.addEventListener('message', event => {
         break
       case 'update.fsPath':
         state.fsPath = message.payload
+        vscode.postMessage(state.fsPath)
         invalidateState()
         break
       case 'update.content':

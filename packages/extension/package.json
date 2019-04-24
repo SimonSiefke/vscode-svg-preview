@@ -2,7 +2,7 @@
   "name": "svg-preview",
   "displayName": "Svg Preview",
   "description": "Preview for Svg files",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "publisher": "SimonSiefke",
   "license": "MIT",
   "enableProposedApi": true,
@@ -68,12 +68,10 @@
       "commandPalette": [
         {
           "command": "svgPreview.showPreview",
-          "when": "editorLangId == xml && resourceExtname == .svg",
           "group": "navigation"
         },
         {
           "command": "svgPreview.showPreviewToSide",
-          "when": "editorLangId == xml && resourceExtname == .svg",
           "group": "navigation"
         },
         {

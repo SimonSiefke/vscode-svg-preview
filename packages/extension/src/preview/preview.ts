@@ -4,7 +4,7 @@ import * as vscode from 'vscode'
 import { configuration, ConfigurationChangeEvent } from '../configuration'
 import { Message } from '../../../shared/src/Message'
 import { PreviewState } from '../../../shared/src/PreviewState'
-import { shouldOpenUri, getPath, setContext } from '../util'
+import { isSvgFile, getPath, setContext } from '../util'
 import { context } from '../extension'
 import { withInlineStyles } from './styles/withInlineStyles'
 import { StyleConfiguration } from '../../../shared/src/StyleConfiguration'
@@ -193,13 +193,27 @@ async function getActualContent(): Promise<string> {
   return content
 }
 
+let lastContent: string
+
+function setLastContent(): void {
+  if (!lastContent) {
+    return
+  }
+  postMessage({
+    command: 'update.content',
+    payload: lastContent,
+  })
+  lastContent = undefined
+}
+
 /**
  * Update the contents.
  */
 async function invalidateContent(): Promise<void> {
+  lastContent = await getActualContent()
   postMessage({
     command: 'update.content',
-    payload: await getActualContent(),
+    payload: lastContent,
   })
 }
 
@@ -273,8 +287,8 @@ const onDidCreatePanel = async (
   context.subscriptions.push(
     state.panel.onDidChangeViewState(event => {
       setContext('svgPreviewIsFocused', event.webviewPanel.active)
-      if (event.webviewPanel.visible) {
-        invalidateContent()
+      if (event.webviewPanel.visible && !event.webviewPanel.webview.html) {
+        setLastContent()
         sendPostponedMessages()
       }
     })
@@ -367,7 +381,7 @@ export const previewPanel: PreviewPanel = {
     }
     if (
       vscode.window.activeTextEditor &&
-      shouldOpenUri(vscode.window.activeTextEditor.document.uri) &&
+      isSvgFile(vscode.window.activeTextEditor.document.uri) &&
       vscode.window.activeTextEditor.document.uri.fsPath !==
         deserializedState.fsPath
     ) {
@@ -377,7 +391,7 @@ export const previewPanel: PreviewPanel = {
       state.content = vscode.window.activeTextEditor.document.getText()
       invalidateContent()
     } else {
-      // preview the saved file
+      // preview the last viewed
       state.fsPath = deserializedState.fsPath
       onDidCreatePanel(webviewPanel)
       state.content = deserializedState.content

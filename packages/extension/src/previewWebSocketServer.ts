@@ -14,8 +14,8 @@ export const previewWebSocketServer: PreviewWebsocketServer = {
   get port() {
     return webSocketServer.port
   },
-  broadcast(message) {
-    webSocketServer.broadcast(message)
+  broadcast(messages) {
+    webSocketServer.broadcast(messages)
   },
   start() {
     webSocketServer.start()

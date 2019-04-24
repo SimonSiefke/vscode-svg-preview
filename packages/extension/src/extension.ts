@@ -1,6 +1,6 @@
 import * as vscode from 'vscode'
 import { previewPanel } from './preview/preview'
-import { shouldOpenUri } from './util'
+import { isSvgFile, tryToGetSvgInsideTextEditor } from './util'
 import { configuration } from './configuration'
 
 // eslint-disable-next-line import/no-mutable-exports
@@ -11,6 +11,8 @@ export let context: vscode.ExtensionContext
  */
 export async function activate(c: vscode.ExtensionContext): Promise<void> {
   context = c
+  let isSvg: boolean
+  let svgInside: string | undefined
   /**
    * Whether or not the last text editor event was a close event or not
    */
@@ -20,7 +22,9 @@ export async function activate(c: vscode.ExtensionContext): Promise<void> {
       'svgPreview.showPreview',
       async (uri: vscode.Uri) => {
         const actualUri = uri || vscode.window.activeTextEditor.document.uri
-        if (!shouldOpenUri(actualUri)) {
+        isSvg = isSvgFile(actualUri)
+        svgInside = tryToGetSvgInsideTextEditor(vscode.window.activeTextEditor)
+        if (!isSvg && !svgInside) {
           return
         }
         previewPanel.show({
@@ -28,7 +32,11 @@ export async function activate(c: vscode.ExtensionContext): Promise<void> {
           fsPath: actualUri.fsPath,
         })
         const textDocument = await vscode.workspace.openTextDocument(actualUri)
-        previewPanel.content = textDocument.getText()
+        if (isSvg) {
+          previewPanel.content = textDocument.getText()
+        } else {
+          previewPanel.content = svgInside
+        }
       }
     )
   )
@@ -37,14 +45,20 @@ export async function activate(c: vscode.ExtensionContext): Promise<void> {
       'svgPreview.showPreviewToSide',
       textEditor => {
         const textDocument = textEditor.document
-        if (!shouldOpenUri(textDocument.uri, previewPanel.fsPath)) {
+        isSvg = isSvgFile(textDocument.uri, previewPanel.fsPath)
+        svgInside = tryToGetSvgInsideTextEditor(textEditor)
+        if (!isSvg && !svgInside) {
           return
         }
         previewPanel.show({
           viewColumn: vscode.ViewColumn.Beside,
           fsPath: textDocument.uri.fsPath,
         })
-        previewPanel.content = textDocument.getText()
+        if (isSvg) {
+          previewPanel.content = textDocument.getText()
+        } else {
+          previewPanel.content = svgInside
+        }
       }
     )
   )
@@ -65,8 +79,10 @@ export async function activate(c: vscode.ExtensionContext): Promise<void> {
         lastEventWasClose = false
         return
       }
+      isSvg = isSvgFile(textEditor.document.uri, previewPanel.fsPath)
+      svgInside = tryToGetSvgInsideTextEditor(textEditor)
       // don't open if it's not an svg
-      if (!shouldOpenUri(textEditor.document.uri, previewPanel.fsPath)) {
+      if (!isSvg && !svgInside) {
         return
       }
       // don't open if auto-open setting isn't enabled
@@ -79,14 +95,19 @@ export async function activate(c: vscode.ExtensionContext): Promise<void> {
       // open the preview
       if (previewPanel.visible) {
         // TODO need to check if there is a webview that can be restored, otherwise there will be 2 open previews at the same time which should not happen, probably need to wait for https://github.com/Microsoft/vscode/issues/15178
-        previewPanel.fsPath = textEditor.document.uri.fsPath
+        if (previewPanel.fsPath !== textEditor.document.uri.fsPath) {
+          previewPanel.fsPath = textEditor.document.uri.fsPath
+        }
       } else {
         previewPanel.show({
           viewColumn: vscode.ViewColumn.Beside,
           fsPath: textEditor.document.uri.fsPath,
         })
       }
-      previewPanel.content = textEditor.document.getText()
+      const content = isSvg ? textEditor.document.getText() : svgInside
+      if (content !== previewPanel.content) {
+        previewPanel.content = content
+      }
     })
   )
   if (DEVELOPMENT) {
@@ -112,11 +133,31 @@ export async function activate(c: vscode.ExtensionContext): Promise<void> {
   )
   context.subscriptions.push(
     vscode.workspace.onDidChangeTextDocument(event => {
-      const shouldUpdateTextDocument =
+      const shouldUpdate =
         event.contentChanges.length > 0 &&
         event.document.uri.fsPath === previewPanel.fsPath
-      if (shouldUpdateTextDocument) {
-        previewPanel.content = event.document.getText()
+      if (!shouldUpdate) {
+        return
+      }
+      const content = isSvg
+        ? vscode.window.activeTextEditor.document.getText()
+        : svgInside
+      if (content !== previewPanel.content) {
+        previewPanel.content = content
+      }
+    })
+  )
+
+  context.subscriptions.push(
+    vscode.window.onDidChangeTextEditorSelection(event => {
+      const shouldUpdate =
+        event.textEditor.document.uri.fsPath === previewPanel.fsPath
+      if (!shouldUpdate) {
+        return
+      }
+      svgInside = tryToGetSvgInsideTextEditor(event.textEditor)
+      if (svgInside !== previewPanel.content) {
+        previewPanel.content = svgInside
       }
     })
   )
