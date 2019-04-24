@@ -23,6 +23,7 @@ function invalidateContent(): void {
     `data:image/svg+xml,${encodeURIComponent(state.content)}`
   )
 }
+invalidateContent()
 let cleanUpPan: CleanUp | undefined
 function invalidatePan(): void {
   if (cleanUpPan) {
