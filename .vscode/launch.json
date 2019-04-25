@@ -14,7 +14,7 @@
       "preLaunchTask": "npm: dev"
     },
     {
-      "name": "Extension (dev & liveshare)",
+      "name": "Extension (liveshare 1)",
       "type": "extensionHost",
       "request": "launch",
       "runtimeExecutable": "${execPath}",
@@ -25,7 +25,7 @@
       "preLaunchTask": "npm: dev"
     },
     {
-      "name": "Extension (dev & liveshare 2)",
+      "name": "Extension (liveshare 2)",
       "type": "extensionHost",
       "request": "launch",
       "runtimeExecutable": "${execPath}",

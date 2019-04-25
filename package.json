@@ -10,8 +10,9 @@
     "lint": "eslint . && prettier **/*.* --list-different",
     "lint:fix": "eslint --fix . && prettier --write **/*.*",
     "bundlesize": "bundlesize",
+    "clean": "rimraf dist packages/*/dist",
     "postinstall": "lerna bootstrap",
-    "package": "rm -rf dist && npm run lint && npm run build && npm run bundlesize && node ./scripts/package.js && cd dist && npx vsce package && cd .."
+    "package": "npm run clean && npm run lint && npm run build && npm run bundlesize && node ./scripts/package.js && cd dist && npx vsce package && cd .."
   },
   "keywords": [],
   "author": "Simon Siefke",
@@ -26,6 +27,7 @@
     "lerna": "^3.13.4",
     "prettier": "^1.17.0",
     "prettier-config-bitworkers": "^1.5.0",
+    "rimraf": "^2.6.3",
     "rollup": "^1.10.1",
     "rollup-plugin-commonjs": "^9.3.4",
     "rollup-plugin-import-alias": "^1.0.6",
