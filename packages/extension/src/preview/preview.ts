@@ -269,7 +269,8 @@ const onDidCreatePanel = async (
   if (!webSocketServer) {
     webSocketServer = (await import('../previewWebSocketServer'))
       .previewWebSocketServer
-    webSocketServer.start()
+    // TODO optimize order (first html then start server)
+    await webSocketServer.start()
   }
   setContext('svgPreviewIsOpen', true)
   state.panel = webViewPanel

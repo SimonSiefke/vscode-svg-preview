@@ -2,7 +2,7 @@
   "name": "svg-preview",
   "displayName": "Svg Preview",
   "description": "Preview for Svg files",
-  "version": "2.1.3",
+  "version": "2.1.4",
   "publisher": "SimonSiefke",
   "license": "MIT",
   "enableProposedApi": true,
