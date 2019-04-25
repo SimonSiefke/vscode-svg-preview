@@ -1,6 +1,5 @@
 html,
-body,
-main {
+body {
   height: 100%;
 }
 html {
@@ -17,13 +16,16 @@ body {
   /* don't need to be able to select image because that doesn't work well with panning */
   user-select: none;
   pointer-events: none;
+  display: grid;
 }
 
 main {
   transform-origin: top left;
-  display: grid;
+  width: 100%;
 }
 
 img {
   box-sizing: border-box;
+  max-height: none;
+  width: 100%;
 }

@@ -116,9 +116,9 @@
           "additionalProperties": false,
           "default": {},
           "properties": {
-            "main": {
+            "body": {
               "type": "object",
-              "description": "Custom style for the main element.",
+              "description": "Custom style for the body element.",
               "additionalProperties": false,
               "properties": {
                 "background": {

@@ -1,5 +1,5 @@
 export type StyleConfiguration = Partial<{
-  main: {
+  body: {
     background: string
     'background-color': string
     'background-position': string

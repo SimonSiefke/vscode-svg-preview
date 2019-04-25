@@ -6,12 +6,6 @@
       "@/*": ["./src"]
     }
   },
-  "include": [
-    "src",
-    "../../deprecated/webView",
-    "../../deprecated/constants.ts",
-    "../../deprecated/extension_new_old.ts",
-    "../../deprecated/preview_new_old.ts"
-  ],
+  "include": ["src"],
   "exclude": ["dist", "node_modules"]
 }
