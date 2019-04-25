@@ -6,7 +6,7 @@ interface Point {
 }
 
 const $root = document.documentElement
-const $element = document.querySelector('main')
+const $element = document.body
 
 /**
  * The transformation matrix.

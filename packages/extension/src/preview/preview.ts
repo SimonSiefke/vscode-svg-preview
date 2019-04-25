@@ -123,9 +123,7 @@ const getPreviewHTML = memoizeOne(
     <style id="custom-style" nonce="${nonce}"></style>
   </head>
   <body>
-    <main>
-      <img alt="">
-    </main>
+    <img alt="">
     <script src="${previewBase}/index.js" nonce="${nonce}"></script>
   </body>
 </html>

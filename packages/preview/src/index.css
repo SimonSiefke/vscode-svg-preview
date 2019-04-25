@@ -1,9 +1,8 @@
-html,
-body {
-  height: 100%;
-}
 html {
+  height: 100%;
   cursor: grab;
+  display: grid;
+  background: var(--vscode-editor-background);
 }
 
 html:active {
@@ -16,12 +15,9 @@ body {
   /* don't need to be able to select image because that doesn't work well with panning */
   user-select: none;
   pointer-events: none;
-  display: grid;
-}
-
-main {
   transform-origin: top left;
   width: 100%;
+  background: transparent;
 }
 
 img {

@@ -12,6 +12,7 @@
 <!-- TODO improve external css -->
 <!-- TODO add tests -->
 <!-- TODO make packages more independent of each other (eslint, tsconfig etc.) -->
+<!-- TODO setting for scale-to-fit or size of viewBox -->
 
 ## Features
 
@@ -40,7 +41,7 @@ You can change the background color:
 ```json
 {
   "svgPreview.style": {
-    "body": {
+    "html": {
       "background": "white"
     }
   }
@@ -54,7 +55,7 @@ Or make a gradient background (note that you need to use `-webkit` prefix radial
 ```json
 {
   "svgPreview.style": {
-    "body": {
+    "html": {
       "background": "-webkit-radial-gradient(center, circle cover, hsl(195, 80%, 20%) 0%,hsl(220, 100%, 5%) 100%)"
     }
   }
@@ -68,7 +69,7 @@ Or you can make a checkerboard background:
 ```json
 {
   "svgPreview.style": {
-    "body": {
+    "html": {
       "background-position": "0 0, 13px 13px",
       "background-size": "26px 26px",
       "background-image": "linear-gradient(45deg,  #141414 25%, transparent 25%, transparent 75%, #141414 75%, #141414), linear-gradient(45deg, #141414 25%, transparent 25%, transparent 75%, #141414 75%, #141414)"
