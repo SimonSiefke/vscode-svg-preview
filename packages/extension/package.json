@@ -186,7 +186,6 @@
     }
   },
   "main": "./dist/extension.js",
-  "scripts": {},
   "dependencies": {
     "get-port": "^5.0.0",
     "memoize-one": "^5.0.4",
