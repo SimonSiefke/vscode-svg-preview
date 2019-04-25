@@ -91,17 +91,16 @@ const state: State = {
 }
 
 /**
- * Get the html for the svg preview panel.
+ * Get the html for the svg preview panel. TODO: port-mapping once stable
  */
 const getPreviewHTML = memoizeOne(
-  (fsPath: string): string => {
+  (fsPath: string, port: number): string => {
     /**
      * The base for the preview files.
      */
     const previewBase = vscode.Uri.file(getPath(previewPath)).with({
       scheme: 'vscode-resource',
     })
-
     /**
      * The base url of the opened document.
      */
@@ -115,14 +114,14 @@ const getPreviewHTML = memoizeOne(
     <meta charset="UTF-8">
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'none'; img-src 'self' data:; style-src vscode-resource: 'nonce-${nonce}'; script-src 'nonce-${nonce}';connect-src ws://localhost:4994/;"
+      content="default-src 'none'; img-src 'self' data:; style-src vscode-resource: 'nonce-${nonce}'; script-src 'nonce-${nonce}';connect-src ws://localhost:${port}/;"
     >
     <base href="${base}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" >
     <link rel="stylesheet" href="${previewBase}/index.css" nonce="${nonce}" >
     <style id="custom-style" nonce="${nonce}"></style>
   </head>
-  <body>
+  <body data-port="${port}">
     <img alt="">
     <script src="${previewBase}/index.js" nonce="${nonce}"></script>
   </body>
@@ -299,7 +298,7 @@ const onDidCreatePanel = async (
       })
     )
   }
-  state.panel.webview.html = getPreviewHTML(state.fsPath)
+  state.panel.webview.html = getPreviewHTML(state.fsPath, webSocketServer.port)
   onDidChangeStyle()
   configuration.addChangeListener(onMightHaveChangedStyle)
 }

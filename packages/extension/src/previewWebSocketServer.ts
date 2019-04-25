@@ -1,3 +1,4 @@
+import getPort from 'get-port'
 import { createWebSocketServer } from '../../websocket-server/src/createWebsocketServer'
 import { Message } from '../../shared/src/Message'
 
@@ -17,8 +18,9 @@ export const previewWebSocketServer: PreviewWebsocketServer = {
   broadcast(messages) {
     webSocketServer.broadcast(messages)
   },
-  start() {
-    webSocketServer.start(4994)
+  async start() {
+    const port = await getPort()
+    webSocketServer.start(port)
     webSocketServer.addListener('message', (message, websocket) => {
       webSocketServer.broadcast(message, { skip: websocket })
     })

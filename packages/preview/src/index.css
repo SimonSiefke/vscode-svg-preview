@@ -12,6 +12,7 @@ html:active {
 body {
   overflow: hidden;
   margin: 0;
+  padding: 0;
   /* don't need to be able to select image because that doesn't work well with panning */
   user-select: none;
   pointer-events: none;

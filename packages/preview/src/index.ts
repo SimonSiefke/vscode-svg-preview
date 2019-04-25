@@ -11,6 +11,7 @@ if (DEVELOPMENT) {
     vscode.postMessage({ command: 'error', payload: event.message })
   })
 }
+const { port } = document.body.dataset
 const state: PreviewState = vscode.getState() || {}
 const $image = document.querySelector('img')
 const $style = document.querySelector('#custom-style')
@@ -70,7 +71,7 @@ function invalidateStyle(): void {
   }
 }
 invalidateStyle()
-const ws = new WebSocket(`ws://localhost:4994`)
+const ws = new WebSocket(`ws://localhost:${port}`)
 ws.addEventListener('message', event => {
   const messages: Message[] = JSON.parse(event.data)
   for (const message of messages) {
