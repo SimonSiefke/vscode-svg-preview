@@ -14,6 +14,7 @@
 <!-- TODO make packages more independent of each other (eslint, tsconfig etc.) -->
 <!-- TODO setting for scale-to-fit or size of viewBox -->
 <!-- TODO better demo gif -->
+<!-- TODO bug with commented out </svg> inside html/js etc -->
 
 ## Features
 
