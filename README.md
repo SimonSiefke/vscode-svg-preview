@@ -15,6 +15,7 @@
 <!-- TODO setting for scale-to-fit or size of viewBox -->
 <!-- TODO better demo gif -->
 <!-- TODO bug with commented out </svg> inside html/js etc -->
+<!-- TODO bug open svg, open preview, close svg, open other svg (title changes), switch to preview -> content not updated -->
 
 ## Features
 
