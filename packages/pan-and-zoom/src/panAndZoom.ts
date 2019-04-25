@@ -112,7 +112,7 @@ export function useZoom({
   initialZoom?: number
 } = {}): CleanUp {
   const minZoom = 0.1
-  const maxZoom = 2 ** 12
+  const maxZoom = 2 ** 11
   const zoomFactor = 1.3
   let zoom = initialZoom
   domMatrix.a = zoom
@@ -125,6 +125,7 @@ export function useZoom({
       (direction === 'up' && zoom >= maxZoom) ||
       (direction === 'down' && zoom < minZoom)
     ) {
+      console.log('max zoom')
       return
     }
     zoom *= currentZoomFactor
