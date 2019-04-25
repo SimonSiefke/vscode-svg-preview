@@ -4,12 +4,14 @@
 
 ![demo](./demo_images/demo.gif)
 
-<!-- TODO need to figure out why animation is restarted so often -->
-<!-- TODO work in html, js -->
+<!-- TODO need to figure out why animation is restarted so often / prevent unnecessary updates -->
 <!-- TODO update content when just opened / handle active text editor before extension is activated-->
 <!-- TODO vscode live share -->
 <!-- TODO rename reset to reload? -->
 <!-- TODO don't zoom/pan outside of the window -->
+<!-- TODO improve external css -->
+<!-- TODO add tests -->
+<!-- TODO make packages more independent of each other (eslint, tsconfig etc.) -->
 
 ## Features
 
