@@ -17,6 +17,7 @@
 <!-- TODO bug with commented out </svg> inside html/js etc -->
 <!-- TODO bug open svg, open preview, close svg, open other svg (title changes), switch to preview -> content not updated -->
 <!-- TODO keep pan and zoom of svg inside html/js etc. -->
+<!-- TODO sometimes buggy when new version is installed -->
 
 ## Features
 
