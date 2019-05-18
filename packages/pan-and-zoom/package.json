@@ -9,10 +9,10 @@
   "devDependencies": {
     "@cypress/webpack-preprocessor": "^4.0.3",
     "concurrently": "^4.1.0",
-    "cypress": "^3.2.0",
+    "cypress": "^3.3.0",
     "parcel-bundler": "^1.12.3",
     "ts-loader": "^6.0.0",
     "typescript": "^3.4.5",
-    "webpack": "^4.30.0"
+    "webpack": "^4.31.0"
   }
 }

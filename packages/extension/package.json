@@ -195,7 +195,7 @@
   "devDependencies": {
     "@types/memoize-one": "^4.1.1",
     "@types/mime-types": "^2.1.0",
-    "@types/node": "^11.13.9",
-    "vscode": "^1.1.33"
+    "@types/node": "^12.0.2",
+    "@types/vscode": "^1.34.0"
   }
 }
