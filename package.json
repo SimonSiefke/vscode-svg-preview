@@ -1,5 +1,8 @@
 {
   "name": "vscode-svg-preview",
+  "engines": {
+    "node": "11"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/SimonSiefke/vscode-svg-preview.git"
@@ -21,14 +24,14 @@
     "autoprefixer": "^9.5.1",
     "bundlesize": "^0.17.1",
     "eslint": "^5.16.0",
-    "eslint-config-bitworkers": "^1.21.11",
+    "eslint-config-bitworkers": "^1.21.12",
     "eslint-plugin-cypress": "^2.2.1",
     "fs-extra": "^8.0.1",
     "lerna": "^3.14.1",
     "prettier": "^1.17.1",
     "prettier-config-bitworkers": "^1.5.0",
     "rimraf": "^2.6.3",
-    "rollup": "^1.12.2",
+    "rollup": "^1.12.3",
     "rollup-plugin-commonjs": "^10.0.0",
     "rollup-plugin-import-alias": "^1.0.6",
     "rollup-plugin-json": "^4.0.0",
