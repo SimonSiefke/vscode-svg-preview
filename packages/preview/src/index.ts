@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
 import { usePan, CleanUp, useZoom } from '../../pan-and-zoom/src/panAndZoom'
 import { PreviewState } from '../../shared/src/PreviewState'
 import { Message } from '../../shared/src/Message'
@@ -19,6 +20,7 @@ function invalidateState(): void {
   vscode.setState(state)
 }
 function invalidateContent(): void {
+  invalidateScaleToFit()
   $image.setAttribute(
     'src',
     `data:image/svg+xml,${encodeURIComponent(state.content)}`
@@ -71,6 +73,47 @@ function invalidateStyle(): void {
   }
 }
 invalidateStyle()
+function invalidateScaleToFit(): void {
+  if (state.scaleToFit) {
+    $image.style.height = 'auto'
+    $image.style.width = 'auto'
+  } else {
+    const parser = new DOMParser()
+    const $svgDocument = parser.parseFromString(state.content, 'image/svg+xml')
+    const $svg = $svgDocument.querySelector('svg')
+    if (!$svg) {
+      if (DEVELOPMENT) {
+        console.warn('no svg')
+      }
+      return
+    }
+    let newWidth = $svg.width.baseVal.valueAsString
+    // when there is no unit specified, we use pixel
+    if ($svg.width.baseVal.unitType === 1) {
+      newWidth += 'px'
+    }
+    let newHeight = $svg.height.baseVal.valueAsString
+    // when there is no unit specified, we use pixel
+    if ($svg.height.baseVal.unitType === 1) {
+      newHeight += 'px'
+    }
+    if ($svg.getAttribute('width') && $svg.getAttribute('height')) {
+      $image.style.width = newWidth
+      $image.style.height = newHeight
+    } else if ($svg.getAttribute('width') && !$svg.getAttribute('height')) {
+      $image.style.width = newWidth
+      $image.style.height = 'auto'
+    } else if (!$svg.getAttribute('width') && $svg.getAttribute('height')) {
+      $image.style.width = 'auto'
+      $image.style.height = newHeight
+    } else {
+      // set width and height based on viewBox when not width or height was given
+      const { width, height } = $svg.viewBox.baseVal
+      $image.style.width = `${width}px`
+      $image.style.height = `${height}px`
+    }
+  }
+}
 const ws = new WebSocket(`ws://localhost:${port}`)
 ws.addEventListener('message', event => {
   const messages: Message[] = JSON.parse(event.data)
@@ -98,6 +141,11 @@ ws.addEventListener('message', event => {
       case 'update.style':
         state.style = message.payload
         invalidateStyle()
+        invalidateState()
+        break
+      case 'update.scaleToFit':
+        state.scaleToFit = message.payload
+        invalidateScaleToFit()
         invalidateState()
         break
       default:

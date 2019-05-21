@@ -2,7 +2,7 @@
   "name": "svg-preview",
   "displayName": "Svg Preview",
   "description": "Preview for Svg files",
-  "version": "2.1.4",
+  "version": "2.1.5",
   "publisher": "SimonSiefke",
   "license": "MIT",
   "enableProposedApi": true,
@@ -108,6 +108,12 @@
           "type": "boolean",
           "default": false,
           "description": "Automatically open the preview when an svg file is opened.",
+          "scope": "resource"
+        },
+        "svgPreview.scaleToFit": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether or not the svg should be scaled to fit the viewport or keep its original size",
           "scope": "resource"
         },
         "svgPreview.style": {

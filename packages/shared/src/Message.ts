@@ -24,3 +24,7 @@ export type Message =
       command: 'update.zoom'
       payload: number
     }
+  | {
+      command: 'update.scaleToFit'
+      payload: boolean
+    }

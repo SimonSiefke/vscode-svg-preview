@@ -22,7 +22,7 @@
   "license": "MIT",
   "devDependencies": {
     "autoprefixer": "^9.5.1",
-    "bundlesize": "^0.17.1",
+    "bundlesize": "^0.17.2",
     "eslint": "^5.16.0",
     "eslint-config-bitworkers": "^1.21.12",
     "eslint-plugin-cypress": "^2.2.1",
@@ -45,12 +45,12 @@
   "bundlesize": [
     {
       "path": "./packages/extension/dist/extension.js",
-      "maxSize": "10.5 kB",
+      "maxSize": "10.7 kB",
       "compression": "none"
     },
     {
       "path": "./packages/preview/dist/index.js",
-      "maxSize": "1.3 kB"
+      "maxSize": "1.55 kB"
     }
   ]
 }

@@ -84,6 +84,10 @@ interface State {
    * Custom styles for the preview.
    */
   style?: StyleConfiguration
+  /**
+   * Whether or not the svg should be scaled to fit the viewport or keep its original size
+   */
+  scaleToFit?: boolean
 }
 
 const state: State = {
@@ -242,7 +246,14 @@ function invalidatePanAndZoom(): void {
   })
 }
 
-function invalidateBackground(): void {
+function invalidateScaleToFit(): void {
+  postMessage({
+    command: 'update.scaleToFit',
+    payload: state.scaleToFit,
+  })
+}
+
+function invalidateStyle(): void {
   postMessage({
     command: 'update.style',
     payload: state.style,
@@ -251,12 +262,24 @@ function invalidateBackground(): void {
 
 function onDidChangeStyle(): void {
   state.style = configuration.get('style', vscode.Uri.file(state.fsPath))
-  invalidateBackground()
+  invalidateStyle()
 }
 
-function onMightHaveChangedStyle(event: ConfigurationChangeEvent): void {
-  if (event.affectsConfiguration('style', vscode.Uri.file(state.fsPath))) {
+function onDidChangeScaleToFit(): void {
+  state.scaleToFit = configuration.get(
+    'scaleToFit',
+    vscode.Uri.file(state.fsPath)
+  )
+  invalidateScaleToFit()
+}
+
+function onDidChangeConfiguration(event: ConfigurationChangeEvent): void {
+  const uri = vscode.Uri.file(state.fsPath)
+  if (event.affectsConfiguration('style', uri)) {
     onDidChangeStyle()
+  }
+  if (event.affectsConfiguration('scaleToFit', uri)) {
+    onDidChangeScaleToFit()
   }
 }
 
@@ -301,7 +324,8 @@ const onDidCreatePanel = async (
   }
   state.panel.webview.html = getPreviewHTML(state.fsPath, webSocketServer.port)
   onDidChangeStyle()
-  configuration.addChangeListener(onMightHaveChangedStyle)
+  onDidChangeScaleToFit()
+  configuration.addChangeListener(onDidChangeConfiguration)
 }
 
 /**

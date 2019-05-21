@@ -1,4 +1,4 @@
-import { StyleConfiguration } from './StyleConfiguration';
+import { StyleConfiguration } from './StyleConfiguration'
 
 /**
  * State of the preview panel.
@@ -27,4 +27,5 @@ export interface PreviewState {
    * Custom styles for the preview.
    */
   style?: StyleConfiguration
+  scaleToFit?: boolean
 }

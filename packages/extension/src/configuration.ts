@@ -1,15 +1,18 @@
 import * as vscode from 'vscode'
 import { context } from './extension'
 import { StyleConfiguration } from '../../shared/src/StyleConfiguration'
+
 /**
  * Options - should match with `contributes.configuration` in `package.json`
  */
 interface Options {
   readonly autoOpen: boolean
+  readonly scaleToFit: boolean
   readonly style: StyleConfiguration
 }
 
 type GetConfiguration = ((key: 'autoOpen', resource: vscode.Uri) => boolean) &
+  ((key: 'scaleToFit', resource: vscode.Uri) => boolean) &
   ((key: 'style', resource: vscode.Uri) => StyleConfiguration)
 
 export interface ConfigurationChangeEvent {
