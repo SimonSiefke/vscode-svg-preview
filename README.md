@@ -35,6 +35,7 @@
 | Property | Description | Default |
 | --- | --- | --- |
 | svgPreview.autoOpen | Automatically open the preview when an svg file is opened | `false` |
+| svgPreview.scaleToFit | Whether or not the svg should be scaled to fit the viewport or keep its original size | `true` |
 | svgPreview.style | Custom style for the preview | `{}` |
 
 ## How to use the `svgPreview.style` setting
