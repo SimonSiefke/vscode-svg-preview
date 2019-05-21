@@ -18,6 +18,7 @@
 <!-- TODO bug open svg, open preview, close svg, open other svg (title changes), switch to preview -> content not updated -->
 <!-- TODO keep pan and zoom of svg inside html/js etc. -->
 <!-- TODO sometimes buggy when new version is installed -->
+<!-- TODO when scaleToFit is false and image is large, image may not be visible because there are no scrollbars-->
 
 ## Features
 
