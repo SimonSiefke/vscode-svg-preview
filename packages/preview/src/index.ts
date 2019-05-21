@@ -75,8 +75,8 @@ function invalidateStyle(): void {
 invalidateStyle()
 function invalidateScaleToFit(): void {
   if (state.scaleToFit) {
-    $image.style.height = 'auto'
-    $image.style.width = 'auto'
+    $image.style.height = ''
+    $image.style.width = ''
   } else {
     const parser = new DOMParser()
     const $svgDocument = parser.parseFromString(state.content, 'image/svg+xml')
@@ -102,9 +102,9 @@ function invalidateScaleToFit(): void {
       $image.style.height = newHeight
     } else if ($svg.getAttribute('width') && !$svg.getAttribute('height')) {
       $image.style.width = newWidth
-      $image.style.height = 'auto'
+      $image.style.height = ''
     } else if (!$svg.getAttribute('width') && $svg.getAttribute('height')) {
-      $image.style.width = 'auto'
+      $image.style.width = ''
       $image.style.height = newHeight
     } else {
       // set width and height based on viewBox when not width or height was given
