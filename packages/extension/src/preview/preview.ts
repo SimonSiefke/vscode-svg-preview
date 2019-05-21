@@ -359,6 +359,8 @@ export const previewPanel: PreviewPanel = {
     }
     invalidateFsPath()
     invalidatePanAndZoom()
+    invalidateStyle()
+    invalidateScaleToFit()
   },
   set fsPath(value: string) {
     if (!value) {

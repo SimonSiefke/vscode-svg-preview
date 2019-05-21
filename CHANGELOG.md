@@ -2,7 +2,8 @@
 
 | Version | Date | Changelog |
 | --- | --- | --- |
-| 2.2.0 | 21.05.19 | &mdash; **_[Feature]_** Added `scaleToFit` option |
+| 2.1.6 | 21.05.19 | &mdash; **_[Fix]_** custom styles sometimes not being applied |
+| 2.1.5 | 21.05.19 | &mdash; **_[Feature]_** Added `scaleToFit` option |
 | 2.1.4 | 25.04.19 | &mdash; **_[Fix Regression]_** Preview sometimes not working at all |
 | 2.1.3 | 25.04.19 | &mdash; **_[Fix]_** Preview not centered (a little bit off) <br> &mdash; **_[Fix]_** Preview not working when multiple windows of vscode are open (because websocket server tried to use same port) |
 | 2.1.2 | 25.04.19 | &mdash; **_[Fix]_** Background setting only affecting the image but not the whole preview |
