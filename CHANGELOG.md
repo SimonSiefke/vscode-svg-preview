@@ -2,6 +2,7 @@
 
 | Version | Date | Changelog |
 | --- | --- | --- |
+| 2.1.7 | 21.05.19 | &mdash; **_[Fix Regression]_** extension manifest error in console |
 | 2.1.6 | 21.05.19 | &mdash; **_[Fix]_** custom styles sometimes not being applied |
 | 2.1.5 | 21.05.19 | &mdash; **_[Feature]_** Added `scaleToFit` option |
 | 2.1.4 | 25.04.19 | &mdash; **_[Fix Regression]_** Preview sometimes not working at all |
