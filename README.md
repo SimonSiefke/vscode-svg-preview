@@ -19,6 +19,7 @@
 <!-- TODO keep pan and zoom of svg inside html/js etc. -->
 <!-- TODO sometimes buggy when new version is installed -->
 <!-- TODO when scaleToFit is false and image is large, image may not be visible because there are no scrollbars-->
+<!-- TODO bug: right click, open preview, only shows small preview instead of large -->
 
 ## Features
 
