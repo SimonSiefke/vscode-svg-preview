@@ -12,13 +12,10 @@
 <!-- TODO improve external css -->
 <!-- TODO add tests -->
 <!-- TODO make packages more independent of each other (eslint, tsconfig etc.) -->
-<!-- TODO setting for scale-to-fit or size of viewBox -->
 <!-- TODO better demo gif -->
 <!-- TODO bug with commented out </svg> inside html/js etc -->
 <!-- TODO bug open svg, open preview, close svg, open other svg (title changes), switch to preview -> content not updated -->
-<!-- TODO keep pan and zoom of svg inside html/js etc. -->
 <!-- TODO sometimes buggy when new version is installed -->
-<!-- TODO when scaleToFit is false and image is large, image may not be visible because there are no scrollbars-->
 <!-- TODO bug: right click, open preview, only shows small preview instead of large -->
 
 ## Features
