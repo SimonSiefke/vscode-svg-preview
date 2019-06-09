@@ -7,6 +7,9 @@ export async function withInlineStyles(
   baseUrl: string,
   svg: string
 ): Promise<string> {
+  if (!svg) {
+    return ''
+  }
   const svgWithoutComments = svg.replace(/<!--(.*?)-->/g, '')
   const matches = svgWithoutComments.match(stylesheetRegex)
   if (!matches) {

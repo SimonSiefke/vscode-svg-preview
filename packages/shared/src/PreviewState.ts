@@ -5,6 +5,10 @@ import { StyleConfiguration } from './StyleConfiguration'
  */
 export interface PreviewState {
   /**
+   * The current error, if there is any.
+   */
+  error?: string
+  /**
    * File system path of the currently previewed file.
    */
   fsPath?: string

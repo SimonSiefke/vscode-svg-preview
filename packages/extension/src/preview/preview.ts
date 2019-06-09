@@ -11,7 +11,11 @@ import { StyleConfiguration } from '../../../shared/src/StyleConfiguration'
 import { PreviewWebsocketServer } from '../previewWebSocketServer'
 
 const previewPath = 'packages/preview/dist'
-const iconPath = 'packages/extension/images/bolt_original_yellow_optimized.svg'
+const iconPathNormal =
+  'packages/extension/images/bolt_original_yellow_optimized.svg'
+const iconPathError =
+  'packages/extension/images/bolt_original_red_optimized.svg'
+
 /**
  * The type of the web view panel. Can be arbitrary, but must match with `onWebviewPanel:svgPreview` in `package.json`.
  */
@@ -61,6 +65,10 @@ interface PreviewPanel extends vscode.WebviewPanelSerializer {
 
 interface State {
   /**
+   * The current error, if there is any.
+   */
+  error?: string
+  /**
    * The webview panel.
    */
   panel?: vscode.WebviewPanel
@@ -91,8 +99,13 @@ interface State {
 }
 
 const state: State = {
+  error: undefined,
   postponedMessages: new Map(),
 }
+
+const getUri = memoizeOne(
+  (relativePath: string): vscode.Uri => vscode.Uri.file(getPath(relativePath))
+)
 
 /**
  * Get the html for the svg preview panel. TODO: port-mapping once stable
@@ -102,7 +115,7 @@ const getPreviewHTML = memoizeOne(
     /**
      * The base for the preview files.
      */
-    const previewBase = vscode.Uri.file(getPath(previewPath)).with({
+    const previewBase = getUri(previewPath).with({
       scheme: 'vscode-resource',
     })
     /**
@@ -297,7 +310,9 @@ const onDidCreatePanel = async (
   }
   setContext('svgPreviewIsOpen', true)
   state.panel = webViewPanel
-  state.panel.iconPath = vscode.Uri.file(getPath(iconPath))
+  state.panel.iconPath = state.error
+    ? getUri(iconPathError)
+    : getUri(iconPathNormal)
   context.subscriptions.push(
     state.panel.onDidDispose(() => {
       state.panel = undefined
@@ -311,6 +326,18 @@ const onDidCreatePanel = async (
       if (event.webviewPanel.visible && !event.webviewPanel.webview.html) {
         setLastContent()
         sendPostponedMessages()
+      }
+    })
+  )
+  context.subscriptions.push(
+    state.panel.webview.onDidReceiveMessage((message: any) => {
+      if (message.command === 'setError') {
+        const error = message.payload
+        if (error) {
+          state.panel.iconPath = getUri(iconPathError)
+        } else {
+          state.panel.iconPath = getUri(iconPathNormal)
+        }
       }
     })
   )
@@ -347,9 +374,7 @@ export const previewPanel: PreviewPanel = {
           },
           {
             enableCommandUris: true,
-            localResourceRoots: [
-              vscode.Uri.file(getPath('packages/preview/dist')),
-            ],
+            localResourceRoots: [getUri('packages/preview/dist')],
             enableScripts: true,
           }
         )
@@ -396,6 +421,7 @@ export const previewPanel: PreviewPanel = {
     return state.panel && state.panel.visible
   },
   async deserializeWebviewPanel(webviewPanel, deserializedState) {
+    state.error = deserializedState.error
     if (state.panel) {
       // TODO deserialized panel should already be disposed at this point
       // There is already an open preview

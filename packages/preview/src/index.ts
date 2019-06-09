@@ -9,22 +9,43 @@ const vscode = acquireVsCodeApi()
 if (DEVELOPMENT) {
   window.addEventListener('error', event => {
     console.error(event)
-    vscode.postMessage({ command: 'error', payload: event.message })
+    vscode.postMessage({ command: 'debugError', payload: event.message })
   })
 }
+
 const { port } = document.body.dataset
 const state: PreviewState = vscode.getState() || {}
 const $image = document.querySelector('img')
+$image.addEventListener('load', () => {
+  if (state.error) {
+    state.error = undefined
+    invalidateState()
+    vscode.postMessage({
+      command: 'setError',
+      payload: undefined,
+    })
+  }
+})
+$image.addEventListener('error', () => {
+  if (!state.error) {
+    state.error = 'invalid image'
+    invalidateState()
+    vscode.postMessage({
+      command: 'setError',
+      payload: 'invalid image',
+    })
+  }
+})
 const $style = document.querySelector('#custom-style')
 function invalidateState(): void {
   vscode.setState(state)
 }
 function invalidateContent(): void {
   invalidateScaleToFit()
-  $image.setAttribute(
-    'src',
-    `data:image/svg+xml,${encodeURIComponent(state.content)}`
-  )
+  const encodedImage = encodeURIComponent(state.content)
+  $image.setAttribute('src', `data:image/svg+xml,${encodedImage}`)
+  // console.log($image.naturalWidth, $image.naturalHeight)
+  // const isError = !encodedImage
 }
 invalidateContent()
 let cleanUpPan: CleanUp | undefined
