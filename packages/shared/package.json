@@ -10,6 +10,6 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/vscode": "^1.34.0"
+    "@types/vscode": "^1.35.0"
   }
 }
