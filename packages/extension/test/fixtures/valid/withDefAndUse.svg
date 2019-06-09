@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+    width="128" height="128"
+    xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs>
+<g id="box">
+<rect height="20" width="20"
+    stroke="black" fill="white"/>
+</g>
+</defs>
+<use xlink:href="#box" x="50" y="50"/>
+</svg>
