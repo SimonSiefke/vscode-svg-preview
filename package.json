@@ -1,7 +1,7 @@
 {
   "name": "vscode-svg-preview",
   "engines": {
-    "node": "11"
+    "node": "12"
   },
   "repository": {
     "type": "git",
@@ -45,12 +45,12 @@
   "bundlesize": [
     {
       "path": "./packages/extension/dist/extension.js",
-      "maxSize": "10.85 kB",
+      "maxSize": "11.3 kB",
       "compression": "none"
     },
     {
       "path": "./packages/preview/dist/index.js",
-      "maxSize": "1.55 kB"
+      "maxSize": "1.65 kB"
     }
   ]
 }
