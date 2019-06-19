@@ -3,7 +3,4 @@ module.exports = {
   globals: {
     DEVELOPMENT: true,
   },
-  rules: {
-    'import/no-unresolved': ['error', { ignore: ['^vscode$'] }],
-  },
 }

@@ -24,7 +24,7 @@
     "autoprefixer": "^9.6.0",
     "bundlesize": "^0.17.2",
     "eslint": "^5.16.0",
-    "eslint-config-bitworkers": "^1.27.5",
+    "eslint-config-bitworkers": "^1.27.6",
     "eslint-plugin-cypress": "^2.2.1",
     "fs-extra": "^8.0.1",
     "lerna": "^3.15.0",
