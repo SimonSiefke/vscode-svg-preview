@@ -1,5 +1,5 @@
 /* eslint-disable no-continue */
-/* eslint-disable import/no-dynamic-require */
+/* eslint-disable import/no-commonjs */
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable import/no-extraneous-dependencies */
 const path = require('path')
@@ -28,12 +28,12 @@ fs.writeFileSync(
 )
 
 fs.copySync(
-  path.join(root, `packages/extension/dist`),
-  `dist/packages/extension/dist`
+  path.join(root, 'packages/extension/dist'),
+  'dist/packages/extension/dist'
 )
 fs.copySync(
-  path.join(root, `packages/preview/dist`),
-  `dist/packages/preview/dist`
+  path.join(root, 'packages/preview/dist'),
+  'dist/packages/preview/dist'
 )
 for (const file of ['README.md', 'LICENSE', 'CHANGELOG.md']) {
   fs.copySync(path.join(root, file), `dist/${file}`)

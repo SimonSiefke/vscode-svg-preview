@@ -9,8 +9,8 @@ ws.addEventListener('open', () => {
   $div.style.width = '10px'
   $div.style.height = '10px'
   $div.style.background = 'green'
-  $div.style.top = `0`
-  $div.style.left = `0`
+  $div.style.top = '0'
+  $div.style.left = '0'
   window.addEventListener('mousemove', event => {
     console.log('mousemove')
     const x = event.clientX

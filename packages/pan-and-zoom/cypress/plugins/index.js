@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable import/no-commonjs */
 const cypressTypeScriptPreprocessor = require('./cy-ts-preprocessor')
 
 module.exports = on => {
