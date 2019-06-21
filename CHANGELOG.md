@@ -2,6 +2,7 @@
 
 | Version | Date | Changelog |
 | --- | --- | --- |
+| 2.2.1 | 21.06.19 | &mdash; **_[Fix]_** fix path to error icon |
 | 2.2.0 | 09.06.19 | &mdash; **_[Feature]_** shows an error icon when the svg is invalid |
 | 2.1.7 | 21.05.19 | &mdash; **_[Fix Regression]_** extension manifest error in console |
 | 2.1.6 | 21.05.19 | &mdash; **_[Fix]_** custom styles sometimes not being applied |

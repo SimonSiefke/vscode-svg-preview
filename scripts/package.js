@@ -55,7 +55,12 @@ for (const file of fs.readdirSync(
       path.join(root, `packages/extension/images/${file}`),
       `dist/images/${file}`
     )
-  } else if (['bolt_original_yellow_optimized.svg'].includes(file)) {
+  } else if (
+    [
+      'bolt_original_yellow_optimized.svg',
+      'bolt_original_red_optimized.svg',
+    ].includes(file)
+  ) {
     fs.copySync(
       path.join(root, `packages/extension/images/${file}`),
       `dist/packages/extension/images/${file}`
