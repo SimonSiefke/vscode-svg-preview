@@ -26,7 +26,6 @@
 ## Commands
 
 - Svg Preview: Open Preview to the Side
-- Svg Preview: Open Preview
 - Svg Preview: Reset Preview
 
 ## Settings
