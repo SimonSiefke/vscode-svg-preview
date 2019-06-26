@@ -2,6 +2,7 @@
 
 | Version | Date | Changelog |
 | --- | --- | --- |
+| 2.3.0 | 26.06.19 | &mdash; **_[Feature]_** open preview command opens preview to the side by default (instead of opening in the same column) |
 | 2.2.2 | 26.06.19 | &mdash; **_[Fix]_** svg position wasn't preserved when it just zoomed out |
 | 2.2.1 | 21.06.19 | &mdash; **_[Fix]_** fix path to error icon |
 | 2.2.0 | 09.06.19 | &mdash; **_[Feature]_** shows an error icon when the svg is invalid |

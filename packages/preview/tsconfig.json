@@ -1,11 +1,7 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "lib": ["dom"],
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["./src"]
-    }
+    "lib": ["dom"]
   },
   "include": ["src"],
   "exclude": ["dist", "node_modules"]

@@ -1,4 +1,3 @@
-import importAlias from 'rollup-plugin-import-alias'
 import nodeResolve from 'rollup-plugin-node-resolve'
 import typescriptPlugin from 'rollup-plugin-typescript2'
 import { terser } from 'rollup-plugin-terser'
@@ -61,10 +60,6 @@ const extensionConfig = {
     commonjs({
       ignore: ['bufferutil', 'utf-8-validate'], // optional dependencies of ws
     }),
-    // @ts-ignore
-    importAlias({
-      '@': './packages/extension/src',
-    }),
     typescriptPlugin({
       tsconfig: './packages/extension/tsconfig.json',
     }),
@@ -90,10 +85,6 @@ const previewConfig = {
     }),
     // @ts-ignore
     nodeResolve(),
-    // @ts-ignore
-    importAlias({
-      '@': './packages/preview/src',
-    }),
     typescriptPlugin({
       tsconfig: './packages/preview/tsconfig.json',
     }),

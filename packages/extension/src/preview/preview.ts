@@ -8,7 +8,6 @@ import { isSvgFile, getPath, setContext } from '../util'
 import { context } from '../extension'
 import { withInlineStyles } from './styles/withInlineStyles'
 import { StyleConfiguration } from '../../../shared/src/StyleConfiguration'
-import { PreviewWebsocketServer } from '../previewWebSocketServer'
 
 const previewPath = 'packages/preview/dist'
 const iconPathNormal =
@@ -149,7 +148,7 @@ const getPreviewHTML = memoizeOne(
 
 let immediate: NodeJS.Immediate
 
-let webSocketServer: PreviewWebsocketServer
+let webSocketServer: import('../previewWebSocketServer').PreviewWebsocketServer
 /**
  * Send all the messages that could not be send because the webview was hidden.
  */
