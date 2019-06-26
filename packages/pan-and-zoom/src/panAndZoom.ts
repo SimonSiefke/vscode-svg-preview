@@ -108,7 +108,7 @@ export function useZoom({
   initialZoom = 1,
   onZoomChange = () => {},
 }: {
-  onZoomChange?: (zoom: number) => void
+  onZoomChange?: (zoom: number, pointerOffset:Point) => void
   initialZoom?: number
 } = {}): CleanUp {
   const minZoom = 0.1
@@ -129,12 +129,12 @@ export function useZoom({
       return
     }
     zoom *= currentZoomFactor
-    onZoomChange(zoom)
     domMatrix = new DOMMatrix()
-      .translateSelf(event.clientX, event.clientY)
-      .scaleSelf(currentZoomFactor)
-      .translateSelf(-event.clientX, -event.clientY)
-      .multiplySelf(domMatrix)
+    .translateSelf(event.clientX, event.clientY)
+    .scaleSelf(currentZoomFactor)
+    .translateSelf(-event.clientX, -event.clientY)
+    .multiplySelf(domMatrix)
+    onZoomChange(zoom, {x:domMatrix.e, y:domMatrix.f})
     applyTransform()
   }
   $root.addEventListener('wheel', handleWheel, { passive: true })

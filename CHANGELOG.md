@@ -2,6 +2,7 @@
 
 | Version | Date | Changelog |
 | --- | --- | --- |
+| 2.2.2 | 26.06.19 | &mdash; **_[Fix]_** svg position wasn't preserved when it just zoomed out |
 | 2.2.1 | 21.06.19 | &mdash; **_[Fix]_** fix path to error icon |
 | 2.2.0 | 09.06.19 | &mdash; **_[Feature]_** shows an error icon when the svg is invalid |
 | 2.1.7 | 21.05.19 | &mdash; **_[Fix Regression]_** extension manifest error in console |

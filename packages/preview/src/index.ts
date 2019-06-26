@@ -69,15 +69,16 @@ function invalidateZoom(): void {
   }
   cleanUpZoom = useZoom({
     initialZoom: state.zoom,
-    onZoomChange(zoom) {
+    onZoomChange(zoom, pointerOffset) {
       state.zoom = zoom
+      state.pointerOffset = pointerOffset
       invalidateState()
     },
   })
 }
 invalidateZoom()
 function createStyleString(styleObject: StyleConfiguration): string {
-  let style = ``
+  let style = ''
   for (const [selector, value] of Object.entries(styleObject)) {
     const right = Object.entries(value).reduce(
       (styleString, [propName, propValue]) =>
