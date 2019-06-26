@@ -17,7 +17,6 @@
 <!-- TODO bug open svg, open preview, close svg, open other svg (title changes), switch to preview -> content not updated -->
 <!-- TODO sometimes buggy when new version is installed -->
 <!-- TODO bug: right click, open preview, only shows small preview instead of large -->
-<!-- TODO bug: zoom out fast then reload -> position not preserved -->
 
 ## Features
 
