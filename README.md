@@ -52,20 +52,6 @@ You can change the background color:
 }
 ```
 
-Or make a gradient background (note that you need to use `-webkit` prefix radial gradients):
-
-![demo of the svg preview with a blue gradient background](./demo_images/demo_gradient_background.png)
-
-```json
-{
-  "svgPreview.style": {
-    "html": {
-      "background": "-webkit-radial-gradient(center, circle cover, hsl(195, 80%, 20%) 0%,hsl(220, 100%, 5%) 100%)"
-    }
-  }
-}
-```
-
 Or you can make a checkerboard background:
 
 ![demo of the svg preview with a checkerboard pattern background](./demo_images/demo_checkerboard_background.png)
