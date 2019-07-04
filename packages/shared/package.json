@@ -10,6 +10,6 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "@types/vscode": "^1.35.0"
+    "@types/vscode": "^1.36.0"
   }
 }

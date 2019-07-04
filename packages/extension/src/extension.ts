@@ -14,7 +14,7 @@ export async function activate(c: vscode.ExtensionContext): Promise<void> {
   let isSvg: boolean
   let svgInside: string | undefined
   /**
-   * Whether or not the last text editor event was a close event or not
+   * Whether or not the last text editor event was a close event or not.
    */
   let lastEventWasClose = false
   context.subscriptions.push(
@@ -110,17 +110,6 @@ export async function activate(c: vscode.ExtensionContext): Promise<void> {
       }
     })
   )
-  if (DEVELOPMENT) {
-    // This is still proposed api so it cannot be used in production at the moment
-    context.subscriptions.push(
-      vscode.workspace.onDidRenameFile(event => {
-        if (previewPanel.fsPath !== event.oldUri.fsPath) {
-          return
-        }
-        previewPanel.fsPath = event.newUri.fsPath
-      })
-    )
-  }
   context.subscriptions.push(
     vscode.workspace.onDidOpenTextDocument(() => {
       lastEventWasClose = false

@@ -11,3 +11,4 @@ jest.config.js
 *.svg
 *.png
 *.gif
+*.d.ts

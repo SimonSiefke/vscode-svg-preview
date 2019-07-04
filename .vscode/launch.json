@@ -7,8 +7,9 @@
       "request": "launch",
       "runtimeExecutable": "${execPath}",
       "args": [
-        "--extensionDevelopmentPath=${workspaceRoot}/packages/extension"
-        // "--disable-extensions"
+        "--extensionDevelopmentPath=${workspaceRoot}/packages/extension",
+        "--disable-extensions",
+        "${workspaceFolder}/dist/images"
       ],
       "outFiles": ["${workspaceFolder}/dist/**/*.js"],
       "preLaunchTask": "npm: dev"
