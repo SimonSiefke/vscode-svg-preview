@@ -2,6 +2,7 @@
 
 | Version | Date | Changelog |
 | --- | --- | --- |
+| 2.3.1 | 08.07.19 | &mdash; **_[Fix]_** Preview sometimes showing old svg and not updating |
 | 2.3.0 | 26.06.19 | &mdash; **_[Feature]_** open preview command opens preview to the side by default (instead of opening in the same column) |
 | 2.2.2 | 26.06.19 | &mdash; **_[Fix]_** svg position wasn't preserved when it just zoomed out |
 | 2.2.1 | 21.06.19 | &mdash; **_[Fix]_** fix path to error icon |
