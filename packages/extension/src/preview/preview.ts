@@ -26,7 +26,7 @@ interface PreviewPanel extends vscode.WebviewPanelSerializer {
     state: PreviewState
   ) => Promise<void>
   /**
-   * The file system path of the currently previewed file
+   * The file system path of the currently previewed file.
    */
   fsPath: string
 
@@ -42,7 +42,7 @@ interface PreviewPanel extends vscode.WebviewPanelSerializer {
   }) => void
 
   /**
-   * The content of the currently previewed file
+   * The content of the currently previewed file.
    */
   content: string
 
@@ -80,7 +80,7 @@ interface State {
    */
   viewColumn?: vscode.ViewColumn
   /**
-   * The content of the currently previewed file
+   * The content of the currently previewed file.
    */
   content?: string
   /**
@@ -92,7 +92,7 @@ interface State {
    */
   style?: StyleConfiguration
   /**
-   * Whether or not the svg should be scaled to fit the viewport or keep its original size
+   * Whether or not the svg should be scaled to fit the viewport or keep its original size.
    */
   scaleToFit?: boolean
 }
@@ -107,7 +107,7 @@ const getUri = memoizeOne(
 )
 
 /**
- * Get the html for the svg preview panel. TODO: port-mapping once stable
+ * Get the html for the svg preview panel.
  */
 const getPreviewHTML = memoizeOne(
   (fsPath: string, port: number): string => {
@@ -171,9 +171,7 @@ const postMessage = (message: Message): void => {
   // Use an immediate to send multiple messages at once (prevents flickering in the preview and is more efficient)
   immediate = setImmediate(() => {
     immediate = undefined
-    if (state.panel && state.panel.visible) {
-      sendPostponedMessages()
-    }
+    sendPostponedMessages()
   })
 }
 
@@ -428,12 +426,10 @@ export const previewPanel: PreviewPanel = {
     } else {
       state.panel = webviewPanel
     }
-    if (
-      vscode.window.activeTextEditor &&
-      isSvgFile(vscode.window.activeTextEditor.document.uri) &&
-      vscode.window.activeTextEditor.document.uri.fsPath !==
-        deserializedState.fsPath
-    ) {
+    const openSvg = vscode.window.activeTextEditor &&
+    isSvgFile(vscode.window.activeTextEditor.document.uri) &&
+    vscode.window.activeTextEditor.document
+    if (openSvg && openSvg.uri.fsPath !== deserializedState.fsPath) {
       // another svg file is currently open so we preview that instead of the one saved
       onDidCreatePanel(webviewPanel)
       this.show({ fsPath: vscode.window.activeTextEditor.document.uri.fsPath })
@@ -443,7 +439,11 @@ export const previewPanel: PreviewPanel = {
       // preview the last viewed
       state.fsPath = deserializedState.fsPath
       onDidCreatePanel(webviewPanel)
-      state.content = deserializedState.content
+      if(openSvg){
+        state.content = openSvg.getText()
+      } else {
+        state.content = deserializedState.content
+      }
       invalidateContent()
     }
   },

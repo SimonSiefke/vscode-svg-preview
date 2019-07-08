@@ -98,12 +98,12 @@ export async function activate(c: vscode.ExtensionContext): Promise<void> {
         if (previewPanel.fsPath !== textEditor.document.uri.fsPath) {
           previewPanel.fsPath = textEditor.document.uri.fsPath
         }
-      } else {
-        previewPanel.show({
-          viewColumn: vscode.ViewColumn.Beside,
-          fsPath: textEditor.document.uri.fsPath,
-        })
-      }
+      } else if (previewPanel.fsPath !== textEditor.document.uri.fsPath) {
+          previewPanel.show({
+            viewColumn: vscode.ViewColumn.Beside,
+            fsPath: textEditor.document.uri.fsPath,
+          })
+        }
       const content = isSvg ? textEditor.document.getText() : svgInside
       if (content !== previewPanel.content) {
         previewPanel.content = content
@@ -113,11 +113,6 @@ export async function activate(c: vscode.ExtensionContext): Promise<void> {
   context.subscriptions.push(
     vscode.workspace.onDidOpenTextDocument(() => {
       lastEventWasClose = false
-    })
-  )
-  context.subscriptions.push(
-    vscode.workspace.onDidCloseTextDocument(() => {
-      lastEventWasClose = true
     })
   )
   context.subscriptions.push(
@@ -136,7 +131,6 @@ export async function activate(c: vscode.ExtensionContext): Promise<void> {
       }
     })
   )
-
   context.subscriptions.push(
     vscode.window.onDidChangeTextEditorSelection(event => {
       const shouldUpdate =
