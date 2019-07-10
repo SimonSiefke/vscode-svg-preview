@@ -154,4 +154,5 @@ export async function activate(c: vscode.ExtensionContext): Promise<void> {
  */
 export function deactivate(): void {
   configuration.dispose()
+  previewPanel.dispose()
 }

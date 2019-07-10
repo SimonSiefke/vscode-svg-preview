@@ -21,6 +21,7 @@ const iconPathError =
 const webViewPanelType = 'svgPreview'
 
 interface PreviewPanel extends vscode.WebviewPanelSerializer {
+  readonly dispose:()=>void
   readonly deserializeWebviewPanel: (
     webviewPanel: vscode.WebviewPanel,
     state: PreviewState
@@ -448,4 +449,10 @@ export const previewPanel: PreviewPanel = {
       invalidateContent()
     }
   },
+  dispose(){
+    if(webSocketServer){
+      webSocketServer.stop()
+      webSocketServer = undefined
+    }
+  }
 }

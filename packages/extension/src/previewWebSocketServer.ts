@@ -26,6 +26,7 @@ export const previewWebSocketServer: PreviewWebsocketServer = {
     })
   },
   stop() {
+    console.log('stopped')
     webSocketServer.stop()
   },
 }
