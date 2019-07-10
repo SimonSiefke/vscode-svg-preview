@@ -73,7 +73,6 @@ export function usePan({
     applyTransform()
     pointerOffset.x += x
     pointerOffset.y += y
-    // onPointerOffsetChange(pointerOffset)
   }
   function onPointerUp(event: PointerEvent): void {
     if (!isPointerDown) {
@@ -113,23 +112,25 @@ export function useZoom({
 } = {}): CleanUp {
   const minZoom = 0.1
   const maxZoom = 2 ** 11
-  const zoomFactor = 1.3
   let zoom = initialZoom
   domMatrix.a = zoom
   domMatrix.d = zoom
   applyTransform()
   function handleWheel(event: WheelEvent): void {
+    if(event.deltaY===0){
+      // ignore horizontal scroll events
+      return
+    }
     const direction = event.deltaY < 0 ? 'up' : 'down'
-    const currentZoomFactor = direction === 'up' ? zoomFactor : 1 / zoomFactor
+    const normalizedDeltaY =  1 + Math.abs(event.deltaY) / 200
+    const currentZoomFactor = direction === 'up' ?  normalizedDeltaY: 1/normalizedDeltaY
     if (
       (direction === 'up' && zoom >= maxZoom) ||
       (direction === 'down' && zoom < minZoom)
     ) {
-      console.log('max zoom')
       return
     }
     zoom *= currentZoomFactor
-    console.log('z', zoom)
     domMatrix = new DOMMatrix()
     .translateSelf(event.clientX, event.clientY)
     .scaleSelf(currentZoomFactor)
