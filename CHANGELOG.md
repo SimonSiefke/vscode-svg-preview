@@ -2,7 +2,7 @@
 
 | Version | Date | Changelog |
 | --- | --- | --- |
-| 2.3.2 | 10.07.19 | &mdash; **_[Fix]_** Right click + open preview not working with `scaleToFit` option <br> &mdash; **_[Fix]_** Close websocket server when extension is disposed |
+| 2.3.2 | 10.07.19 | &mdash; **_[Fix]_** Right click + open preview not working with `scaleToFit` option <br> &mdash; **_[Fix]_** Close websocket server when extension is disposed <br> &mdash; **_[Fix Regression]_** Don't auto open preview when a tab was closed |
 | 2.3.1 | 08.07.19 | &mdash; **_[Fix]_** Preview sometimes showing old svg and not updating |
 | 2.3.0 | 26.06.19 | &mdash; **_[Feature]_** open preview command opens preview to the side by default (instead of opening in the same column) |
 | 2.2.2 | 26.06.19 | &mdash; **_[Fix]_** svg position wasn't preserved when it just zoomed out |
