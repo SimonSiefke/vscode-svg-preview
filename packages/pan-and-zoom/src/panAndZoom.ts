@@ -39,7 +39,7 @@ export function usePan({
   applyTransform()
 
   /**
-   *  This variable will be used later for move events to check if pointer is down or not
+   *  This variable will be used later for move events to check if pointer is down or not.
    */
   let isPointerDown = false
 
@@ -129,6 +129,7 @@ export function useZoom({
       return
     }
     zoom *= currentZoomFactor
+    console.log('z', zoom)
     domMatrix = new DOMMatrix()
     .translateSelf(event.clientX, event.clientY)
     .scaleSelf(currentZoomFactor)

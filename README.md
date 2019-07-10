@@ -22,7 +22,7 @@
 ## Features
 
 - Live editing of svg files and svg's inside files
-- Panning and zooming of the preview
+- Panning and zooming of the preview (up to 2620%)
 
 ## Commands
 
