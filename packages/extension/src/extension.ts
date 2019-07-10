@@ -68,53 +68,62 @@ export async function activate(c: vscode.ExtensionContext): Promise<void> {
       previewPanel.reset
     )
   )
+  const onDidChangeActiveTextEditor:(textEditor :vscode.TextEditor)=>void=textEditor => {
+    // there is nothing to open
+    if (!textEditor) {
+      return
+    }
+    // don't open when a tab was closed
+    if (lastEventWasClose) {
+      lastEventWasClose = false
+      return
+    }
+    isSvg = isSvgFile(textEditor.document.uri, previewPanel.fsPath)
+    svgInside = tryToGetSvgInsideTextEditor(textEditor)
+    // don't open if it's not an svg
+    if (!isSvg && !svgInside) {
+      return
+    }
+    // don't open if auto-open setting isn't enabled
+    if (
+      !previewPanel.fsPath &&
+      !configuration.get('autoOpen', textEditor.document.uri)
+    ) {
+      return
+    }
+    // open the preview
+    if (previewPanel.visible) {
+      // TODO need to check if there is a webview that can be restored, otherwise there will be 2 open previews at the same time which should not happen, probably need to wait for https://github.com/Microsoft/vscode/issues/15178
+      if (previewPanel.fsPath !== textEditor.document.uri.fsPath) {
+        previewPanel.fsPath = textEditor.document.uri.fsPath
+      }
+    } else if (previewPanel.fsPath !== textEditor.document.uri.fsPath) {
+        previewPanel.show({
+          viewColumn: vscode.ViewColumn.Beside,
+          fsPath: textEditor.document.uri.fsPath,
+        })
+      }
+    const content = isSvg ? textEditor.document.getText() : svgInside
+    if (content !== previewPanel.content) {
+      previewPanel.content = content
+    }
+  }
+  // TODO this collides with deserialized webview panel
+  // if(vscode.window.activeTextEditor){
+  //   onDidChangeActiveTextEditor(vscode.window.activeTextEditor)
+  // }
   context.subscriptions.push(
-    vscode.window.onDidChangeActiveTextEditor(textEditor => {
-      // there is nothing to open
-      if (!textEditor) {
-        return
-      }
-      // don't open when a tab was closed
-      if (lastEventWasClose && !previewPanel.visible) {
-        lastEventWasClose = false
-        return
-      }
-      isSvg = isSvgFile(textEditor.document.uri, previewPanel.fsPath)
-      svgInside = tryToGetSvgInsideTextEditor(textEditor)
-      // don't open if it's not an svg
-      if (!isSvg && !svgInside) {
-        return
-      }
-      // don't open if auto-open setting isn't enabled
-      if (
-        !previewPanel.fsPath &&
-        !configuration.get('autoOpen', textEditor.document.uri)
-      ) {
-        return
-      }
-      // open the preview
-      if (previewPanel.visible) {
-        // TODO need to check if there is a webview that can be restored, otherwise there will be 2 open previews at the same time which should not happen, probably need to wait for https://github.com/Microsoft/vscode/issues/15178
-        if (previewPanel.fsPath !== textEditor.document.uri.fsPath) {
-          previewPanel.fsPath = textEditor.document.uri.fsPath
-        }
-      } else if (previewPanel.fsPath !== textEditor.document.uri.fsPath) {
-          previewPanel.show({
-            viewColumn: vscode.ViewColumn.Beside,
-            fsPath: textEditor.document.uri.fsPath,
-          })
-        }
-      const content = isSvg ? textEditor.document.getText() : svgInside
-      if (content !== previewPanel.content) {
-        previewPanel.content = content
-      }
-    })
+    vscode.window.onDidChangeActiveTextEditor(onDidChangeActiveTextEditor)
   )
   context.subscriptions.push(
     vscode.workspace.onDidOpenTextDocument(() => {
       lastEventWasClose = false
     })
   )
+  context.subscriptions.push(
+  vscode.workspace.onDidCloseTextDocument(()=>{
+    lastEventWasClose=true
+  }))
   context.subscriptions.push(
     vscode.workspace.onDidChangeTextDocument(event => {
       const shouldUpdate =
