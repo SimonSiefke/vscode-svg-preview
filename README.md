@@ -16,8 +16,8 @@
 <!-- TODO bug with commented out </svg> inside html/js etc -->
 <!-- TODO bug open svg, open preview, close svg, open other svg (title changes), switch to preview -> content not updated -->
 <!-- TODO sometimes buggy when new version is installed -->
-<!-- TODO bug: right click, open preview, only shows small preview instead of large -->
 <!-- TODO bug: when deleted file and open another file, preview is not updated -->
+<!-- TODO prevent short flickering of error icon when preview is opened -->
 
 ## Features
 
