@@ -32,7 +32,7 @@
     "prettier": "^1.18.2",
     "prettier-config-bitworkers": "^1.5.1",
     "rimraf": "^2.6.3",
-    "rollup": "^1.16.6",
+    "rollup": "^1.16.7",
     "rollup-plugin-commonjs": "^10.0.1",
     "rollup-plugin-json": "^4.0.0",
     "rollup-plugin-node-resolve": "^5.2.0",
@@ -40,12 +40,12 @@
     "rollup-plugin-replace": "^2.2.0",
     "rollup-plugin-terser": "^5.1.1",
     "rollup-plugin-typescript2": "^0.21.2",
-    "typescript": "^3.5.2"
+    "typescript": "^3.5.3"
   },
   "bundlesize": [
     {
       "path": "./packages/extension/dist/extension.js",
-      "maxSize": "11.3 kB",
+      "maxSize": "11.45 kB",
       "compression": "none"
     },
     {
