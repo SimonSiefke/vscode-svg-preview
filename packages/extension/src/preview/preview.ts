@@ -149,6 +149,7 @@ const getPreviewHTML = memoizeOne(
 let immediate: NodeJS.Immediate
 
 let webSocketServer: import('../previewWebSocketServer').PreviewWebsocketServer
+
 /**
  * Send all the messages that could not be send because the webview was hidden.
  */

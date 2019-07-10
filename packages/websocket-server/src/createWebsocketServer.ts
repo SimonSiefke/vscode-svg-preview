@@ -35,7 +35,7 @@ export interface WebSocketServer {
 
 export function createWebSocketServer(): WebSocketServer {
   let webSocketServer: WebSocket.Server
-  let lastMessage: any
+  const lastCommands:{[key:string]:string}={}
   const eventEmitter = createEventEmitter<Events>()
   return {
     get port() {
@@ -43,8 +43,10 @@ export function createWebSocketServer(): WebSocketServer {
     },
     addListener: eventEmitter.addListener,
     broadcast(message, { skip } = {}) {
+      for(const {command,payload} of message){
+        lastCommands[command]=payload
+      }
       const stringifiedMessage = JSON.stringify(message)
-      lastMessage = stringifiedMessage
       for (const client of webSocketServer.clients) {
         if (skip !== client && client.readyState === WebSocket.OPEN) {
           client.send(stringifiedMessage)
@@ -54,8 +56,9 @@ export function createWebSocketServer(): WebSocketServer {
     start(port = 3000) {
       webSocketServer = new WebSocket.Server({ port })
       webSocketServer.on('connection', websocket => {
-        if (lastMessage) {
-          websocket.send(lastMessage)
+        const stringifiedMessage = JSON.stringify(Object.entries(lastCommands).map(([key,value])=>({command:key,payload:value})))
+        if (stringifiedMessage) {
+          websocket.send(stringifiedMessage)
         }
         websocket.on('message', message => {
           eventEmitter.emit('message', message, websocket)
