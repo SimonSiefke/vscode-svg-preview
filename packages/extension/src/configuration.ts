@@ -3,7 +3,7 @@ import { context } from './extension'
 import { StyleConfiguration } from '../../shared/src/StyleConfiguration'
 
 /**
- * Options - should match with `contributes.configuration` in `package.json`
+ * Options - should match with `contributes.configuration` in `package.json`.
  */
 interface Options {
   readonly autoOpen: boolean
@@ -32,7 +32,7 @@ interface Configuration extends vscode.Disposable {
 }
 
 /**
- * An array of callback functions that are executed when the configuration changes
+ * An array of callback functions that are executed when the configuration changes.
  */
 let listeners: Set<(event: vscode.ConfigurationChangeEvent) => void>
 

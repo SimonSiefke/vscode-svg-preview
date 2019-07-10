@@ -21,9 +21,6 @@ export const previewWebSocketServer: PreviewWebsocketServer = {
   async start() {
     const port = await getPort()
     webSocketServer.start(port)
-    webSocketServer.addListener('message', (message, websocket) => {
-      webSocketServer.broadcast(message, { skip: websocket })
-    })
   },
   stop() {
     webSocketServer.stop()

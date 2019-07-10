@@ -5,8 +5,7 @@ import { Fetch } from './types'
 export const fetchRemote: Fetch = async (
   url,
   encoding = 'utf-8'
-): Promise<string> => {
-  const promise = new Promise<string>((resolve, reject) => {
+): Promise<string> => new Promise<string>((resolve, reject) => {
     const agent = url.startsWith('https') ? https : http
     const req = agent
       .get(url, res => {
@@ -35,5 +34,3 @@ export const fetchRemote: Fetch = async (
       })
     req.end()
   })
-  return promise
-}
