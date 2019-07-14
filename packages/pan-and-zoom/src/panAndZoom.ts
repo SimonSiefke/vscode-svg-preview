@@ -57,6 +57,13 @@ export function usePan({
     pointerOffset.y = event.clientY
   }
 
+  function move({ x = 0, y = 0 }: { x?: number; y?: number }): void {
+    // Update the transform coordinates with the distance from origin and current position
+    domMatrix.e += x
+    domMatrix.f += y
+    applyTransform()
+  }
+
   /**
    * Function called by the event listeners when user starts moving/dragging.
    */
@@ -65,14 +72,12 @@ export function usePan({
     if (!isPointerDown) {
       return
     }
-    // Update the transform coordinates with the distance from origin and current position
-    const x = event.clientX - pointerOffset.x
-    const y = event.clientY - pointerOffset.y
-    domMatrix.e += x
-    domMatrix.f += y
-    applyTransform()
-    pointerOffset.x += x
-    pointerOffset.y += y
+    move({
+      x: event.clientX - pointerOffset.x,
+      y: event.clientY - pointerOffset.y,
+    })
+    pointerOffset.x = event.clientX
+    pointerOffset.y = event.clientY
   }
   function onPointerUp(event: PointerEvent): void {
     if (!isPointerDown) {
@@ -86,15 +91,37 @@ export function usePan({
       y: domMatrix.f,
     })
   }
+
+  function onKeyDown(event: KeyboardEvent): void {
+    const movement = 10
+    switch (event.key) {
+      case 'ArrowLeft':
+        move({ x: -movement })
+        break
+      case 'ArrowUp':
+        move({ y: -movement })
+        break
+      case 'ArrowRight':
+        move({ x: movement })
+        break
+      case 'ArrowDown':
+        move({ y: movement })
+        break
+      default:
+        break
+    }
+  }
   $root.addEventListener('pointerdown', onPointerDown) // Pointer is pressed
   $root.addEventListener('pointerup', onPointerUp) // Releasing the pointer
   $root.addEventListener('pointerleave', onPointerUp) // Pointer gets out of the $root area
   $root.addEventListener('pointermove', onPointerMove) // Pointer is moving
+  $root.addEventListener('keydown', onKeyDown) // for navigating with arrow keys
   return () => {
     $root.removeEventListener('pointerdown', onPointerDown)
     $root.removeEventListener('pointerup', onPointerUp)
     $root.removeEventListener('pointerleave', onPointerUp)
     $root.removeEventListener('pointermove', onPointerMove)
+    $root.removeEventListener('keydown', onKeyDown)
   }
 }
 
@@ -107,7 +134,7 @@ export function useZoom({
   initialZoom = 1,
   onZoomChange = () => {},
 }: {
-  onZoomChange?: (zoom: number, pointerOffset:Point) => void
+  onZoomChange?: (zoom: number, pointerOffset: Point) => void
   initialZoom?: number
 } = {}): CleanUp {
   const minZoom = 0.1
@@ -117,13 +144,14 @@ export function useZoom({
   domMatrix.d = zoom
   applyTransform()
   function handleWheel(event: WheelEvent): void {
-    if(event.deltaY===0){
+    if (event.deltaY === 0) {
       // ignore horizontal scroll events
       return
     }
     const direction = event.deltaY < 0 ? 'up' : 'down'
-    const normalizedDeltaY =  1 + Math.abs(event.deltaY) / 200
-    const currentZoomFactor = direction === 'up' ?  normalizedDeltaY: 1/normalizedDeltaY
+    const normalizedDeltaY = 1 + Math.abs(event.deltaY) / 200
+    const currentZoomFactor =
+      direction === 'up' ? normalizedDeltaY : 1 / normalizedDeltaY
     if (
       (direction === 'up' && zoom >= maxZoom) ||
       (direction === 'down' && zoom < minZoom)
@@ -132,11 +160,11 @@ export function useZoom({
     }
     zoom *= currentZoomFactor
     domMatrix = new DOMMatrix()
-    .translateSelf(event.clientX, event.clientY)
-    .scaleSelf(currentZoomFactor)
-    .translateSelf(-event.clientX, -event.clientY)
-    .multiplySelf(domMatrix)
-    onZoomChange(zoom, {x:domMatrix.e, y:domMatrix.f})
+      .translateSelf(event.clientX, event.clientY)
+      .scaleSelf(currentZoomFactor)
+      .translateSelf(-event.clientX, -event.clientY)
+      .multiplySelf(domMatrix)
+    onZoomChange(zoom, { x: domMatrix.e, y: domMatrix.f })
     applyTransform()
   }
   $root.addEventListener('wheel', handleWheel, { passive: true })
