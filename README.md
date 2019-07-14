@@ -4,20 +4,20 @@
 
 ![demo](./demo_images/demo.gif)
 
+<!-- TODO better demo gif -->
 <!-- TODO need to figure out why animation is restarted so often / prevent unnecessary updates -->
 <!-- TODO update content when just opened / handle active text editor before extension is activated-->
 <!-- TODO vscode live share -->
-<!-- TODO rename reset to reload? -->
+<!-- TODO rename reset to reload or a different icon? -->
 <!-- TODO don't zoom/pan outside of the window -->
 <!-- TODO improve external css -->
 <!-- TODO add tests -->
-<!-- TODO make packages more independent of each other (eslint, tsconfig etc.) -->
-<!-- TODO better demo gif -->
 <!-- TODO bug with commented out </svg> inside html/js etc -->
 <!-- TODO bug open svg, open preview, close svg, open other svg (title changes), switch to preview -> content not updated -->
 <!-- TODO sometimes buggy when new version is installed -->
 <!-- TODO bug: when deleted file and open another file, preview is not updated -->
 <!-- TODO prevent short flickering of error icon when preview is opened -->
+<!-- TODO feature idea: move preview with arrow keys -->
 
 ## Features
 
