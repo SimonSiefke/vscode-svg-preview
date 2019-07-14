@@ -5,3 +5,7 @@
 *.png
 *.gif
 *.d.ts
+test/*.svg
+test/*.html
+test/*.ts
+test/*.css
