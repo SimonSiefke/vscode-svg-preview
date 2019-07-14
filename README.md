@@ -18,6 +18,7 @@
 <!-- TODO bug: when deleted file and open another file, preview is not updated -->
 <!-- TODO prevent short flickering of error icon when preview is opened -->
 <!-- TODO feature idea: move preview with arrow keys -->
+<!-- TODO feature idea: zoom with ctrl+arrow key up/down -->
 
 ## Features
 
