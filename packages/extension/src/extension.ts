@@ -73,8 +73,8 @@ export async function activate(c: vscode.ExtensionContext): Promise<void> {
     if (!textEditor) {
       return
     }
-    // don't open when a tab was closed
-    if (lastEventWasClose) {
+    // don't open when a tab was closed, but still update when the preview panel is visible
+    if (lastEventWasClose && !previewPanel.visible) {
       lastEventWasClose = false
       return
     }
