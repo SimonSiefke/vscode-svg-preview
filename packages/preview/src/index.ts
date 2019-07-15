@@ -12,7 +12,6 @@ if (DEVELOPMENT) {
     vscode.postMessage({ command: 'debugError', payload: event.message })
   })
 }
-
 const { port } = document.body.dataset
 const state: PreviewState = vscode.getState() || {}
 const $image = document.querySelector('img')
@@ -27,14 +26,15 @@ $image.addEventListener('load', () => {
   }
 })
 $image.addEventListener('error', () => {
-  if (!state.error) {
-    state.error = 'invalid image'
-    invalidateState()
-    vscode.postMessage({
-      command: 'setError',
-      payload: 'invalid image',
-    })
+  if(state.error){
+    return
   }
+  state.error = 'invalid image'
+  invalidateState()
+  vscode.postMessage({
+    command: 'setError',
+    payload: 'invalid image',
+  })
 })
 const $style = document.querySelector('#custom-style')
 function invalidateState(): void {
@@ -44,10 +44,7 @@ function invalidateContent(): void {
   invalidateScaleToFit()
   const encodedImage = encodeURIComponent(state.content)
   $image.setAttribute('src', `data:image/svg+xml,${encodedImage}`)
-  // console.log($image.naturalWidth, $image.naturalHeight)
-  // const isError = !encodedImage
 }
-invalidateContent()
 let cleanUpPan: CleanUp | undefined
 function invalidatePan(): void {
   if (cleanUpPan) {

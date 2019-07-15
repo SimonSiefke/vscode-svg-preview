@@ -134,8 +134,8 @@ const getPreviewHTML = memoizeOne(
       content="default-src 'none'; img-src 'self' data:; style-src vscode-resource: 'nonce-${nonce}'; script-src 'nonce-${nonce}';connect-src ws://localhost:${port}/;"
     >
     <base href="${base}">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" >
-    <link rel="stylesheet" href="${previewBase}/index.css" nonce="${nonce}" >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="${previewBase}/index.css" nonce="${nonce}">
     <style id="custom-style" nonce="${nonce}"></style>
   </head>
   <body data-port="${port}">
