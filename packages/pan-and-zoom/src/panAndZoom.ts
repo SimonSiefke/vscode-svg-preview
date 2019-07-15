@@ -92,36 +92,109 @@ export function usePan({
     })
   }
 
+  let animationFrame: number
+  let moving = false
+  const speed = Math.ceil(window.innerWidth / 200)
+  let arrowLeftDown = false
+  let arrowRightDown = false
+  let arrowUpDown = false
+  let arrowDownDown = false
+  function startMoving(): void {
+    let x = 0
+    let y = 0
+    if (arrowLeftDown && !arrowRightDown) {
+      x = -speed
+    } else if (!arrowLeftDown && arrowRightDown) {
+      x = speed
+    }
+    if (arrowUpDown && !arrowDownDown) {
+      y = -speed
+    } else if (!arrowUpDown && arrowDownDown) {
+      y = speed
+    }
+    move({ x, y })
+    animationFrame = requestAnimationFrame(startMoving)
+  }
+
+  function stopMoving(): void {
+    cancelAnimationFrame(animationFrame)
+    moving = false
+  }
+
   function onKeyDown(event: KeyboardEvent): void {
-    const movement = 10
     switch (event.key) {
       case 'ArrowLeft':
-        move({ x: -movement })
+        arrowLeftDown = true
+        if (!moving) {
+          moving = true
+          startMoving()
+        }
         break
       case 'ArrowUp':
-        move({ y: -movement })
+        arrowUpDown = true
+        if (!moving) {
+          moving = true
+          startMoving()
+        }
         break
       case 'ArrowRight':
-        move({ x: movement })
+        arrowRightDown = true
+        if (!moving) {
+          moving = true
+          startMoving()
+        }
         break
       case 'ArrowDown':
-        move({ y: movement })
+        arrowDownDown = true
+        if (!moving) {
+          moving = true
+          startMoving()
+        }
         break
       default:
         break
     }
   }
+
+  function onKeyUp(event: KeyboardEvent): void {
+    switch (event.key) {
+      case 'ArrowLeft':
+        arrowLeftDown = false
+        break
+      case 'ArrowUp':
+        arrowUpDown = false
+        break
+      case 'ArrowRight':
+        arrowRightDown = false
+        break
+      case 'ArrowDown':
+        arrowDownDown = false
+        break
+      default:
+        break
+    }
+    if (
+      [arrowLeftDown, arrowUpDown, arrowRightDown, arrowDownDown].every(
+        keyDown => !keyDown
+      )
+    ) {
+      stopMoving()
+    }
+  }
+
   $root.addEventListener('pointerdown', onPointerDown) // Pointer is pressed
   $root.addEventListener('pointerup', onPointerUp) // Releasing the pointer
   $root.addEventListener('pointerleave', onPointerUp) // Pointer gets out of the $root area
   $root.addEventListener('pointermove', onPointerMove) // Pointer is moving
   $root.addEventListener('keydown', onKeyDown) // for navigating with arrow keys
+  $root.addEventListener('keyup', onKeyUp)
   return () => {
     $root.removeEventListener('pointerdown', onPointerDown)
     $root.removeEventListener('pointerup', onPointerUp)
     $root.removeEventListener('pointerleave', onPointerUp)
     $root.removeEventListener('pointermove', onPointerMove)
     $root.removeEventListener('keydown', onKeyDown)
+    $root.removeEventListener('keyup', onKeyUp)
   }
 }
 
