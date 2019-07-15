@@ -2,6 +2,7 @@
 
 | Version | Date | Changelog |
 | --- | --- | --- |
+| 2.5.1 | 15.07.19 | &mdash; **_[Feature]_** Smoother panning of preview using arrow keys |
 | 2.5.0 | 15.07.19 | &mdash; **_[Feature]_** Ability to move preview around using arrow keys |
 | 2.4.0 | 10.07.19 | &mdash; **_[Feature]_** Smooth zooming |
 | 2.3.2 | 10.07.19 | &mdash; **_[Fix]_** Right click + open preview not working with `scaleToFit` option <br> &mdash; **_[Fix]_** Close websocket server when extension is disposed <br> &mdash; **_[Fix Regression]_** Don't auto open preview when a tab was closed |
