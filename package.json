@@ -41,17 +41,6 @@
     "rollup-plugin-typescript2": "^0.22.0",
     "typescript": "^3.5.3"
   },
-  "bundlesize": [
-    {
-      "path": "./packages/extension/dist/extension.js",
-      "maxSize": "11.46 kB",
-      "compression": "none"
-    },
-    {
-      "path": "./packages/preview/dist/index.js",
-      "maxSize": "1.93 kB"
-    }
-  ],
   "renovate": {
     "extends": [
       "bitworkers"
@@ -101,5 +90,16 @@
     "globals": {
       "DEVELOPMENT": true
     }
-  }
+  },
+  "bundlesize": [
+    {
+      "path": "./packages/extension/dist/extension.js",
+      "maxSize": "11.48 kB",
+      "compression": "none"
+    },
+    {
+      "path": "./packages/preview/dist/index.js",
+      "maxSize": "1.93 kB"
+    }
+  ]
 }
