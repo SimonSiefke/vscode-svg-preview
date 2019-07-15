@@ -94,12 +94,13 @@ export function usePan({
 
   let animationFrame: number
   let moving = false
-  const speed = Math.ceil(window.innerWidth / 200)
   let arrowLeftDown = false
   let arrowRightDown = false
   let arrowUpDown = false
   let arrowDownDown = false
+
   function startMoving(): void {
+    const speed = Math.ceil(window.innerWidth / 200)
     let x = 0
     let y = 0
     if (arrowLeftDown && !arrowRightDown) {
