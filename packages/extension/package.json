@@ -2,7 +2,7 @@
   "name": "svg-preview",
   "displayName": "Svg Preview",
   "description": "Preview for Svg files",
-  "version": "2.5.1",
+  "version": "2.5.2",
   "publisher": "SimonSiefke",
   "license": "MIT",
   "homepage": "https://github.com/SimonSiefke/vscode-svg-preview",
@@ -201,7 +201,7 @@
   "devDependencies": {
     "@types/memoize-one": "^4.1.1",
     "@types/mime-types": "^2.1.0",
-    "@types/node": "^12.6.2",
+    "@types/node": "^12.6.3",
     "@types/vscode": "^1.36.0"
   }
 }
