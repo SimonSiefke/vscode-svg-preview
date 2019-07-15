@@ -17,6 +17,7 @@
 <!-- TODO bug: when deleted file and open another file, preview is not updated -->
 <!-- TODO feature idea: zoom with ctrl+arrow key up/down -->
 <!-- TODO bug: no reset preview icon when only preview is open -->
+<!-- TODO doesn't work with emmet:increment (only works when cursor is moved afterwards) -->
 
 ## Features
 
