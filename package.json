@@ -30,7 +30,6 @@
     "fs-extra": "^8.1.0",
     "lerna": "^3.15.0",
     "prettier": "^1.18.2",
-    "prettier-config-bitworkers": "^1.5.1",
     "rimraf": "^2.6.3",
     "rollup": "^1.16.7",
     "rollup-plugin-commonjs": "^10.0.1",
@@ -52,5 +51,55 @@
       "path": "./packages/preview/dist/index.js",
       "maxSize": "1.93 kB"
     }
-  ]
+  ],
+  "renovate": {
+    "extends": [
+      "bitworkers"
+    ]
+  },
+  "prettier": {
+    "semi": false,
+    "singleQuote": true,
+    "trailingComma": "es5",
+    "arrowParens": "avoid"
+  },
+  "//": "not working yet (https://github.com/prettier/prettier/issues/3460#issuecomment-358847136)",
+  "prettierIgnore": [
+    "**/node_modules",
+    "**/dist",
+    "**/coverage",
+    "*.svg",
+    "*.png",
+    "*.gif",
+    "*.d.ts",
+    "test/*.svg",
+    "test/*.html",
+    "test/*.ts",
+    "test/*.css"
+  ],
+  "eslintIgnore": [
+    "prettierrc.js",
+    "**/dist",
+    "*.html",
+    "deprecated",
+    "rollup.config.js",
+    "rollup.config.prod.js",
+    "**/node_modules",
+    "**/coverage",
+    "*.md",
+    "jest.config.js",
+    "*.svg",
+    "*.png",
+    "*.gif",
+    "*.d.ts",
+    "*.svg",
+    "*.css",
+    "*.html"
+  ],
+  "eslintConfig": {
+    "extends": "bitworkers",
+    "globals": {
+      "DEVELOPMENT": true
+    }
+  }
 }
