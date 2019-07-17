@@ -212,7 +212,7 @@ export function useZoom({
   initialZoom?: number
 } = {}): CleanUp {
   const minZoom = 0.1
-  const maxZoom = 2 ** 16
+  const maxZoom = 2 ** 15 // max value that doesn't result in degradation
   let zoom = initialZoom
   domMatrix.a = zoom
   domMatrix.d = zoom
