@@ -1,9 +1,0 @@
-.vscode/**
-**/node_modules/**
-**/src/**
-**/.*
-**/tsconfig.json
-lerna.json
-rollup.config.js
-**/package.json
-!packages/extension/package.json

@@ -4,7 +4,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 const path = require('path')
 const fs = require('fs-extra')
-const { exec } = require('child_process')
 
 const root = path.join(__dirname, '..')
 
@@ -29,11 +28,17 @@ fs.writeFileSync(
 
 fs.copySync(
   path.join(root, 'packages/extension/dist'),
-  'dist/packages/extension/dist'
+  'dist/packages/extension/dist',
+  {
+    filter: file => !file.endsWith('.map'),
+  }
 )
 fs.copySync(
   path.join(root, 'packages/preview/dist'),
-  'dist/packages/preview/dist'
+  'dist/packages/preview/dist',
+  {
+    filter: file => !file.endsWith('.map'),
+  }
 )
 for (const file of ['README.md', 'LICENSE', 'CHANGELOG.md']) {
   fs.copySync(path.join(root, file), `dist/${file}`)
@@ -67,10 +72,3 @@ for (const file of fs.readdirSync(
     )
   }
 }
-
-exec('cd dist && npm install', err => {
-  if (err) {
-    console.error(`exec error: ${err}`)
-    process.exit(1)
-  }
-})
