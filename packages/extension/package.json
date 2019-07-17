@@ -130,9 +130,6 @@
                 "background": {
                   "type": "string"
                 },
-                "background-color": {
-                  "type": "string"
-                },
                 "background-position": {
                   "type": "string"
                 },
@@ -159,13 +156,6 @@
                 },
                 "padding": {
                   "type": "string"
-                },
-                "place-items": {
-                  "type": "string",
-                  "enum": [
-                    "center",
-                    "start center"
-                  ]
                 }
               }
             },
