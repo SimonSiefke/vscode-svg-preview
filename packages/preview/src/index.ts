@@ -15,6 +15,10 @@ if (DEVELOPMENT) {
 const { port } = document.body.dataset
 const state: PreviewState = vscode.getState() || {}
 const $image = document.querySelector('img')
+/**
+ * Whether or not the image has been panned/zoomed.
+ */
+let moved = Boolean(state.pointerOffset || state.zoom)
 $image.addEventListener('load', () => {
   if (state.error) {
     state.error = undefined
@@ -26,7 +30,7 @@ $image.addEventListener('load', () => {
   }
 })
 $image.addEventListener('error', () => {
-  if(state.error){
+  if (state.error) {
     return
   }
   state.error = 'invalid image'
@@ -55,6 +59,14 @@ function invalidatePan(): void {
     onPointerOffsetChange(pointerOffset) {
       state.pointerOffset = pointerOffset
       invalidateState()
+      if (!moved) {
+        moved = true
+        state.fixedSize = {
+          width: parseInt(window.getComputedStyle($image).width, 10),
+          height: parseInt(window.getComputedStyle($image).height, 10),
+        }
+        invalidateScaleToFit()
+      }
     },
   })
 }
@@ -70,6 +82,14 @@ function invalidateZoom(): void {
       state.zoom = zoom
       state.pointerOffset = pointerOffset
       invalidateState()
+      if (!moved) {
+        moved = true
+        state.fixedSize = {
+          width: parseInt(window.getComputedStyle($image).width, 10),
+          height: parseInt(window.getComputedStyle($image).height, 10),
+        }
+        invalidateScaleToFit()
+      }
     },
   })
 }
@@ -93,10 +113,16 @@ function invalidateStyle(): void {
 }
 invalidateStyle()
 function invalidateScaleToFit(): void {
-  if (state.scaleToFit) {
+  if (state.scaleToFit && !moved) {
     $image.style.height = ''
     $image.style.width = ''
   } else {
+    if (state.fixedSize) {
+      $image.style.width = `${state.fixedSize.width}px`
+      $image.style.height = `${state.fixedSize.height}px`
+      $image.style.maxWidth = 'none'
+      return
+    }
     const parser = new DOMParser()
     const $svgDocument = parser.parseFromString(state.content, 'image/svg+xml')
     const $svg = $svgDocument.querySelector('svg')
@@ -130,46 +156,82 @@ function invalidateScaleToFit(): void {
       const { width, height } = $svg.viewBox.baseVal
       $image.style.width = `${width}px`
       $image.style.height = `${height}px`
+      state.fixedSize = {
+        width,
+        height,
+      }
+      invalidateState()
     }
   }
 }
 const ws = new WebSocket(`ws://localhost:${port}`)
 ws.addEventListener('message', event => {
   const messages: Message[] = JSON.parse(event.data)
+  let invalidScaleToFit = false
+  let invalidPan = false
+  let invalidState = false
+  let invalidContent = false
+  let invalidStyle = false
+  let invalidZoom = false
   for (const message of messages) {
     switch (message.command) {
       case 'update.pan':
         state.pointerOffset = undefined
-        invalidatePan()
-        invalidateState()
+        state.fixedSize = undefined
+        moved = false
+        invalidScaleToFit = true
+        invalidPan = true
+        invalidState = true
         break
       case 'update.zoom':
         state.zoom = undefined
-        invalidateZoom()
-        invalidateState()
+        state.fixedSize = undefined
+        moved = false
+        invalidScaleToFit = true
+        invalidZoom = true
+        invalidState = true
         break
       case 'update.fsPath':
         state.fsPath = message.payload
-        invalidateState()
+        invalidState = true
         break
       case 'update.content':
         state.content = message.payload
-        invalidateContent()
-        invalidateState()
+        invalidContent = true
+        invalidState = true
         break
       case 'update.style':
         state.style = message.payload
-        invalidateStyle()
-        invalidateState()
+        invalidStyle = true
+        invalidState = true
         break
       case 'update.scaleToFit':
         state.scaleToFit = message.payload
-        invalidateScaleToFit()
-        invalidateState()
+        invalidScaleToFit = true
+        invalidState = true
         break
       default:
         // @ts-ignore
         throw new Error(`unknown command ${message.command}`)
     }
+  }
+
+  if (invalidPan) {
+    invalidatePan()
+  }
+  if (invalidScaleToFit) {
+    invalidateScaleToFit()
+  }
+  if (invalidZoom) {
+    invalidateZoom()
+  }
+  if (invalidContent) {
+    invalidateContent()
+  }
+  if (invalidStyle) {
+    invalidateStyle()
+  }
+  if (invalidState) {
+    invalidateState()
   }
 })

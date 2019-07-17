@@ -94,12 +94,12 @@
   "bundlesize": [
     {
       "path": "./packages/extension/dist/extension.js",
-      "maxSize": "11.48 kB",
+      "maxSize": "11.55 kB",
       "compression": "none"
     },
     {
       "path": "./packages/preview/dist/index.js",
-      "maxSize": "1.95 kB"
+      "maxSize": "2.15 kB"
     }
   ]
 }

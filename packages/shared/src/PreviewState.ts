@@ -32,4 +32,8 @@ export interface PreviewState {
    */
   style?: StyleConfiguration
   scaleToFit?: boolean
+  fixedSize?: {
+    width: number
+    height: number
+  }
 }

@@ -20,11 +20,7 @@ body {
   margin: 0;
 }
 
-body[data-background='transparent'] {
-  background: transparent;
-}
-
-body[data-background^='checkerboard'] {
+body {
   --checker-size: 16px;
   --checker-color: transparent;
   background-size: var(--checker-size) var(--checker-size);
@@ -48,12 +44,8 @@ body[data-background^='checkerboard'] {
     );
 }
 
-body[data-background='checkerboard-light'] {
+body {
   --checker-color: #e6e6e6;
-}
-
-body[data-background='checkerboard-dark'] {
-  --checker-color: #141414;
 }
 
 main {
@@ -66,7 +58,7 @@ img {
 body {
   transform-origin: top left;
   overflow: hidden;
-  width: 600px;
-  height: 600px;
+  /* width: 600px;
+  height: 600px; */
   border: 1px solid orange;
 }

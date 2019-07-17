@@ -19,11 +19,12 @@
 <!-- TODO bug: no reset preview icon when only preview is open -->
 <!-- TODO doesn't work with emmet:increment (only works when cursor is moved afterwards) -->
 <!-- TODO thinner icons (because of new vscode icons) -->
+<!-- TODO infinite zoom -->
 
 ## Features
 
 - Live editing of svg files and svg's inside files
-- Panning and zooming of the preview (up to 4096%)
+- Panning and zooming of the preview (up to 65536%)
 
 ## Commands
 

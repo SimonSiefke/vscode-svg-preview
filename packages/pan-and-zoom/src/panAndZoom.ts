@@ -212,7 +212,7 @@ export function useZoom({
   initialZoom?: number
 } = {}): CleanUp {
   const minZoom = 0.1
-  const maxZoom = 2 ** 12
+  const maxZoom = 2 ** 16
   let zoom = initialZoom
   domMatrix.a = zoom
   domMatrix.d = zoom
@@ -228,12 +228,15 @@ export function useZoom({
       direction === 'up' ? normalizedDeltaY : 1 / normalizedDeltaY
     const previousZoom = zoom
     zoom *= currentZoomFactor
-    if(zoom > maxZoom){
-      zoom = maxZoom
-    } else if(zoom < minZoom){
-      zoom = minZoom
+    // if larger than maxZoom, stay at previousZoom
+    if (zoom > maxZoom) {
+      zoom = previousZoom
     }
-    if(zoom === previousZoom){
+    // if smaller than minZoom, stay at previous zoom
+    if (zoom < minZoom) {
+      zoom = previousZoom
+    }
+    if (zoom === previousZoom) {
       return
     }
     domMatrix = new DOMMatrix()
