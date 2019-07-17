@@ -2,7 +2,7 @@
   "name": "svg-preview",
   "displayName": "Svg Preview",
   "description": "Preview for Svg files",
-  "version": "2.5.3",
+  "version": "2.5.4",
   "publisher": "SimonSiefke",
   "license": "MIT",
   "homepage": "https://github.com/SimonSiefke/vscode-svg-preview",
