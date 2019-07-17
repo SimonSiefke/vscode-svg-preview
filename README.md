@@ -24,7 +24,7 @@
 ## Features
 
 - Live editing of svg files and svg's inside files
-- Panning and zooming of the preview (up to 65536%)
+- Panning and zooming of the preview (up to 32767%)
 
 ## Commands
 
