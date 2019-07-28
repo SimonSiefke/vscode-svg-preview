@@ -185,8 +185,7 @@
   "dependencies": {
     "get-port": "^5.0.0",
     "memoize-one": "^5.0.5",
-    "mime-types": "^2.1.24",
-    "vsls": "^0.3.1291"
+    "mime-types": "^2.1.24"
   },
   "devDependencies": {
     "@types/memoize-one": "^4.1.1",
