@@ -55,8 +55,8 @@
       },
       {
         "category": "Svg Preview",
-        "command": "svgPreview.resetPreview",
-        "title": "Reset Preview",
+        "command": "svgPreview.reloadPreview",
+        "title": "Reload Preview",
         "icon": {
           "light": "images/refresh_original_darkgray_optimized.svg",
           "dark": "images/refresh_original_lightgray_optimized.svg"
@@ -75,7 +75,7 @@
           "group": "navigation"
         },
         {
-          "command": "svgPreview.resetPreview",
+          "command": "svgPreview.reloadPreview",
           "when": "svgPreviewIsOpen == true",
           "group": "navigation"
         }
@@ -94,7 +94,7 @@
           "when": "editorLangId == xml && resourceExtname == .svg && svgPreviewIsOpen == false"
         },
         {
-          "command": "svgPreview.resetPreview",
+          "command": "svgPreview.reloadPreview",
           "when": "svgPreviewIsFocused && !editorLangId",
           "group": "navigation"
         }

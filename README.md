@@ -29,7 +29,7 @@
 ## Commands
 
 - Svg Preview: Open Preview to the Side
-- Svg Preview: Reset Preview
+- Svg Preview: Reload Preview
 
 ## Settings
 

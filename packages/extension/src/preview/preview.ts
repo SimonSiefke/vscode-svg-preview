@@ -53,9 +53,9 @@ interface PreviewPanel extends vscode.WebviewPanelSerializer {
   readonly visible: boolean
 
   /**
-   * Reset the panning and zooming of the preview.
+   * Reload the preview.
    */
-  readonly reset: () => void
+  readonly reload: () => void
 
   /**
    * The view column of the webview panel.
@@ -240,7 +240,7 @@ function invalidateFsPath(): void {
 }
 
 /**
- * Reset the panning.
+ * Reset the panning and the zoom.
  */
 function invalidatePanAndZoom(): void {
   postMessage({
@@ -359,7 +359,7 @@ const onDidCreatePanel = async (
  * The preview panel.
  */
 export const previewPanel: PreviewPanel = {
-  reset: invalidatePanAndZoom,
+  reload: invalidatePanAndZoom,
   show({ viewColumn, fsPath }) {
     state.fsPath = fsPath
     const title = `Preview ${path.basename(fsPath)}`

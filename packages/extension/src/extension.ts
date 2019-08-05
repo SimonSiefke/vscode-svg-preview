@@ -64,8 +64,8 @@ export async function activate(c: vscode.ExtensionContext): Promise<void> {
   )
   context.subscriptions.push(
     vscode.commands.registerCommand(
-      'svgPreview.resetPreview',
-      previewPanel.reset
+      'svgPreview.reloadPreview',
+      previewPanel.reload
     )
   )
   const onDidChangeActiveTextEditor:(textEditor :vscode.TextEditor)=>void=textEditor => {
