@@ -19,6 +19,7 @@
 <!-- TODO doesn't work with emmet:increment (only works when cursor is moved afterwards) -->
 <!-- TODO thinner icons (because of new vscode icons) -->
 <!-- TODO infinite zoom -->
+<!-- TODO still open a new tab when the tab is left and hidden -->
 
 ## Features
 
