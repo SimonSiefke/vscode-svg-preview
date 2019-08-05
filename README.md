@@ -8,7 +8,6 @@
 <!-- TODO need to figure out why animation is restarted so often / prevent unnecessary updates -->
 <!-- TODO update content when just opened / handle active text editor before extension is activated-->
 <!-- TODO vscode live share -->
-<!-- TODO rename reset to reload or a different icon? -->
 <!-- TODO don't zoom/pan outside of the window -->
 <!-- TODO improve external css -->
 <!-- TODO add tests -->
