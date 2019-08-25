@@ -19,7 +19,7 @@
     "theme": "dark"
   },
   "engines": {
-    "vscode": "^1.31.0"
+    "vscode": "^1.37.1"
   },
   "categories": [
     "Other"
@@ -191,13 +191,13 @@
   "main": "./dist/extension.js",
   "dependencies": {
     "get-port": "^5.0.0",
-    "memoize-one": "^5.0.5",
+    "memoize-one": "^5.1.1",
     "mime-types": "^2.1.24"
   },
   "devDependencies": {
     "@types/memoize-one": "^4.1.1",
     "@types/mime-types": "^2.1.0",
-    "@types/node": "^12.6.9",
-    "@types/vscode": "^1.36.0"
+    "@types/node": "^12.7.2",
+    "@types/vscode": "^1.37.0"
   }
 }
