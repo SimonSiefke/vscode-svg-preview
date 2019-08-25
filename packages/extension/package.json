@@ -2,7 +2,7 @@
   "name": "svg-preview",
   "displayName": "Svg Preview",
   "description": "Preview for Svg files",
-  "version": "2.5.7",
+  "version": "2.6.0",
   "publisher": "SimonSiefke",
   "license": "MIT",
   "homepage": "https://github.com/SimonSiefke/vscode-svg-preview",
@@ -61,6 +61,13 @@
           "light": "images/refresh_original_darkgray_optimized.svg",
           "dark": "images/refresh_original_lightgray_optimized.svg"
         }
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "svgPreview.showPreviewToSide",
+        "key": "ctrl+alt+p",
+        "when": "resourceLangId == svg ||resourceLangId == xml"
       }
     ],
     "menus": {

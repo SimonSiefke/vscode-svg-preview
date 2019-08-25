@@ -28,8 +28,10 @@
 
 ## Commands
 
-- Svg Preview: Open Preview to the Side
-- Svg Preview: Reload Preview
+| Command                               | Keybinding   |
+| ------------------------------------- | ------------ |
+| Svg Preview: Open Preview to the Side | `ctrl+alt+p` |
+| Svg Preview: Reload Preview           | none         |
 
 ## Settings
 
