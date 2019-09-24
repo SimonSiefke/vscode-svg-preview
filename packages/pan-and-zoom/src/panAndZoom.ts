@@ -16,20 +16,20 @@ let domMatrix = new DOMMatrix()
 /**
  * Apply the domMatrix transformations.
  */
-function applyTransform(): void {
+const applyTransform = (): void => {
   $element.style.transform = `${domMatrix}`
 }
 
 /**
  * Use pan functionality.
  */
-export function usePan({
+export const usePan = ({
   initialPointerOffset = { x: 0, y: 0 },
   onPointerOffsetChange = () => {},
 }: {
   onPointerOffsetChange?: (pointerOffset: Readonly<Point>) => void
   initialPointerOffset?: Point
-} = {}): CleanUp {
+} = {}): CleanUp => {
   /**
    * Offset of the pointer.
    */
@@ -46,7 +46,7 @@ export function usePan({
   /**
    * Function called by the event listeners when user start pressing.
    */
-  function onPointerDown(event: PointerEvent): void {
+  const onPointerDown = (event: PointerEvent): void => {
     // ignore right clicks
     if (event.button !== 0) {
       return
@@ -57,7 +57,7 @@ export function usePan({
     pointerOffset.y = event.clientY
   }
 
-  function move({ x = 0, y = 0 }: { x?: number; y?: number }): void {
+  const move = ({ x = 0, y = 0 }: { x?: number; y?: number }): void => {
     // Update the transform coordinates with the distance from origin and current position
     domMatrix.e += x
     domMatrix.f += y
@@ -67,7 +67,7 @@ export function usePan({
   /**
    * Function called by the event listeners when user starts moving/dragging.
    */
-  function onPointerMove(event: PointerEvent): void {
+  const onPointerMove = (event: PointerEvent): void => {
     // Only run this function if the pointer is down
     if (!isPointerDown) {
       return
@@ -79,7 +79,7 @@ export function usePan({
     pointerOffset.x = event.clientX
     pointerOffset.y = event.clientY
   }
-  function onPointerUp(event: PointerEvent): void {
+  const onPointerUp = (event: PointerEvent): void => {
     if (!isPointerDown) {
       return
     }
@@ -99,7 +99,7 @@ export function usePan({
   let arrowUpDown = false
   let arrowDownDown = false
 
-  function startMoving(): void {
+  const startMoving = (): void => {
     const speed = Math.ceil(window.innerWidth / 200)
     let x = 0
     let y = 0
@@ -117,12 +117,12 @@ export function usePan({
     animationFrame = requestAnimationFrame(startMoving)
   }
 
-  function stopMoving(): void {
+  const stopMoving = (): void => {
     cancelAnimationFrame(animationFrame)
     moving = false
   }
 
-  function onKeyDown(event: KeyboardEvent): void {
+  const onKeyDown = (event: KeyboardEvent): void => {
     switch (event.key) {
       case 'ArrowLeft':
         arrowLeftDown = true
@@ -157,7 +157,7 @@ export function usePan({
     }
   }
 
-  function onKeyUp(event: KeyboardEvent): void {
+  const onKeyUp = (event: KeyboardEvent): void => {
     switch (event.key) {
       case 'ArrowLeft':
         arrowLeftDown = false
@@ -204,20 +204,20 @@ export function usePan({
 /**
  * Use zoom functionality.
  */
-export function useZoom({
+export const useZoom = ({
   initialZoom = 1,
   onZoomChange = () => {},
 }: {
   onZoomChange?: (zoom: number, pointerOffset: Point) => void
   initialZoom?: number
-} = {}): CleanUp {
+} = {}): CleanUp => {
   const minZoom = 0.1
   const maxZoom = 2 ** 15 // max value that doesn't result in degradation
   let zoom = initialZoom
   domMatrix.a = zoom
   domMatrix.d = zoom
   applyTransform()
-  function handleWheel(event: WheelEvent): void {
+  const handleWheel = (event: WheelEvent): void => {
     if (event.deltaY === 0) {
       // ignore horizontal scroll events
       return
