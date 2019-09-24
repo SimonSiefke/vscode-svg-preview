@@ -41,16 +41,16 @@ $image.addEventListener('error', () => {
   })
 })
 const $style = document.querySelector('#custom-style')
-function invalidateState(): void {
+const invalidateState = (): void => {
   vscode.setState(state)
 }
-function invalidateContent(): void {
+const invalidateContent = (): void => {
   invalidateScaleToFit()
   const encodedImage = encodeURIComponent(state.content)
   $image.setAttribute('src', `data:image/svg+xml,${encodedImage}`)
 }
 let cleanUpPan: CleanUp | undefined
-function invalidatePan(): void {
+const invalidatePan = (): void => {
   if (cleanUpPan) {
     cleanUpPan()
   }
@@ -72,7 +72,7 @@ function invalidatePan(): void {
 }
 invalidatePan()
 let cleanUpZoom: CleanUp | undefined
-function invalidateZoom(): void {
+const invalidateZoom = (): void => {
   if (cleanUpZoom) {
     cleanUpZoom()
   }
@@ -94,7 +94,7 @@ function invalidateZoom(): void {
   })
 }
 invalidateZoom()
-function createStyleString(styleObject: StyleConfiguration): string {
+const createStyleString = (styleObject: StyleConfiguration): string => {
   let style = ''
   for (const [selector, value] of Object.entries(styleObject)) {
     const right = Object.entries(value).reduce(
@@ -106,13 +106,13 @@ function createStyleString(styleObject: StyleConfiguration): string {
   }
   return style
 }
-function invalidateStyle(): void {
+const invalidateStyle = (): void => {
   if (state.style) {
     $style.textContent = createStyleString(state.style)
   }
 }
 invalidateStyle()
-function invalidateScaleToFit(): void {
+const invalidateScaleToFit = (): void => {
   if (state.scaleToFit && !moved) {
     $image.style.height = ''
     $image.style.width = ''
