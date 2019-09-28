@@ -1,10 +1,16 @@
 {
-  "name": "pan-and-zoom",
+  "name": "@simon-siefke/pan-and-zoom",
+  "version": "0.0.1",
+  "main": "dist/panAndZoom.js",
+  "files": [
+    "dist"
+  ],
   "license": "MIT",
   "scripts": {
     "test": "echo test",
     "e2e:watch": "concurrently \"npm run dev\" \"cypress open\"",
-    "dev": "parcel --port 3000 example/index.html"
+    "dev": "parcel --port 3000 example/index.html",
+    "build": "tsc --outDir dist --declaration --declarationMap"
   },
   "devDependencies": {
     "@cypress/webpack-preprocessor": "^4.1.0",

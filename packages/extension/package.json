@@ -2,7 +2,7 @@
   "name": "svg-preview",
   "displayName": "Svg Preview",
   "description": "Preview for Svg files",
-  "version": "2.6.1",
+  "version": "2.7.0",
   "publisher": "SimonSiefke",
   "license": "MIT",
   "homepage": "https://github.com/SimonSiefke/vscode-svg-preview",
@@ -113,7 +113,7 @@
       "properties": {
         "svgPreview.autoOpen": {
           "type": "boolean",
-          "default": false,
+          "default": true,
           "description": "Automatically open the preview when an svg file is opened.",
           "scope": "resource"
         },

@@ -68,7 +68,9 @@ export async function activate(c: vscode.ExtensionContext): Promise<void> {
       previewPanel.reload
     )
   )
-  const onDidChangeActiveTextEditor:(textEditor :vscode.TextEditor)=>void=textEditor => {
+  const onDidChangeActiveTextEditor: (
+    textEditor: vscode.TextEditor
+  ) => void = textEditor => {
     // there is nothing to open
     if (!textEditor) {
       return
@@ -98,20 +100,24 @@ export async function activate(c: vscode.ExtensionContext): Promise<void> {
         previewPanel.fsPath = textEditor.document.uri.fsPath
       }
     } else if (previewPanel.fsPath !== textEditor.document.uri.fsPath) {
-        previewPanel.show({
-          viewColumn: vscode.ViewColumn.Beside,
-          fsPath: textEditor.document.uri.fsPath,
-        })
-      }
+      previewPanel.show({
+        viewColumn: vscode.ViewColumn.Beside,
+        fsPath: textEditor.document.uri.fsPath,
+      })
+    }
     const content = isSvg ? textEditor.document.getText() : svgInside
     if (content !== previewPanel.content) {
       previewPanel.content = content
     }
   }
-  // TODO this collides with deserialized webview panel
-  // if(vscode.window.activeTextEditor){
-  //   onDidChangeActiveTextEditor(vscode.window.activeTextEditor)
-  // }
+  // TODO this may collide with deserialized webview panel, but the timeout with 100ms works for the most part
+  if (vscode.window.activeTextEditor) {
+    setTimeout(() => {
+      if (vscode.window.activeTextEditor && !previewPanel.visible) {
+        onDidChangeActiveTextEditor(vscode.window.activeTextEditor)
+      }
+    }, 100)
+  }
   context.subscriptions.push(
     vscode.window.onDidChangeActiveTextEditor(onDidChangeActiveTextEditor)
   )
@@ -121,9 +127,10 @@ export async function activate(c: vscode.ExtensionContext): Promise<void> {
     })
   )
   context.subscriptions.push(
-  vscode.workspace.onDidCloseTextDocument(()=>{
-    lastEventWasClose=true
-  }))
+    vscode.workspace.onDidCloseTextDocument(() => {
+      lastEventWasClose = true
+    })
+  )
   context.subscriptions.push(
     vscode.workspace.onDidChangeTextDocument(event => {
       const shouldUpdate =
