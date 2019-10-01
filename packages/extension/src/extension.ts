@@ -113,7 +113,13 @@ export async function activate(c: vscode.ExtensionContext): Promise<void> {
   // TODO this may collide with deserialized webview panel, but the timeout with 100ms works for the most part
   if (vscode.window.activeTextEditor) {
     setTimeout(() => {
-      if (vscode.window.activeTextEditor && !previewPanel.visible) {
+      if (
+        vscode.window.activeTextEditor &&
+        ['xml', 'svg'].includes(
+          vscode.window.activeTextEditor.document.languageId
+        ) &&
+        !previewPanel.visible
+      ) {
         onDidChangeActiveTextEditor(vscode.window.activeTextEditor)
       }
     }, 100)
