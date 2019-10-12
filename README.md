@@ -20,6 +20,8 @@
 <!-- TODO thinner icons (because of new vscode icons) -->
 <!-- TODO infinite zoom -->
 <!-- TODO still open a new tab when the tab is left and hidden -->
+<!-- TODO fix themify icons -->
+<!-- TODO always scaleToFit -->
 
 ## Features
 
