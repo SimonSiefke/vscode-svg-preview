@@ -4,12 +4,12 @@ import * as vscode from 'vscode'
 import { configuration, ConfigurationChangeEvent } from '../configuration'
 import { Message } from '../../../shared/src/Message'
 import { PreviewState } from '../../../shared/src/PreviewState'
-import { isSvgFile, getPath, setContext } from '../util'
+import { isSvgFile, setContext } from '../util'
 import { context } from '../extension'
 import { withInlineStyles } from './styles/withInlineStyles'
 import { StyleConfiguration } from '../../../shared/src/StyleConfiguration'
+import { getUri, getPreviewBaseWebview } from '../webviewUtils'
 
-const previewPath = 'packages/preview/dist'
 const iconPathNormal =
   'packages/extension/images/bolt_original_yellow_optimized.svg'
 const iconPathError =
@@ -103,26 +103,25 @@ const state: State = {
   postponedMessages: new Map(),
 }
 
-const getUri = memoizeOne(
-  (relativePath: string): vscode.Uri => vscode.Uri.file(getPath(relativePath))
-)
-
 /**
  * Get the html for the svg preview panel.
  */
-const getPreviewHTML = memoizeOne((fsPath: string, port: number): string => {
+const getPreviewHTML = (
+  webview: vscode.Webview,
+  fsPath: string,
+  port: number
+): string => {
   /**
    * The base for the preview files.
    */
-  const previewBase = getUri(previewPath).with({
-    scheme: 'vscode-resource',
-  })
+  const previewBase = webview.asWebviewUri(
+    getUri({ context, relativePath: 'packages/preview/dist' })
+  )
+
   /**
    * The base url of the opened document.
    */
-  const base = vscode.Uri.file(fsPath).with({
-    scheme: 'vscode-resource',
-  })
+  const base = webview.asWebviewUri(vscode.Uri.file(fsPath))
   const nonce = Math.round(Math.random() * 2 ** 20)
   return `<!DOCTYPE html>
 <html>
@@ -143,7 +142,7 @@ const getPreviewHTML = memoizeOne((fsPath: string, port: number): string => {
   </body>
 </html>
 `
-})
+}
 
 let immediate: NodeJS.Immediate
 
@@ -308,8 +307,8 @@ const onDidCreatePanel = async (
   setContext('svgPreviewIsOpen', true)
   state.panel = webViewPanel
   state.panel.iconPath = state.error
-    ? getUri(iconPathError)
-    : getUri(iconPathNormal)
+    ? getUri({ context, relativePath: iconPathError })
+    : getUri({ context, relativePath: iconPathNormal })
   context.subscriptions.push(
     state.panel.onDidDispose(() => {
       state.panel = undefined
@@ -334,9 +333,15 @@ const onDidCreatePanel = async (
       if (message.command === 'setError') {
         const error = message.payload
         if (error) {
-          state.panel.iconPath = getUri(iconPathError)
+          state.panel.iconPath = getUri({
+            context,
+            relativePath: iconPathError,
+          })
         } else {
-          state.panel.iconPath = getUri(iconPathNormal)
+          state.panel.iconPath = getUri({
+            context,
+            relativePath: iconPathNormal,
+          })
         }
       }
     })
@@ -349,7 +354,11 @@ const onDidCreatePanel = async (
       })
     )
   }
-  state.panel.webview.html = getPreviewHTML(state.fsPath, webSocketServer.port)
+  state.panel.webview.html = getPreviewHTML(
+    state.panel.webview,
+    state.fsPath,
+    webSocketServer.port
+  )
   onDidChangeStyle()
   onDidChangeScaleToFit()
   configuration.addChangeListener(onDidChangeConfiguration)
@@ -374,7 +383,9 @@ export const previewPanel: PreviewPanel = {
           },
           {
             enableCommandUris: true,
-            localResourceRoots: [getUri('packages/preview/dist')],
+            localResourceRoots: [
+              getUri({ context, relativePath: 'packages/preview/dist' }),
+            ],
             enableScripts: true,
           }
         )

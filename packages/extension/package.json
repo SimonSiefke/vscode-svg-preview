@@ -2,7 +2,7 @@
   "name": "svg-preview",
   "displayName": "Svg Preview",
   "description": "Preview for Svg files",
-  "version": "2.7.1",
+  "version": "2.7.2",
   "publisher": "SimonSiefke",
   "license": "MIT",
   "homepage": "https://github.com/SimonSiefke/vscode-svg-preview",
@@ -19,7 +19,7 @@
     "theme": "dark"
   },
   "engines": {
-    "vscode": "^1.38.1"
+    "vscode": "^1.39.0"
   },
   "categories": [
     "Other"
@@ -197,7 +197,7 @@
   "devDependencies": {
     "@types/memoize-one": "^4.1.1",
     "@types/mime-types": "^2.1.0",
-    "@types/node": "^12.7.5",
-    "@types/vscode": "^1.38.0"
+    "@types/node": "^12.7.12",
+    "@types/vscode": "^1.39.0"
   }
 }
