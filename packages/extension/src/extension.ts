@@ -88,8 +88,9 @@ export async function activate(c: vscode.ExtensionContext): Promise<void> {
     }
     // don't open if auto-open setting isn't enabled
     if (
-      !previewPanel.fsPath &&
-      !configuration.get('autoOpen', textEditor.document.uri)
+      !isSvg ||
+      (!previewPanel.fsPath &&
+        !configuration.get('autoOpen', textEditor.document.uri))
     ) {
       return
     }
