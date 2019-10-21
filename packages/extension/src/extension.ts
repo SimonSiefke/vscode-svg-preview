@@ -111,7 +111,7 @@ export async function activate(c: vscode.ExtensionContext): Promise<void> {
       previewPanel.content = content
     }
   }
-  // TODO this may collide with deserialized webview panel, but the timeout with 100ms works for the most part
+  // TODO this may collide with deserialized webview panel, but the timeout works for the most part
   if (vscode.window.activeTextEditor) {
     setTimeout(() => {
       if (
@@ -123,7 +123,7 @@ export async function activate(c: vscode.ExtensionContext): Promise<void> {
       ) {
         onDidChangeActiveTextEditor(vscode.window.activeTextEditor)
       }
-    }, 100)
+    }, 600)
   }
   context.subscriptions.push(
     vscode.window.onDidChangeActiveTextEditor(onDidChangeActiveTextEditor)

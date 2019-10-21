@@ -115,7 +115,7 @@ invalidateStyle()
 const invalidateScaleToFit = (): void => {
   if (state.scaleToFit && !moved) {
     $image.style.height = ''
-    $image.style.width = ''
+    $image.style.width = '100vmin'
   } else {
     if (state.fixedSize) {
       $image.style.width = `${state.fixedSize.width}px`
