@@ -1,5 +1,6 @@
 {
   "name": "vscode-svg-preview",
+  "extensionKind": "ui",
   "engines": {
     "node": "12"
   },
