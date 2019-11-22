@@ -1,12 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg"
-    width="128" height="128"
-    xmlns:xlink="http://www.w3.org/1999/xlink">
-<defs>
-<g id="box">
-<rect height="20" width="20"
-    stroke="black" fill="white"/>
-</g>
-</defs>
-<use xlink:href="#box" x="50" y="50"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="128" height="128"><defs><g id="box"><rect width="20" height="20" fill="#fff" stroke="#000"/></g></defs><use x="50" y="50" xlink:href="#box"/></svg>
