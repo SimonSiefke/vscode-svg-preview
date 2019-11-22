@@ -2,7 +2,7 @@
   "name": "svg-preview",
   "displayName": "Svg Preview",
   "description": "Preview for Svg files",
-  "version": "2.7.6",
+  "version": "2.7.7",
   "publisher": "SimonSiefke",
   "license": "MIT",
   "homepage": "https://github.com/SimonSiefke/vscode-svg-preview",
@@ -58,8 +58,8 @@
         "command": "svgPreview.reloadPreview",
         "title": "Reload Preview",
         "icon": {
-          "light": "images/refresh_original_darkgray_optimized.svg",
-          "dark": "images/refresh_original_lightgray_optimized.svg"
+          "light": "images/refresh_dark.svg",
+          "dark": "images/refresh_light.svg"
         }
       }
     ],
