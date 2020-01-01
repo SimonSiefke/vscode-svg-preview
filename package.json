@@ -99,7 +99,7 @@
     },
     {
       "path": "./packages/preview/dist/index.js",
-      "maxSize": "2.15 kB"
+      "maxSize": "2.35 kB"
     }
   ]
 }
