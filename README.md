@@ -22,6 +22,7 @@
 <!-- TODO still open a new tab when the tab is left and hidden -->
 <!-- TODO fix themify icons -->
 <!-- TODO always scaleToFit -->
+<!-- TODO rename style.body to style.html or vice versa (currently the setting is names style.html but in the code it is referred to as style.body) -->
 
 ## Features
 

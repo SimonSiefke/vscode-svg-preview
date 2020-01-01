@@ -1,5 +1,5 @@
 export type StyleConfiguration = Partial<{
-  body: {
+  html: {
     background: string
     'background-color': string
     'background-position': string
@@ -15,7 +15,6 @@ export type StyleConfiguration = Partial<{
       | 'no-repeat'
     margin: string
     padding: string
-    'place-items': 'center' | 'start center'
   }
   img: {
     border: string

@@ -45,8 +45,33 @@ const invalidateState = (): void => {
   vscode.setState(state)
 }
 const invalidateContent = (): void => {
+  console.log('invalidate content')
   invalidateScaleToFit()
-  const encodedImage = encodeURIComponent(state.content)
+  const svgVariablesInlineStyle = Object.entries(
+    (state.style && state.style.html) || {}
+  )
+    .filter(([key]) => key.startsWith('--'))
+    .map(([key, value]) => `${key}:${value};`)
+    .join('')
+  console.log(svgVariablesInlineStyle)
+  let contentWithCustomStyle = state.content
+  if (contentWithCustomStyle.includes('style="')) {
+    contentWithCustomStyle = contentWithCustomStyle.replace(
+      'style="',
+      `style="${svgVariablesInlineStyle}`
+    )
+  } else if (contentWithCustomStyle.includes(`style='`)) {
+    contentWithCustomStyle = contentWithCustomStyle.replace(
+      `style='`,
+      `style='${svgVariablesInlineStyle}`
+    )
+  } else if (contentWithCustomStyle.includes('<svg')) {
+    contentWithCustomStyle = state.content.replace(
+      '<svg',
+      `<svg style="${svgVariablesInlineStyle}"`
+    )
+  }
+  const encodedImage = encodeURIComponent(contentWithCustomStyle)
   $image.setAttribute('src', `data:image/svg+xml,${encodedImage}`)
 }
 let cleanUpPan: CleanUp | undefined
@@ -230,6 +255,7 @@ ws.addEventListener('message', event => {
   }
   if (invalidStyle) {
     invalidateStyle()
+    invalidateContent() // because of css variables that are inserted into the content
   }
   if (invalidState) {
     invalidateState()
