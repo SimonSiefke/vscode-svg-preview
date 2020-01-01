@@ -47,9 +47,10 @@ const invalidateState = (): void => {
 const invalidateContent = (): void => {
   console.log('invalidate content')
   invalidateScaleToFit()
-  const svgVariablesInlineStyle = Object.entries(
-    (state.style && state.style.html) || {}
-  )
+  const svgVariablesInlineStyle = [
+    ...Object.entries((state.style && state.style.html) || {}),
+    ...Object.entries((state.style && state.style.img) || {}),
+  ]
     .filter(([key]) => key.startsWith('--'))
     .map(([key, value]) => `${key}:${value};`)
     .join('')

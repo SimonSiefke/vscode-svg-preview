@@ -2,8 +2,11 @@
   "name": "svg-preview",
   "displayName": "Svg Preview",
   "description": "Preview for Svg files",
-  "version": "2.8.0",
+  "version": "2.8.1",
   "publisher": "SimonSiefke",
+  "extensionKind": [
+    "ui"
+  ],
   "license": "MIT",
   "homepage": "https://github.com/SimonSiefke/vscode-svg-preview",
   "repository": {
@@ -168,7 +171,6 @@
             "img": {
               "type": "object",
               "description": "Custom style for the image.",
-              "additionalProperties": false,
               "properties": {
                 "border": {
                   "type": "string"

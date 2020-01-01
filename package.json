@@ -1,8 +1,5 @@
 {
   "name": "vscode-svg-preview",
-  "extensionKind": [
-    "ui"
-  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/SimonSiefke/vscode-svg-preview.git"
