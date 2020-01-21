@@ -2,7 +2,7 @@
   "name": "svg-preview",
   "displayName": "Svg Preview",
   "description": "Preview for Svg files",
-  "version": "2.8.1",
+  "version": "2.8.2",
   "publisher": "SimonSiefke",
   "extensionKind": [
     "ui"
@@ -191,14 +191,14 @@
   },
   "main": "./dist/extension.js",
   "dependencies": {
-    "get-port": "^5.1.0",
+    "get-port": "^5.1.1",
     "memoize-one": "^5.1.1",
-    "mime-types": "^2.1.25"
+    "mime-types": "^2.1.26"
   },
   "devDependencies": {
     "@types/memoize-one": "^5.1.2",
     "@types/mime-types": "^2.1.0",
-    "@types/node": "^13.1.2",
+    "@types/node": "^13.1.8",
     "@types/vscode": "^1.41.0"
   }
 }
