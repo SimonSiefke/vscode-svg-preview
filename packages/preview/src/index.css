@@ -23,6 +23,8 @@ body {
 
 img {
   box-sizing: border-box;
-  max-height: none;
+  display: block; /* center the image */
+  margin: 0 auto; /* center the image */
+  /* max-height: none; */
   /* width: 100vmin; */
 }
