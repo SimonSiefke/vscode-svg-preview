@@ -1,11 +1,11 @@
-import nodeResolve from 'rollup-plugin-node-resolve'
+import nodeResolve from '@rollup/plugin-node-resolve'
 import typescriptPlugin from 'rollup-plugin-typescript2'
 import { terser } from 'rollup-plugin-terser'
-import replace from 'rollup-plugin-replace'
+import replace from '@rollup/plugin-replace'
 import postcss from 'rollup-plugin-postcss'
 import autoprefixer from 'autoprefixer'
-import commonjs from 'rollup-plugin-commonjs'
-import json from 'rollup-plugin-json'
+import commonjs from '@rollup/plugin-commonjs'
+import json from '@rollup/plugin-json'
 
 const DEV = process.env.NODE_ENV === 'development'
 
@@ -79,6 +79,7 @@ const previewConfig = {
     },
   },
   plugins: [
+    // @ts-ignore
     postcss({
       extract: true,
       plugins: [autoprefixer()],
