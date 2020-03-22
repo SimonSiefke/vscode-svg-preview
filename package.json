@@ -30,7 +30,7 @@
     "eslint-plugin-cypress": "^2.8.1",
     "fs-extra": "^9.0.0",
     "lerna": "^3.20.2",
-    "prettier": "^1.19.1",
+    "prettier": "^2.0.0",
     "rimraf": "^3.0.0",
     "rollup": "^2.0.0",
     "rollup-plugin-postcss": "^2.0.5",
