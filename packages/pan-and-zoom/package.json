@@ -13,7 +13,7 @@
     "build": "tsc --outDir dist --declaration --declarationMap"
   },
   "devDependencies": {
-    "@cypress/webpack-preprocessor": "^4.1.1",
+    "@cypress/webpack-preprocessor": "^5.0.0",
     "concurrently": "^5.0.2",
     "cypress": "^4.0.0",
     "parcel-bundler": "^1.12.4",
