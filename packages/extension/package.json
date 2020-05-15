@@ -194,12 +194,12 @@
   "dependencies": {
     "get-port": "^5.1.1",
     "memoize-one": "^5.1.1",
-    "mime-types": "^2.1.26"
+    "mime-types": "^2.1.27"
   },
   "devDependencies": {
     "@types/memoize-one": "^5.1.2",
     "@types/mime-types": "^2.1.0",
-    "@types/node": "^13.5.0",
-    "@types/vscode": "^1.41.0"
+    "@types/node": "^14.0.1",
+    "@types/vscode": "^1.45.1"
   }
 }
