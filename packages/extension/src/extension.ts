@@ -1,16 +1,16 @@
 import * as vscode from 'vscode'
 import { previewPanel } from './preview/preview'
-import { isSvgFile, tryToGetSvgInsideTextEditor } from './util'
+import { isSvgFile, setContext, tryToGetSvgInsideTextEditor } from './util'
 import { configuration } from './configuration'
-
-// eslint-disable-next-line import/no-mutable-exports
-export let context: vscode.ExtensionContext
-
+import * as ContextState from './ContextState'
 /**
  * Activate the extension.
  */
-export async function activate(c: vscode.ExtensionContext): Promise<void> {
-  context = c
+export async function activate(
+  context: vscode.ExtensionContext
+): Promise<void> {
+  ContextState.setContext(context)
+
   let isSvg: boolean
   let svgInside: string | undefined
   /**

@@ -5,10 +5,10 @@ import { configuration, ConfigurationChangeEvent } from '../configuration'
 import { Message } from '../../../shared/src/Message'
 import { PreviewState } from '../../../shared/src/PreviewState'
 import { isSvgFile, setContext } from '../util'
-import { context } from '../extension'
 import { withInlineStyles } from './styles/withInlineStyles'
 import { StyleConfiguration } from '../../../shared/src/StyleConfiguration'
 import { getUri, getPreviewBaseWebview } from '../webviewUtils'
+import * as ContextState from '../ContextState'
 
 const iconPathNormal =
   'packages/extension/images/bolt_original_yellow_optimized.svg'
@@ -111,6 +111,7 @@ const getPreviewHTML = (
   fsPath: string,
   port: number
 ): string => {
+  const context = ContextState.getContext()
   /**
    * The base for the preview files.
    */
@@ -304,6 +305,7 @@ const onDidCreatePanel = async (
     // TODO optimize order (first html then start server)
     await webSocketServer.start()
   }
+  const context = ContextState.getContext()
   setContext('svgPreviewIsOpen', true)
   state.panel = webViewPanel
   state.panel.iconPath = state.error
@@ -372,6 +374,7 @@ export const previewPanel: PreviewPanel = {
   show({ viewColumn, fsPath }) {
     state.fsPath = fsPath
     const title = `Preview ${path.basename(fsPath)}`
+    const context = ContextState.getContext()
     if (!state.panel) {
       onDidCreatePanel(
         vscode.window.createWebviewPanel(

@@ -1,7 +1,7 @@
 /* eslint-disable no-cond-assign */
 import * as vscode from 'vscode'
 import * as path from 'path'
-import { context } from './extension'
+import * as ContextState from './ContextState'
 
 export function isSvgFile(uri: vscode.Uri, currentFsPath?: string): boolean {
   // 1. its preview already open
@@ -25,6 +25,7 @@ export function isSvgFile(uri: vscode.Uri, currentFsPath?: string): boolean {
  * ```
  */
 export function getPath(relativePath: string): string {
+  const context = ContextState.getContext()
   return path.join(context.extensionPath, ROOT, relativePath)
 }
 
