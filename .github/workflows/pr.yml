@@ -1,0 +1,26 @@
+name: PR
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  pr:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, macos-13, windows-2022]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+      - name: npm ci
+        run: npm ci
+      - name: lint
+        run: npm run lint
+      - name: bundlesize
+        run: npm run bundlesize
