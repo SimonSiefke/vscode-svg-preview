@@ -1,5 +1,5 @@
 import * as vscode from 'vscode'
-import { context } from './extension'
+import * as ContextState from './ContextState'
 import { StyleConfiguration } from '../../shared/src/StyleConfiguration'
 
 /**
@@ -39,6 +39,7 @@ let listeners: Set<(event: vscode.ConfigurationChangeEvent) => void>
 export const configuration: Configuration = {
   addChangeListener(callback) {
     if (!listeners) {
+      const context = ContextState.getContext()
       listeners = new Set()
       context.subscriptions.push(
         vscode.workspace.onDidChangeConfiguration(event => {
