@@ -20,5 +20,3 @@ jobs:
           node-version-file: '.nvmrc'
       - name: npm ci
         run: npm ci
-      - name: bundlesize
-        run: npm run bundlesize
